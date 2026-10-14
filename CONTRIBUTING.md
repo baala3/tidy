@@ -23,6 +23,8 @@ If PowerShell blocks scripts, run them as `powershell -ExecutionPolicy Bypass -F
 - `src/Tidy.App` is the WinUI 3 app.
 - `tests/Tidy.Core.Tests` holds the tests. They run against a throwaway profile, never your real folders.
 - `site/` is the website, published to GitHub Pages.
+  Preview it with `node scripts/build-site.mjs --serve` and open http://localhost:8080.
+  Opening `site/index.html` from disk won't have the Safety page, which is generated into `_site/`.
 
 ## Rules for changes
 

@@ -36,3 +36,10 @@ Tidy also uses these packages at runtime, each under its own license:
 - [Windows App SDK](https://github.com/microsoft/WindowsAppSDK) (MIT)
 - [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet) (MIT)
 - [.NET](https://github.com/dotnet/runtime) (MIT)
+
+The website uses:
+
+- The parallax landscape and its scroll choreography by [isladjan](https://isladjan.com/work/4/) (MIT), in `site/index.html` and `site/scene.js`.
+  The page layout is adapted from the [Sunset Scroll Story Page](https://instalanding.ai/prompt/sunset-scroll-story-page) template (MIT).
+- [GSAP](https://gsap.com) and its ScrollTrigger plugin, loaded from cdnjs under the [GSAP standard license](https://gsap.com/standard-license).
+- Space Grotesk, Inter and JetBrains Mono from Google Fonts (SIL Open Font License).

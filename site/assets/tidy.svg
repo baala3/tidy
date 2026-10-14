@@ -1,7 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34D399"/><stop offset="1" stop-color="#0D9488"/></linearGradient></defs>
-  <rect x="4" y="4" width="92" height="92" rx="22" fill="url(#g)"/>
-  <path d="M45.0 25.0 Q50.4 49.6 75.0 55.0 Q50.4 60.4 45.0 85.0 Q39.6 60.4 15.0 55.0 Q39.6 49.6 45.0 25.0Z" fill="#fff"/>
-  <path d="M71.0 16.0 Q73.2 25.8 83.0 28.0 Q73.2 30.2 71.0 40.0 Q68.8 30.2 59.0 28.0 Q68.8 25.8 71.0 16.0Z" fill="#fff" fill-opacity=".94"/>
-  <circle cx="73" cy="70" r="4.5" fill="#fff" fill-opacity=".86"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B2050"/><stop offset="1" stop-color="#110F1D"/></linearGradient>
+    <linearGradient id="sun" x1="0" y1="22" x2="0" y2="78" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#F5C54E"/><stop offset=".55" stop-color="#FF9171"/><stop offset="1" stop-color="#FD75A8"/></linearGradient>
+    <clipPath id="disc"><circle cx="50" cy="50" r="28"/></clipPath>
+  </defs>
+  <rect x="4" y="4" width="92" height="92" rx="22" fill="url(#bg)"/>
+  <g clip-path="url(#disc)" fill="url(#sun)">
+    <rect x="22" y="22" width="56" height="29"/>
+    <rect x="22" y="55" width="56" height="8"/>
+    <rect x="22" y="67" width="56" height="5"/>
+    <rect x="22" y="75.5" width="56" height="3"/>
+  </g>
 </svg>
