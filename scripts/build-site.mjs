@@ -1,18 +1,27 @@
 // Builds the website into _site/.
 //
 //   node scripts/build-site.mjs [version]
+//   node scripts/build-site.mjs --serve [version]   build, then preview at http://localhost:8080
+//
+// Preview through --serve rather than opening site/index.html from disk: the Safety page only
+// exists in _site/, and the download links and version are filled in at build time. The preview
+// rebuilds on every page load, so edits show up on reload.
 //
 // The safety page is generated from the app's own rules (catalog.json, apps.json and the
 // protected fragments in DeletionSafetyPolicy.cs), so the published list cannot drift from
 // what Tidy actually does.
 
 import { readFileSync, writeFileSync, mkdirSync, cpSync, rmSync } from "node:fs";
-import { join, dirname } from "node:path";
+import { join, dirname, extname, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execFileSync } from "node:child_process";
+import { createServer } from "node:http";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const out = join(root, "_site");
-const version = (process.argv[2] ?? process.env.TIDY_VERSION ?? "0.1.0").replace(/^v/, "");
+const args = process.argv.slice(2);
+const serve = args.includes("--serve");
+const version = (args.find((a) => !a.startsWith("--")) ?? process.env.TIDY_VERSION ?? "0.1.0").replace(/^v/, "");
 const siteUrl = process.env.SITE_URL ?? "https://baala3.github.io/tidy";
 const repo = "https://github.com/baala3/tidy";
 
@@ -190,3 +199,25 @@ writeFileSync(join(out, "safety.html"), safety);
 cpSync(join(root, "scripts", "install.ps1"), join(out, "install.ps1"));
 writeFileSync(join(out, ".nojekyll"), "");
 console.log(`Built _site for Tidy ${version}: ${catalog.entries.length} cache entries, ${apps.preinstalled.length} preinstalled apps, ${fragments.length} protected fragments.`);
+
+if (serve) {
+  const port = Number(process.env.PORT ?? 8080);
+  const types = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml", ".png": "image/png", ".webp": "image/webp", ".ps1": "text/plain" };
+  const rebuild = () => execFileSync(process.execPath, [fileURLToPath(import.meta.url), version], { stdio: "ignore" });
+  createServer((req, res) => {
+    let path = decodeURIComponent(new URL(req.url, "http://localhost").pathname);
+    if (path.endsWith("/")) path += "index.html";
+    const file = normalize(join(out, path));
+    if (!file.startsWith(out)) { res.writeHead(403).end(); return; }
+    if (extname(file) === ".html") rebuild();
+    let body;
+    try {
+      body = readFileSync(file);
+    } catch {
+      res.writeHead(404, { "content-type": "text/plain" }).end("Not found");
+      return;
+    }
+    res.writeHead(200, { "content-type": types[extname(file)] ?? "application/octet-stream", "cache-control": "no-store" });
+    res.end(body);
+  }).listen(port, () => console.log(`Previewing at http://localhost:${port}/ (Ctrl+C to stop)`));
+}
