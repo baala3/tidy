@@ -18,8 +18,9 @@ jobs:
           global-json-file: global.json
       - name: Test
         run: dotnet test --project tests/Tidy.Core.Tests -c Release
-      - name: Build app
-        run: dotnet build src/Tidy.App -c Release -p:Platform=x64
+      - name: Build installers and zips
+        shell: pwsh
+        run: ./build.ps1 -Target publish -Version 0.0.0
       - uses: actions/setup-node@v5
         with:
           node-version: 22

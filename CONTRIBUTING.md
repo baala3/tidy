@@ -11,7 +11,7 @@ If PowerShell blocks scripts, run them as `powershell -ExecutionPolicy Bypass -F
 ```powershell
 .\build.ps1 -Target test    # unit tests
 .\build.ps1 -Target run     # build and start the app
-.\build.ps1 -Target publish # self-contained build in artifacts\
+.\build.ps1 -Target publish # installers and zips in artifacts\ (needs Inno Setup 6)
 ```
 
 ## Where things live

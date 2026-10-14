@@ -24,8 +24,9 @@ const escape = (text) =>
 const placeholders = {
   "{{VERSION}}": version,
   "{{SITE_URL}}": siteUrl,
-  "{{DOWNLOAD_X64}}": `${repo}/releases/latest/download/Tidy-win-x64.zip`,
-  "{{DOWNLOAD_ARM64}}": `${repo}/releases/latest/download/Tidy-win-arm64.zip`,
+  "{{DOWNLOAD_X64}}": `${repo}/releases/latest/download/Tidy-Setup-x64.exe`,
+  "{{DOWNLOAD_ARM64}}": `${repo}/releases/latest/download/Tidy-Setup-arm64.exe`,
+  "{{DOWNLOAD_ZIP}}": `${repo}/releases/latest/download/Tidy-win-x64.zip`,
 };
 const fill = (html) => Object.entries(placeholders).reduce((text, [key, value]) => text.replaceAll(key, value), html);
 

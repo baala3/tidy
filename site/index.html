@@ -40,7 +40,7 @@
           <button type="button" class="copy" aria-label="Copy install command">Copy</button>
         </div>
       </div>
-      <p class="meta">Free · v{{VERSION}} · Windows 10 and 11 · x64 and Arm · <a href="{{DOWNLOAD_ARM64}}">Arm64 download</a></p>
+      <p class="meta">Free · v{{VERSION}} · Windows 10 and 11 · x64 and Arm · <a href="{{DOWNLOAD_ARM64}}">Arm64</a> · <a href="{{DOWNLOAD_ZIP}}">Portable zip</a></p>
 
       <figure class="shot">
         <picture>
@@ -133,7 +133,7 @@
       </details>
       <details>
         <summary>Why does Windows say "Windows protected your PC"?</summary>
-        <p>Tidy isn't code-signed yet, so SmartScreen warns about new downloads. Choose <em>More info</em>, then <em>Run anyway</em>. The PowerShell install command doesn't trigger the warning, and it checks the download against the published SHA-256 before installing.</p>
+        <p>Tidy isn't code-signed yet, so SmartScreen warns about the downloaded installer. Choose <em>More info</em>, then <em>Run anyway</em>. The PowerShell install command doesn't trigger the warning, and it checks the installer against the published SHA-256 before running it.</p>
       </details>
       <details>
         <summary>Does it need admin rights?</summary>
@@ -153,7 +153,7 @@
       </details>
       <details>
         <summary>How do I uninstall it?</summary>
-        <p>If you used the install command, uninstall Tidy from Settings &gt; Apps like any other app. If you downloaded the zip, close Tidy and delete its folder.</p>
+        <p>Uninstall Tidy from Settings &gt; Apps like any other app. If you used the portable zip, close Tidy and delete its folder.</p>
       </details>
     </section>
   </main>

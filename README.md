@@ -26,11 +26,12 @@ In PowerShell:
 irm https://baala3.github.io/tidy/install.ps1 | iex
 ```
 
-The script downloads the latest release, checks it against the published SHA-256, and installs Tidy for your account in `%LOCALAPPDATA%\Programs\Tidy`.
+The script downloads the latest installer, checks it against the published SHA-256, and installs Tidy for your account in `%LOCALAPPDATA%\Programs\Tidy`.
 It needs no admin rights, adds a Start menu shortcut, and adds Tidy to Settings > Apps so you can uninstall it there.
 
-Or download the zip for your PC from [Releases](https://github.com/baala3/tidy/releases/latest), extract it anywhere, and run `Tidy.exe`.
-Tidy is not code-signed yet, so Windows SmartScreen may say "Windows protected your PC".
+Or download `Tidy-Setup-x64.exe` (or `Tidy-Setup-arm64.exe`) from [Releases](https://github.com/baala3/tidy/releases/latest) and run it.
+For a portable copy, extract `Tidy-win-x64.zip` anywhere and run `Tidy.exe`.
+Tidy is not code-signed yet, so Windows SmartScreen may say "Windows protected your PC" about a downloaded file.
 Choose **More info**, then **Run anyway**.
 
 Tidy runs on Windows 10 (version 2004) and Windows 11, on x64 and Arm64.
