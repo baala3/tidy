@@ -1,5 +1,5 @@
 /* Night palette from the sunset scroll story. The home page opens over the landscape in
-   partials/landscape.svg (its colours live in that SVG's gradients); everything after it, and the
+   index.html's inline SVG (its colours live in that SVG's gradients); everything after it, and the
    Safety page, sits on --ink. */
 :root {
   --ink: #08070f;

@@ -1,5 +1,5 @@
 // The home page's scroll story: the sun sets over the landscape, the sky turns to night, then the
-// content slides in. Landscape and choreography by isladjan (https://isladjan.com/work/4/), MIT.
+// content slides in. Landscape (inline in index.html) and choreography by isladjan (https://isladjan.com/work/4/), MIT.
 //
 // Everything is timed against .scrollElement, which is 6000px tall (as is .spacer). Change that
 // height and every start/end below has to move with it, or scenes overlap.

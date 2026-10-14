@@ -30,9 +30,8 @@ const placeholders = {
 };
 const fill = (html) => Object.entries(placeholders).reduce((text, [key, value]) => text.replaceAll(key, value), html);
 
-// One nav for both pages. Over the home page's sunset it starts plum and turns to glass on scroll
-// (scene.js); on the Safety page it is glass from the start. `home` is "" on the home page itself so
-// its links scroll in place instead of reloading.
+// The Safety page's nav. It matches the one in site/index.html (keep the two in step), but is glass
+// from the start and its section links point back at the home page.
 const nav = ({ home, solid }) => `<nav class="nav${solid ? " solid" : ""}" id="nav" aria-label="Primary">
     <a class="brand" href="./" aria-label="Tidy home">
       <svg viewBox="0 0 32 32" aria-hidden="true">
@@ -59,8 +58,6 @@ const nav = ({ home, solid }) => `<nav class="nav${solid ? " solid" : ""}" id="n
       <span>Windows 10 and 11</span>
     </div>
   </nav>`;
-placeholders["{{NAV}}"] = nav({ home: "", solid: false });
-placeholders["{{LANDSCAPE}}"] = read("site/partials/landscape.svg").trim();
 
 const catalog = json("src/Tidy.Core/Catalog/catalog.json");
 const apps = json("src/Tidy.Core/Apps/apps.json");
@@ -187,8 +184,7 @@ ${preinstalledRows}
 
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
-// partials/ is inlined into the pages above, not served on its own.
-cpSync(join(root, "site"), out, { recursive: true, filter: (src) => !src.startsWith(join(root, "site", "partials")) });
+cpSync(join(root, "site"), out, { recursive: true });
 writeFileSync(join(out, "index.html"), fill(read("site/index.html")));
 writeFileSync(join(out, "safety.html"), safety);
 cpSync(join(root, "scripts", "install.ps1"), join(out, "install.ps1"));
