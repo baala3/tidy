@@ -54,6 +54,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 }
 .brand { display: flex; align-items: center; gap: 10px; font: 700 1.2rem var(--display); letter-spacing: .01em; text-decoration: none; }
 .brand svg { width: 26px; height: 26px; }
+/* Plum over the bright sunset; the app icon's gold-to-pink sun once the nav is on night. */
+.nav.solid .brand g, .nav.open .brand g { fill: url(#brand-sun-fill); }
 .nav-links { display: flex; gap: 28px; list-style: none; margin: 0 0 0 auto; padding: 0; font-size: .92rem; font-weight: 500; }
 .nav-links a { text-decoration: none; opacity: .85; transition: opacity .2s; }
 .nav-links a:hover { opacity: 1; }
