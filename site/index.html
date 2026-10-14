@@ -7,181 +7,210 @@
   <meta name="description" content="Tidy finds the cache, developer junk, preinstalled extras and forgotten apps Windows piles up, and clears them safely. Everything goes to the Recycle Bin first. Free and open source.">
   <meta property="og:title" content="Tidy: free up your PC. Safely.">
   <meta property="og:description" content="A free, open-source Windows cleaner that only clears what it recognizes, and sends it to the Recycle Bin first.">
-  <meta property="og:image" content="{{SITE_URL}}/assets/overview-light.webp">
+  <meta property="og:image" content="{{SITE_URL}}/assets/overview-dark.webp">
   <meta property="og:type" content="website">
+  <meta name="theme-color" content="#08070f">
   <link rel="icon" href="assets/tidy.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <header class="top">
-    <a class="brand" href="./"><img src="assets/tidy.svg" alt="" width="28" height="28"><span>Tidy</span></a>
-    <nav>
-      <a href="safety.html">Safety</a>
-      <a href="https://github.com/baala3/tidy">GitHub</a>
-      <a class="button small primary" href="{{DOWNLOAD_X64}}">Download</a>
-    </nav>
+<body class="home">
+  {{NAV}}
+
+  <header class="hero" id="top">
+    <p class="eyebrow"><span class="dot"></span>Free · open source · Windows 10 and 11</p>
+    <h1>Free up your PC. Safely.</h1>
+    <p class="lede">Tidy finds the junk Windows and your apps pile up, and clears it. Files go to the Recycle Bin first, so you can put them back.</p>
+    <div class="hero-ctas">
+      <a class="btn-primary" href="{{DOWNLOAD_X64}}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5 10 4.5v7H3zm8-1.2L21 3v8.5H11zM3 12.5h7v7l-7-1zm8 0h10V21l-10-1.4z"/></svg>
+        Download for Windows
+      </a>
+      <a class="btn-ghost" href="#clears">What it clears</a>
+    </div>
+    <div class="command" data-copy="irm {{SITE_URL}}/install.ps1 | iex">
+      <code><span class="prompt">PS&gt;</span> irm {{SITE_URL}}/install.ps1 | iex</code>
+      <button type="button" class="copy" aria-label="Copy install command">Copy</button>
+    </div>
   </header>
 
-  <main>
-    <section class="hero">
-      <img class="hero-icon" src="assets/tidy.svg" alt="" width="88" height="88">
-      <h1>Free up your PC.<br>Safely.</h1>
-      <p class="lede">Tidy finds the junk Windows and your apps pile up, and clears it.<br>Files go to the Recycle Bin first, so you can put them back.</p>
+  <div class="caption" id="cap1"><div class="caption-inner">
+    <span class="mono">Temp files · crash dumps · shader caches · node_modules</span>
+    <h2>Junk piles up.<br>Quietly.</h2>
+  </div></div>
+  <div class="caption" id="cap2"><div class="caption-inner">
+    <span class="mono">Recycle Bin first · nothing leaves your PC</span>
+    <h2>Cleared safely.<br>Back if you need it.</h2>
+  </div></div>
 
-      <div class="cta">
-        <a class="button primary large" href="{{DOWNLOAD_X64}}">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5 10 4.5v7H3zm8-1.2L21 3v8.5H11zM3 12.5h7v7l-7-1zm8 0h10V21l-10-1.4z"/></svg>
-          Download for Windows
-        </a>
-        <span class="or">or</span>
-        <div class="command" data-copy="irm {{SITE_URL}}/install.ps1 | iex">
-          <code><span class="prompt">PS&gt;</span> irm {{SITE_URL}}/install.ps1 | iex</code>
-          <button type="button" class="copy" aria-label="Copy install command">Copy</button>
+  <div class="wrapper">
+    {{LANDSCAPE}}
+
+    <div class="scrollElement"></div>
+    <div class="spacer" aria-hidden="true"></div>
+
+    <main class="content">
+      <div class="stats reveal">
+        <div class="stat"><div class="num">Recycle Bin</div><div class="label">is where every cleared<br>file goes first</div></div>
+        <div class="stat"><div class="num">0 bytes</div><div class="label">sent anywhere. No telemetry,<br>no account, no internet</div></div>
+        <div class="stat"><div class="num">No admin</div><div class="label">rights needed. Cleans and<br>installs for your account only</div></div>
+        <div class="stat"><div class="num">MIT</div><div class="label">licensed. No trial, no paid<br>tier, nothing bundled</div></div>
+      </div>
+
+      <section class="section" id="clears">
+        <p class="kicker reveal">// 01 · What it clears</p>
+        <h2 class="reveal">The stuff that piles up while you're not looking.</h2>
+        <p class="intro reveal">Tidy only lists folders it recognizes, and tells you why each one is safe. Anything it doesn't recognize never shows up.</p>
+
+        <div class="grid-4">
+          <article class="card reveal">
+            <span class="idx">01 / Caches</span>
+            <div class="icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="5" rx="1.5"/><path d="M5 9v9.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V9M10 13h4"/></svg></div>
+            <h3>App caches</h3>
+            <p>Temp files, crash dumps, error reports, shader caches, and browser caches for every profile. Passwords, history and sign-ins are never touched. An open browser is skipped until you close it.</p>
+            <div class="spec">Chrome · Edge · Brave · Firefox · Vivaldi · Opera</div>
+          </article>
+          <article class="card reveal">
+            <span class="idx">02 / Dev</span>
+            <div class="icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5c-2 0-3 1-3 3v2c0 1-1 2-2 2 1 0 2 1 2 2v2c0 2 1 3 3 3M16 5c2 0 3 1 3 3v2c0 1 1 2 2 2-1 0-2 1-2 2v2c0 2-1 3-3 3"/></svg></div>
+            <h3>Dev junk</h3>
+            <p>Package manager and editor caches, plus build output in projects you haven't touched in a while. Projects you're still working on are skipped.</p>
+            <div class="spec">npm · NuGet · Cargo · node_modules · .venv</div>
+          </article>
+          <article class="card reveal">
+            <span class="idx">03 / Apps</span>
+            <div class="icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><path d="M13 16.5h7M16.5 13v7"/></svg></div>
+            <h3>Apps</h3>
+            <p>The games, promos and trials that came with Windows or your PC, each with a note on what it is, and apps you haven't opened in 90 days. Runtimes, codecs and drivers are never offered.</p>
+            <div class="spec">Preinstalled extras · unused for 90 days</div>
+          </article>
+          <article class="card reveal">
+            <span class="idx">04 / Large files</span>
+            <div class="icon"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></div>
+            <h3>Large files</h3>
+            <p>Old downloads, installers, videos, disk images and AI models in your own folders, with search and filters. Nothing is selected for you, and OneDrive-only files are left alone.</p>
+            <div class="spec">Never pre-selected · you pick each one</div>
+          </article>
         </div>
-      </div>
-      <p class="meta">Free · v{{VERSION}} · Windows 10 and 11 · x64 and Arm · <a href="{{DOWNLOAD_ARM64}}">Arm64</a> · <a href="{{DOWNLOAD_ZIP}}">Portable zip</a></p>
+      </section>
 
-      <figure class="shot">
-        <picture>
-          <source srcset="assets/overview-dark.webp" media="(prefers-color-scheme: dark)">
-          <img src="assets/overview-light.webp" alt="Tidy's Overview: one bar for the whole drive, with App Caches, Dev Tools, Large Files and Apps each sized and marked safe to clean or review first." width="1600" height="1115">
-        </picture>
-      </figure>
-    </section>
+      <section class="section" id="see">
+        <p class="kicker reveal">// 02 · See it</p>
+        <h2 class="reveal">One bar for the whole drive.</h2>
+        <p class="intro reveal">Everything Tidy can clear, sized and marked safe to clean or worth a look first.</p>
+        <figure class="shot hero-shot reveal">
+          <img src="assets/overview-dark.webp" alt="Tidy's Overview: one bar for the whole drive, with App Caches, Dev Tools, Large Files and Apps each sized and marked safe to clean or review first." width="1600" height="1115" loading="lazy">
+        </figure>
+        <div class="screens">
+          <figure class="shot reveal">
+            <img src="assets/app-caches-dark.webp" alt="App Caches: each cache with a plain-language explanation, its size, and a Safe to Clean tag. Browser caches say to close the browser first." width="1600" height="1115" loading="lazy">
+            <figcaption>Every item says what it is and why it's safe.</figcaption>
+          </figure>
+          <figure class="shot reveal">
+            <img src="assets/apps-dark.webp" alt="Apps: installed apps with their icons, when each was last opened, and preinstalled extras marked Safe to Remove or Check First." width="1600" height="1115" loading="lazy">
+            <figcaption>See which apps came with your PC, and which you never open.</figcaption>
+          </figure>
+        </div>
+      </section>
 
-    <section class="clears">
-      <p class="eyebrow">what it clears</p>
-      <h2>The stuff that piles up while you're not looking.</h2>
-      <div class="grid">
-        <article>
-          <h3>App caches</h3>
-          <p class="summary">Temporary files apps rebuild on their own.</p>
-          <p>Temp files, crash dumps, error reports, shader caches, and browser caches for every Chrome, Edge, Brave, Firefox, Vivaldi and Opera profile. Your passwords, history and sign-ins are never touched. A browser that's open is skipped until you close it.</p>
-        </article>
-        <article>
-          <h3>Dev junk</h3>
-          <p class="summary">Tool caches and old project folders.</p>
-          <p>npm, pnpm, Yarn, NuGet, Gradle, Maven, Cargo, Go, pip and uv caches, plus VS Code, Cursor and JetBrains caches. In old projects, <code>node_modules</code>, <code>target</code>, <code>bin</code>, <code>obj</code> and <code>.venv</code>. Projects you're still working on are skipped.</p>
-        </article>
-        <article>
-          <h3>Apps</h3>
-          <p class="summary">Preinstalled extras and apps you forgot.</p>
-          <p>The games, promos and trials that came with Windows or your PC, each with a note on what it is. Apps you haven't opened in 90 days. Things other apps need, like runtimes, codecs and drivers, are never offered.</p>
-        </article>
-        <article>
-          <h3>Large files</h3>
-          <p class="summary">The big stuff you forgot was still on disk.</p>
-          <p>Old downloads, installers, videos, disk images and AI models in your own folders, with search and filters. Nothing is selected for you, and files that live only in OneDrive are left alone.</p>
-        </article>
-      </div>
-    </section>
+      <section class="section" id="how">
+        <div class="split">
+          <div>
+            <p class="kicker reveal">// 03 · How it works</p>
+            <h2 class="reveal">Most cleaners try to find more. Tidy tries to be sure.</h2>
+            <p class="intro reveal">Every line is public on <a href="https://github.com/baala3/tidy">GitHub</a>. The <a href="safety.html">safety page</a> lists everything Tidy may clear and everything it refuses, generated from the app's own rules.</p>
+          </div>
+          <ol class="steps">
+            <li class="reveal"><div><h4>It only lists what it recognizes</h4><p>Caches come from a fixed allowlist. Anything behind a link or junction is skipped.</p></div></li>
+            <li class="reveal"><div><h4>You see why before you choose</h4><p>Each item is marked Safe to Clean or Check First, with a plain-language note. Large files and apps are never selected for you.</p></div></li>
+            <li class="reveal"><div><h4>It checks again at the last moment</h4><p>Every path is re-checked against the safety rules right before it moves, not just when it was scanned.</p></div></li>
+            <li class="reveal"><div><h4>The Recycle Bin, not the void</h4><p>Cleared files go to the Recycle Bin. If Windows would delete something for good, Tidy leaves it alone instead.</p></div></li>
+          </ol>
+        </div>
+      </section>
 
-    <section class="screens">
-      <figure class="shot">
-        <picture>
-          <source srcset="assets/app-caches-dark.webp" media="(prefers-color-scheme: dark)">
-          <img src="assets/app-caches-light.webp" alt="App Caches: each cache with a plain-language explanation, its size, and a Safe to Clean tag. Browser caches say to close the browser first." width="1600" height="1115" loading="lazy">
-        </picture>
-        <figcaption>Every item says what it is and why it's safe.</figcaption>
-      </figure>
-      <figure class="shot">
-        <picture>
-          <source srcset="assets/apps-dark.webp" media="(prefers-color-scheme: dark)">
-          <img src="assets/apps-light.webp" alt="Apps: installed apps with their icons, when each was last opened, and preinstalled extras marked Safe to Remove or Check First." width="1600" height="1115" loading="lazy">
-        </picture>
-        <figcaption>See which apps came with your PC, and which you never open.</figcaption>
-      </figure>
-    </section>
+      <section class="section faq" id="faq">
+        <p class="kicker reveal">// 04 · Questions</p>
+        <h2 class="reveal">Before you clean.</h2>
+        <div class="faq-list reveal">
+          <details>
+            <summary>Is Tidy safe to use?</summary>
+            <p>Caches are cleared only from a fixed allowlist, and anything Tidy doesn't recognize never shows up. Each path is checked again at the moment it's moved. Large files and apps are never selected for you, and nothing goes until you confirm. The <a href="safety.html">safety page</a> lists everything Tidy may clear and everything it refuses, generated from the app's own rules.</p>
+          </details>
+          <details>
+            <summary>Will it delete anything permanently?</summary>
+            <p>Files and folders go to the Recycle Bin, and emptying it is your call. If the Recycle Bin is turned off for a drive, or an item is too big for it, Tidy skips that item rather than delete it for good. Uninstalled apps are the exception: they can't go to the Recycle Bin. Store apps can be reinstalled from the Microsoft Store, and Tidy says so before you confirm.</p>
+          </details>
+          <details>
+            <summary>What are "preinstalled extras"?</summary>
+            <p>Apps that came with Windows or your PC rather than ones you chose: games like Solitaire and Candy Crush, News, Tips, Get Help, streaming promos, and maker add-ons from HP, Lenovo, Dell, ASUS and others. Each is marked Safe to Remove or Check First with a note on what it does. The Store itself, Windows Security, Xbox sign-in parts, codecs and drivers are never offered.</p>
+          </details>
+          <details>
+            <summary>How does it know which apps I don't use?</summary>
+            <p>Windows keeps a record of apps you open from Start, the taskbar and File Explorer. Tidy reads it on your PC; nothing leaves your machine. Apps you only start another way, like from a terminal, show "No launch recorded" instead of a date. If you turned app launch tracking off in Windows privacy settings, Tidy says so and doesn't guess.</p>
+          </details>
+          <details>
+            <summary>Why does Windows say "Windows protected your PC"?</summary>
+            <p>Tidy isn't code-signed yet, so SmartScreen warns about the downloaded installer. Choose <em>More info</em>, then <em>Run anyway</em>. The PowerShell install command doesn't trigger the warning, and it checks the installer against the published SHA-256 before running it.</p>
+          </details>
+          <details>
+            <summary>Does it need admin rights?</summary>
+            <p>No. Tidy cleans your own folders and installs for your account only. Some desktop apps ask for permission when their own uninstaller runs; that request comes from the app, not Tidy.</p>
+          </details>
+          <details>
+            <summary>Why didn't my free space go up right away?</summary>
+            <p>Files in the Recycle Bin still take space. The space comes back when you empty it. Tidy shows how much is sitting there, so the number isn't a surprise.</p>
+          </details>
+          <details>
+            <summary>Does Tidy collect any data?</summary>
+            <p>No. No analytics, no telemetry, no crash reporting, no account. Tidy doesn't connect to the internet at all.</p>
+          </details>
+          <details>
+            <summary>Is it really free?</summary>
+            <p>Yes. No license, no trial, no paid tier, nothing bundled in. It's MIT licensed, and the full source is on GitHub.</p>
+          </details>
+          <details>
+            <summary>How do I uninstall it?</summary>
+            <p>Uninstall Tidy from Settings &gt; Apps like any other app. If you used the portable zip, close Tidy and delete its folder.</p>
+          </details>
+        </div>
+      </section>
 
-    <section class="different">
-      <p class="eyebrow">how it's different</p>
-      <h2>Most cleaners try to find more. Tidy tries to be sure.</h2>
-      <div class="grid three">
-        <article>
-          <h3>Open source</h3>
-          <p>Every line is public. Read it, fork it, or audit it yourself. <a href="https://github.com/baala3/tidy">Tidy on GitHub</a>.</p>
-        </article>
-        <article>
-          <h3>It doesn't guess</h3>
-          <p>Tidy only lists folders it recognizes, and tells you why each is safe. Anything behind a link or junction is skipped. <a href="safety.html">See what it never touches</a>.</p>
-        </article>
-        <article>
-          <h3>Recycle Bin first</h3>
-          <p>Cleared files go to the Recycle Bin, so you can put them back. If Windows would delete something for good, Tidy leaves it alone instead.</p>
-        </article>
-      </div>
-    </section>
+      <section class="cta reveal" id="download">
+        <h2>Give your PC a clean night.</h2>
+        <p>Free and open source. It asks before it moves anything, and everything it moves can come back.</p>
+        <div class="cta-actions">
+          <a class="btn-light" href="{{DOWNLOAD_X64}}">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5 10 4.5v7H3zm8-1.2L21 3v8.5H11zM3 12.5h7v7l-7-1zm8 0h10V21l-10-1.4z"/></svg>
+            Download for Windows
+          </a>
+          <div class="command dark" data-copy="irm {{SITE_URL}}/install.ps1 | iex">
+            <code><span class="prompt">PS&gt;</span> irm {{SITE_URL}}/install.ps1 | iex</code>
+            <button type="button" class="copy" aria-label="Copy install command">Copy</button>
+          </div>
+        </div>
+        <p class="note">v{{VERSION}} · Windows 10 and 11 · x64 and Arm · <a href="{{DOWNLOAD_ARM64}}">Arm64</a> · <a href="{{DOWNLOAD_ZIP}}">Portable zip</a></p>
+      </section>
 
-    <section class="faq">
-      <h2>Questions</h2>
-      <details>
-        <summary>Is Tidy safe to use?</summary>
-        <p>Caches are cleared only from a fixed allowlist, and anything Tidy doesn't recognize never shows up. Each path is checked again at the moment it's moved. Large files and apps are never selected for you, and nothing goes until you confirm. The <a href="safety.html">safety page</a> lists everything Tidy may clear and everything it refuses, generated from the app's own rules.</p>
-      </details>
-      <details>
-        <summary>Will it delete anything permanently?</summary>
-        <p>Files and folders go to the Recycle Bin, and emptying it is your call. If the Recycle Bin is turned off for a drive, or an item is too big for it, Tidy skips that item rather than delete it for good. Uninstalled apps are the exception: they can't go to the Recycle Bin. Store apps can be reinstalled from the Microsoft Store, and Tidy says so before you confirm.</p>
-      </details>
-      <details>
-        <summary>What are "preinstalled extras"?</summary>
-        <p>Apps that came with Windows or your PC rather than ones you chose: games like Solitaire and Candy Crush, News, Tips, Get Help, streaming promos, and maker add-ons from HP, Lenovo, Dell, ASUS and others. Each is marked Safe to Remove or Check First with a note on what it does. The Store itself, Windows Security, Xbox sign-in parts, codecs and drivers are never offered.</p>
-      </details>
-      <details>
-        <summary>How does it know which apps I don't use?</summary>
-        <p>Windows keeps a record of apps you open from Start, the taskbar and File Explorer. Tidy reads it on your PC; nothing leaves your machine. Apps you only start another way, like from a terminal, show "No launch recorded" instead of a date. If you turned app launch tracking off in Windows privacy settings, Tidy says so and doesn't guess.</p>
-      </details>
-      <details>
-        <summary>Why does Windows say "Windows protected your PC"?</summary>
-        <p>Tidy isn't code-signed yet, so SmartScreen warns about the downloaded installer. Choose <em>More info</em>, then <em>Run anyway</em>. The PowerShell install command doesn't trigger the warning, and it checks the installer against the published SHA-256 before running it.</p>
-      </details>
-      <details>
-        <summary>Does it need admin rights?</summary>
-        <p>No. Tidy cleans your own folders and installs for your account only. Some desktop apps ask for permission when their own uninstaller runs; that request comes from the app, not Tidy.</p>
-      </details>
-      <details>
-        <summary>Why didn't my free space go up right away?</summary>
-        <p>Files in the Recycle Bin still take space. The space comes back when you empty it. Tidy shows how much is sitting there, so the number isn't a surprise.</p>
-      </details>
-      <details>
-        <summary>Does Tidy collect any data?</summary>
-        <p>No. No analytics, no telemetry, no crash reporting, no account. Tidy doesn't connect to the internet at all.</p>
-      </details>
-      <details>
-        <summary>Is it really free?</summary>
-        <p>Yes. No license, no trial, no paid tier, nothing bundled in. It's MIT licensed, and the full source is on GitHub.</p>
-      </details>
-      <details>
-        <summary>How do I uninstall it?</summary>
-        <p>Uninstall Tidy from Settings &gt; Apps like any other app. If you used the portable zip, close Tidy and delete its folder.</p>
-      </details>
-    </section>
-  </main>
+      <footer class="site-footer">
+        <span>Made by <a href="https://github.com/baala3">Bala</a>. Based on <a href="https://github.com/jithin-sabu/purge-app">Purge for Mac</a> by Jithin Sabu (MIT). Not affiliated with Purge.</span>
+        <nav>
+          <a href="safety.html">Safety</a>
+          <a href="https://github.com/baala3/tidy/releases">Releases</a>
+          <a href="https://github.com/baala3/tidy/blob/main/SECURITY.md">Security</a>
+          <a href="https://github.com/baala3/tidy/blob/main/LICENSE">License (MIT)</a>
+          <a href="https://isladjan.com/work/4/">Landscape by isladjan</a>
+        </nav>
+      </footer>
+    </main>
+  </div>
 
-  <footer>
-    <div class="links">
-      <a href="safety.html">Safety</a>
-      <a href="https://github.com/baala3/tidy/releases">Releases</a>
-      <a href="https://github.com/baala3/tidy/blob/main/SECURITY.md">Security</a>
-      <a href="https://github.com/baala3/tidy/blob/main/LICENSE">License (MIT)</a>
-      <a href="https://github.com/baala3/tidy">GitHub</a>
-    </div>
-    <p class="credit">Made by <a href="https://github.com/baala3">Bala</a>. Based on <a href="https://github.com/jithin-sabu/purge-app">Purge for Mac</a> by Jithin Sabu (MIT). Not affiliated with Purge.</p>
-  </footer>
-
-  <script>
-    for (const box of document.querySelectorAll('.command')) {
-      const button = box.querySelector('.copy');
-      button.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(box.dataset.copy);
-          button.textContent = 'Copied';
-        } catch {
-          button.textContent = 'Select and copy';
-        }
-        setTimeout(() => { button.textContent = 'Copy'; }, 1600);
-      });
-    }
-  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="site.js"></script>
+  <script src="scene.js"></script>
 </body>
 </html>

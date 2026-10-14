@@ -30,6 +30,38 @@ const placeholders = {
 };
 const fill = (html) => Object.entries(placeholders).reduce((text, [key, value]) => text.replaceAll(key, value), html);
 
+// One nav for both pages. Over the home page's sunset it starts plum and turns to glass on scroll
+// (scene.js); on the Safety page it is glass from the start. `home` is "" on the home page itself so
+// its links scroll in place instead of reloading.
+const nav = ({ home, solid }) => `<nav class="nav${solid ? " solid" : ""}" id="nav" aria-label="Primary">
+    <a class="brand" href="./" aria-label="Tidy home">
+      <svg viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="4" y="4" width="11" height="11" rx="2.5" fill="currentColor"/>
+        <rect x="18" y="5" width="9" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="2" opacity=".55"/>
+        <rect x="4" y="17" width="11" height="11" rx="2.5" fill="currentColor"/>
+        <rect x="17" y="17" width="11" height="11" rx="2.5" fill="currentColor"/>
+      </svg>
+      Tidy
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="${home}#clears">What it clears</a></li>
+      <li><a href="${home}#how">How it works</a></li>
+      <li><a href="safety.html">Safety</a></li>
+      <li><a href="${home}#faq">Questions</a></li>
+      <li><a href="${repo}">GitHub</a></li>
+    </ul>
+    <a class="nav-cta" href="${placeholders["{{DOWNLOAD_X64}}"]}">Download</a>
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks">
+      <span class="burger" aria-hidden="true"><i></i><i></i><i></i></span>
+    </button>
+    <div class="nav-meta" aria-hidden="true">
+      <span>Tidy ${escape(version)} · free and open source</span>
+      <span>Windows 10 and 11</span>
+    </div>
+  </nav>`;
+placeholders["{{NAV}}"] = nav({ home: "", solid: false });
+placeholders["{{LANDSCAPE}}"] = read("site/partials/landscape.svg").trim();
+
 const catalog = json("src/Tidy.Core/Catalog/catalog.json");
 const apps = json("src/Tidy.Core/Apps/apps.json");
 const policy = read("src/Tidy.Core/Safety/DeletionSafetyPolicy.cs");
@@ -85,18 +117,16 @@ const safety = `<!doctype html>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tidy Safety: what it clears and what it never touches</title>
   <meta name="description" content="Every location Tidy may clear, every app it may offer, and everything it refuses. Generated from the app's own rules.">
+  <meta name="theme-color" content="#08070f">
   <link rel="icon" href="assets/tidy.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="top">
-    <a class="brand" href="./"><img src="assets/tidy.svg" alt="" width="28" height="28"><span>Tidy</span></a>
-    <nav>
-      <a href="safety.html">Safety</a>
-      <a href="${repo}">GitHub</a>
-      <a class="button small primary" href="${placeholders["{{DOWNLOAD_X64}}"]}">Download</a>
-    </nav>
-  </header>
+  ${nav({ home: "./", solid: true })}
   <main class="doc">
     <h1>Safety</h1>
     <p>Tidy only clears what is listed on this page. This page is generated from Tidy ${escape(version)}'s own rules, so it always matches what the app does.</p>
@@ -141,22 +171,24 @@ ${preinstalledRows}
     <p class="note" style="margin-top:16px">Desktop programs whose name contains:</p>
     ${chips(apps.neverDesktop)}
   </main>
-  <footer>
-    <div class="links">
+  <footer class="site-footer">
+    <span>Generated from Tidy ${escape(version)}. Based on <a href="https://github.com/jithin-sabu/purge-app">Purge for Mac</a> by Jithin Sabu (MIT).</span>
+    <nav>
       <a href="./">Home</a>
       <a href="${repo}/blob/main/docs/safety-notes.md">Safety notes</a>
       <a href="${repo}/blob/main/SECURITY.md">Report a problem</a>
       <a href="${repo}">GitHub</a>
-    </div>
-    <p class="credit">Generated from Tidy ${escape(version)}. Based on <a href="https://github.com/jithin-sabu/purge-app">Purge for Mac</a> by Jithin Sabu (MIT).</p>
+    </nav>
   </footer>
+  <script src="site.js"></script>
 </body>
 </html>
 `;
 
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
-cpSync(join(root, "site"), out, { recursive: true });
+// partials/ is inlined into the pages above, not served on its own.
+cpSync(join(root, "site"), out, { recursive: true, filter: (src) => !src.startsWith(join(root, "site", "partials")) });
 writeFileSync(join(out, "index.html"), fill(read("site/index.html")));
 writeFileSync(join(out, "safety.html"), safety);
 cpSync(join(root, "scripts", "install.ps1"), join(out, "install.ps1"));
