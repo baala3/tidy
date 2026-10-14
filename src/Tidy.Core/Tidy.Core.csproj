@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>Tidy.Core</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Catalog\catalog.json" LogicalName="Tidy.Core.catalog.json" />
+    <EmbeddedResource Include="Apps\apps.json" LogicalName="Tidy.Core.apps.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Tidy.Core.Tests" />
+  </ItemGroup>
+</Project>

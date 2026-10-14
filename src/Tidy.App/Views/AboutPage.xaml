@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Tidy.App.Views.AboutPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer>
+        <StackPanel Padding="{StaticResource PagePadding}" Spacing="16" MaxWidth="640" HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal" Spacing="16" Margin="0,8,0,0">
+                <Image Source="ms-appx:///Assets/Tidy-64.png" Width="64" Height="64" />
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Tidy" Style="{StaticResource PageTitleStyle}" />
+                    <TextBlock x:Name="VersionText" Style="{StaticResource SecondaryTextStyle}" />
+                </StackPanel>
+            </StackPanel>
+            <TextBlock TextWrapping="Wrap" Style="{StaticResource BodyTextBlockStyle}" Foreground="{ThemeResource TextPrimaryBrush}"
+                       Text="Tidy your PC. Safely. Tidy finds the cache and junk Windows and your apps pile up, marks what is safe, and moves it to the Recycle Bin so anything can come back." />
+            <TextBlock TextWrapping="Wrap" Style="{StaticResource SecondaryTextStyle}">
+                <Run Text="Based on " /><Hyperlink NavigateUri="https://github.com/jithin-sabu/purge-app">Purge for Mac</Hyperlink><Run Text=" by Jithin Sabu, used under the MIT License. Tidy is an independent project, not affiliated with Purge." />
+            </TextBlock>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

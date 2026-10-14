@@ -1,0 +1,48 @@
+name: Website
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "scripts/build-site.mjs"
+      - "scripts/install.ps1"
+      - "src/Tidy.Core/Catalog/catalog.json"
+      - "src/Tidy.Core/Apps/apps.json"
+      - "src/Tidy.Core/Safety/DeletionSafetyPolicy.cs"
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Build website for the latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(gh release view --repo "${{ github.repository }}" --json tagName --jq .tagName 2>/dev/null || echo v0.1.0)
+          node scripts/build-site.mjs "$version"
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

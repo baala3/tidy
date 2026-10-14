@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="Tidy.App.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Tidy">
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <Grid x:Name="Root" KeyboardAcceleratorPlacementMode="Hidden">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="AppTitleBar" Padding="16,0,0,0" ColumnSpacing="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Image Source="ms-appx:///Assets/Tidy-64.png" Width="18" Height="18" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Text="Tidy" VerticalAlignment="Center"
+                       Style="{StaticResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextPrimaryBrush}" />
+        </Grid>
+
+        <NavigationView
+            x:Name="Nav"
+            Grid.Row="1"
+            PaneDisplayMode="Left"
+            IsBackButtonVisible="Collapsed"
+            IsPaneToggleButtonVisible="False"
+            IsSettingsVisible="False"
+            OpenPaneLength="248"
+            SelectionChanged="OnNavSelectionChanged">
+            <NavigationView.MenuItems>
+                <NavigationViewItem Tag="overview" Content="Overview" IsSelected="True">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE80F;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItemHeader Content="Clean" />
+                <NavigationViewItem Tag="caches" AutomationProperties.Name="App Caches">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE7B8;" />
+                    </NavigationViewItem.Icon>
+                    <Grid>
+                        <TextBlock Text="App Caches" />
+                        <TextBlock x:Name="CachesSize" HorizontalAlignment="Right" Margin="0,0,12,0"
+                                   Style="{StaticResource CaptionSecondaryStyle}" VerticalAlignment="Center" />
+                    </Grid>
+                </NavigationViewItem>
+                <NavigationViewItem Tag="dev" AutomationProperties.Name="Dev Tools">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE943;" />
+                    </NavigationViewItem.Icon>
+                    <Grid>
+                        <TextBlock Text="Dev Tools" />
+                        <TextBlock x:Name="DevSize" HorizontalAlignment="Right" Margin="0,0,12,0"
+                                   Style="{StaticResource CaptionSecondaryStyle}" VerticalAlignment="Center" />
+                    </Grid>
+                </NavigationViewItem>
+                <NavigationViewItemHeader Content="Review" />
+                <NavigationViewItem Tag="large" AutomationProperties.Name="Large Files">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8A5;" />
+                    </NavigationViewItem.Icon>
+                    <Grid>
+                        <TextBlock Text="Large Files" />
+                        <TextBlock x:Name="LargeSize" HorizontalAlignment="Right" Margin="0,0,12,0"
+                                   Style="{StaticResource CaptionSecondaryStyle}" VerticalAlignment="Center" />
+                    </Grid>
+                </NavigationViewItem>
+                <NavigationViewItem Tag="apps" AutomationProperties.Name="Apps">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE71D;" />
+                    </NavigationViewItem.Icon>
+                    <Grid>
+                        <TextBlock Text="Apps" />
+                        <TextBlock x:Name="AppsSize" HorizontalAlignment="Right" Margin="0,0,12,0"
+                                   Style="{StaticResource CaptionSecondaryStyle}" VerticalAlignment="Center" />
+                    </Grid>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem Tag="settings" Content="Settings">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE713;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Tag="about" Content="About">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE946;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.FooterMenuItems>
+
+            <NavigationView.PaneFooter>
+                <Button x:Name="RecycleBinButton" Click="OnRecycleBinClick" Margin="8,4,8,12" Padding="12,10"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                        Background="{ThemeResource FillSecondaryBrush}" BorderThickness="0" CornerRadius="8"
+                        ToolTipService.ToolTip="Open the Recycle Bin">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <FontIcon Glyph="&#xE74D;" FontSize="14" Foreground="{ThemeResource TextSecondaryBrush}" />
+                        <TextBlock>
+                            <Run x:Name="RecycleBinSize" FontWeight="SemiBold" Text="…" />
+                            <Run Text=" in Recycle Bin" Foreground="{ThemeResource TextSecondaryBrush}" />
+                        </TextBlock>
+                    </StackPanel>
+                </Button>
+            </NavigationView.PaneFooter>
+
+            <Border Background="{ThemeResource SurfaceBaseBrush}" BorderBrush="{ThemeResource BorderSubtleBrush}"
+                    BorderThickness="1,1,0,0" CornerRadius="8,0,0,0">
+                <Frame x:Name="ContentFrame" />
+            </Border>
+        </NavigationView>
+    </Grid>
+</Window>

@@ -1,0 +1,379 @@
+{
+  "preinstalled": [
+    {
+      "match": "Microsoft.BingNews",
+      "name": "Microsoft News",
+      "tier": "safe",
+      "explanation": "Headlines from MSN. News sites work the same in your browser without it."
+    },
+    {
+      "match": "Microsoft.BingWeather",
+      "name": "Weather",
+      "tier": "safe",
+      "explanation": "The MSN weather app. The forecast on the taskbar is part of Widgets and is not affected."
+    },
+    {
+      "match": "Microsoft.BingFinance",
+      "name": "Money",
+      "tier": "safe",
+      "explanation": "An MSN finance app Microsoft no longer updates."
+    },
+    {
+      "match": "Microsoft.BingSports",
+      "name": "Sports",
+      "tier": "safe",
+      "explanation": "An MSN sports app Microsoft no longer updates."
+    },
+    {
+      "match": "Microsoft.GetHelp",
+      "name": "Get Help",
+      "tier": "safe",
+      "explanation": "Opens Microsoft's support chat. Support works in the browser at support.microsoft.com too."
+    },
+    {
+      "match": "Microsoft.Getstarted",
+      "name": "Tips",
+      "tier": "safe",
+      "explanation": "Introductory tips about Windows features."
+    },
+    {
+      "match": "Microsoft.MicrosoftSolitaireCollection",
+      "name": "Solitaire Collection",
+      "tier": "safe",
+      "explanation": "Card games with ads. Scores sync to your Microsoft account if you signed in."
+    },
+    {
+      "match": "Microsoft.MicrosoftOfficeHub",
+      "name": "Microsoft 365 Copilot",
+      "tier": "safe",
+      "explanation": "The app formerly called Office: a launcher for Office on the web with Copilot and Microsoft 365 offers. Word, Excel and other installed Office apps are separate and keep working."
+    },
+    {
+      "match": "Microsoft.WindowsFeedbackHub",
+      "name": "Feedback Hub",
+      "tier": "safe",
+      "explanation": "Sends feedback and bug reports to Microsoft. Windows works the same without it."
+    },
+    {
+      "match": "Microsoft.WindowsMaps",
+      "name": "Maps",
+      "tier": "safe",
+      "explanation": "Microsoft's offline-capable map app, which Microsoft is retiring. Any maps you downloaded for offline use go with it."
+    },
+    {
+      "match": "Microsoft.ZuneVideo",
+      "name": "Movies & TV",
+      "tier": "safe",
+      "explanation": "Microsoft's old video store and player. Videos you own play in Media Player, and purchases stay in your account."
+    },
+    {
+      "match": "Microsoft.549981C3F5F10",
+      "name": "Cortana",
+      "tier": "safe",
+      "explanation": "Microsoft retired Cortana. The app no longer does anything."
+    },
+    {
+      "match": "Microsoft.MixedReality.Portal",
+      "name": "Mixed Reality Portal",
+      "tier": "safe",
+      "explanation": "Sets up Windows Mixed Reality headsets, which Microsoft discontinued. Only useful if you still use one."
+    },
+    {
+      "match": "Microsoft.SkypeApp",
+      "name": "Skype",
+      "tier": "safe",
+      "explanation": "Microsoft shut Skype down in 2025. Your contacts and chats moved to Teams if you chose to."
+    },
+    {
+      "match": "Microsoft.People",
+      "name": "People",
+      "tier": "safe",
+      "explanation": "An old contacts app. Your contacts live in your Microsoft or mail account, not in the app."
+    },
+    {
+      "match": "Microsoft.Messaging",
+      "name": "Messaging",
+      "tier": "safe",
+      "explanation": "An old text messaging app Microsoft no longer updates."
+    },
+    {
+      "match": "Microsoft.OneConnect",
+      "name": "Mobile Plans",
+      "tier": "safe",
+      "explanation": "Buys mobile data plans for PCs with a SIM slot. Only useful if your PC has one."
+    },
+    {
+      "match": "Microsoft.Print3D",
+      "name": "Print 3D",
+      "tier": "safe",
+      "explanation": "An old 3D printing app Microsoft has retired."
+    },
+    {
+      "match": "Microsoft.3DBuilder",
+      "name": "3D Builder",
+      "tier": "safe",
+      "explanation": "An old 3D modelling app Microsoft has retired."
+    },
+    {
+      "match": "Microsoft.Microsoft3DViewer",
+      "name": "3D Viewer",
+      "tier": "safe",
+      "explanation": "Views 3D model files. Microsoft has retired it."
+    },
+    {
+      "match": "Microsoft.Windows.DevHome",
+      "name": "Dev Home",
+      "tier": "safe",
+      "explanation": "A developer dashboard Microsoft discontinued in 2025."
+    },
+    {
+      "match": "king.com.",
+      "name": null,
+      "tier": "safe",
+      "explanation": "A King game (like Candy Crush) that came preinstalled. If you never played it, nothing is lost."
+    },
+    {
+      "match": "Disney.",
+      "name": null,
+      "tier": "safe",
+      "explanation": "A Disney app that came preinstalled as a promotion."
+    },
+    {
+      "match": "BytedancePte.Ltd.TikTok",
+      "name": "TikTok",
+      "tier": "safe",
+      "explanation": "Preinstalled as a promotion. Your account and videos live online."
+    },
+    {
+      "match": "Facebook.",
+      "name": null,
+      "tier": "safe",
+      "explanation": "A Meta app that came preinstalled as a promotion. Your account lives online."
+    },
+    {
+      "match": "7EE7776C.LinkedInforWindows",
+      "name": "LinkedIn",
+      "tier": "safe",
+      "explanation": "Preinstalled as a promotion. Your account lives online and works in the browser."
+    },
+    {
+      "match": "Microsoft.EnjoyOffice",
+      "name": "Enjoy Office (promotion)",
+      "tier": "safe",
+      "explanation": "A preinstalled promotion for Microsoft Office. Office itself is not affected."
+    },
+    {
+      "match": "Clipchamp.Clipchamp",
+      "name": "Clipchamp",
+      "tier": "medium",
+      "explanation": "Microsoft's video editor. Projects you made and did not back up to the cloud are removed with it."
+    },
+    {
+      "match": "Microsoft.ZuneMusic",
+      "name": "Media Player",
+      "tier": "medium",
+      "explanation": "Windows' music and video player. Your files stay, but you need another player to open them."
+    },
+    {
+      "match": "Microsoft.YourPhone",
+      "name": "Phone Link",
+      "tier": "medium",
+      "explanation": "Connects an Android phone or iPhone to your PC for texts, calls and photos."
+    },
+    {
+      "match": "Microsoft.GamingApp",
+      "name": "Xbox",
+      "tier": "medium",
+      "explanation": "The Xbox app and PC Game Pass. Keep it if you install or launch games through it."
+    },
+    {
+      "match": "Microsoft.XboxGamingOverlay",
+      "name": "Game Bar",
+      "tier": "medium",
+      "explanation": "The Win+G overlay for screen recording and game captures. Keep it if you record clips."
+    },
+    {
+      "match": "MSTeams",
+      "name": "Microsoft Teams",
+      "tier": "medium",
+      "explanation": "Teams for work or school. Remove it only if you do not use Teams."
+    },
+    {
+      "match": "MicrosoftTeams",
+      "name": "Microsoft Teams (personal)",
+      "tier": "medium",
+      "explanation": "Teams for personal chats. Your chats live in your Microsoft account."
+    },
+    {
+      "match": "Microsoft.OutlookForWindows",
+      "name": "Outlook (new)",
+      "tier": "medium",
+      "explanation": "The new Outlook mail app. Your mail stays in your account, but you need another app or the browser to read it."
+    },
+    {
+      "match": "Microsoft.Todos",
+      "name": "Microsoft To Do",
+      "tier": "medium",
+      "explanation": "A task list that syncs to your Microsoft account. Tasks stay in your account."
+    },
+    {
+      "match": "Microsoft.MicrosoftStickyNotes",
+      "name": "Sticky Notes",
+      "tier": "medium",
+      "explanation": "Notes sync to your Microsoft account if you signed in. Notes that never synced are removed with it."
+    },
+    {
+      "match": "Microsoft.PowerAutomateDesktop",
+      "name": "Power Automate",
+      "tier": "medium",
+      "explanation": "Automates repetitive tasks. Keep it if you built any flows."
+    },
+    {
+      "match": "Microsoft.Copilot",
+      "name": "Copilot",
+      "tier": "medium",
+      "explanation": "Microsoft's AI assistant app. Copilot also works in Edge and on the web."
+    },
+    {
+      "match": "MicrosoftCorporationII.QuickAssist",
+      "name": "Quick Assist",
+      "tier": "medium",
+      "explanation": "Lets someone you trust help you remotely. Keep it if family or IT support use it to help you."
+    },
+    {
+      "match": "Microsoft.MicrosoftJournal",
+      "name": "Journal",
+      "tier": "medium",
+      "explanation": "A pen note-taking app. Journals saved only on this PC are removed with it."
+    },
+    {
+      "match": "SpotifyAB.SpotifyMusic",
+      "name": "Spotify",
+      "tier": "medium",
+      "explanation": "Often preinstalled as a promotion. Songs downloaded for offline listening are removed with it."
+    },
+    {
+      "match": "AmazonVideo.PrimeVideo",
+      "name": "Prime Video",
+      "tier": "medium",
+      "explanation": "Often preinstalled as a promotion. Downloaded videos are removed with it."
+    },
+    {
+      "match": "4DF9E0F8.Netflix",
+      "name": "Netflix",
+      "tier": "medium",
+      "explanation": "Often preinstalled as a promotion. Downloaded episodes are removed with it."
+    },
+    {
+      "match": "5A894077.McAfeeSecurity",
+      "name": "McAfee",
+      "tier": "medium",
+      "explanation": "A security trial preinstalled by the PC maker. Windows Security keeps protecting your PC without it."
+    },
+    {
+      "match": "AD2F1837.",
+      "name": null,
+      "tier": "medium",
+      "explanation": "An HP app that came with this PC. Some show warranty details or offer driver updates."
+    },
+    {
+      "match": "E046963F.",
+      "name": null,
+      "tier": "medium",
+      "explanation": "A Lenovo app that came with this PC. Some offer driver and firmware updates."
+    },
+    {
+      "match": "DellInc.",
+      "name": null,
+      "tier": "medium",
+      "explanation": "A Dell app that came with this PC. Some offer driver and firmware updates."
+    },
+    {
+      "match": "AcerIncorporated.",
+      "name": null,
+      "tier": "medium",
+      "explanation": "An Acer app that came with this PC."
+    },
+    {
+      "match": "B9ECED6F.",
+      "name": null,
+      "tier": "medium",
+      "explanation": "An ASUS app that came with this PC. Some control laptop features like battery care, updates or the ScreenPad, so check what it does before removing it."
+    },
+    {
+      "match": "F5080380.",
+      "name": null,
+      "tier": "medium",
+      "explanation": "A CyberLink app the PC maker preinstalled, often a trial. Projects saved only inside the app are removed with it."
+    }
+  ],
+  "neverStore": [
+    "Microsoft.WindowsStore",
+    "Microsoft.StorePurchaseApp",
+    "Microsoft.DesktopAppInstaller",
+    "Microsoft.SecHealthUI",
+    "Microsoft.Xbox.TCUI",
+    "Microsoft.XboxIdentityProvider",
+    "Microsoft.XboxSpeechToTextOverlay",
+    "Microsoft.XboxGameCallableUI",
+    "Microsoft.GamingServices",
+    "Microsoft.AAD.",
+    "Microsoft.AccountsControl",
+    "MicrosoftWindows.",
+    "Microsoft.UI.Xaml",
+    "Microsoft.VCLibs",
+    "Microsoft.NET.",
+    "Microsoft.WindowsAppRuntime",
+    "Microsoft.WinAppRuntime",
+    "Microsoft.Services.Store",
+    "Microsoft.LanguageExperiencePack",
+    "Microsoft.MicrosoftEdge",
+    "Microsoft.Edge",
+    "Microsoft.Winget",
+    "Microsoft.ApplicationCompatibilityEnhancements",
+    "Microsoft.OneDriveSync",
+    "Microsoft.Wallet",
+    "NVIDIACorp.",
+    "RealtekSemiconductorCorp.",
+    "AppUp.Intel",
+    "DolbyLaboratories.",
+    "WavesAudio.",
+    "AdvancedMicroDevicesInc",
+    "SynapticsIncorporated.",
+    "ElanMicroelectronicsCorpo.",
+    "Microsoft.StartExperiencesApp",
+    "MicrosoftCorporationII.WindowsSubsystemForLinux",
+    "MicrosoftWindows.CrossDevice"
+  ],
+  "neverStoreSuffixes": [
+    "Extension",
+    "Extensions"
+  ],
+  "neverDesktop": [
+    "Visual C++",
+    "Redistributable",
+    "Runtime",
+    "WebView2",
+    "Driver",
+    "Microsoft Edge",
+    "Update Health Tools",
+    "Microsoft Update",
+    "Chipset",
+    "Management Engine",
+    "Microsoft .NET",
+    "GameInput",
+    "Windows PC Health Check",
+    "Windows Subsystem",
+    "Microsoft Windows Desktop Runtime",
+    "Intel(R) ",
+    "Realtek",
+    "NVIDIA Graphics",
+    "NVIDIA PhysX",
+    "NVIDIA HD Audio",
+    "AMD Software",
+    "Bonjour",
+    "Microsoft Windows SDK",
+    "Compatibility Fix",
+    "Maintenance Service"
+  ]
+}

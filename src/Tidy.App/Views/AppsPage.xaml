@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="Tidy.App.Views.AppsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:Tidy.App.ViewModels">
+    <Grid Padding="{StaticResource PagePadding}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="Apps" Style="{StaticResource PageTitleStyle}" />
+                <TextBlock Text="{x:Bind Vm.Summary, Mode=OneWay}" Style="{StaticResource SecondaryTextStyle}" Margin="0,2,0,0" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Top">
+                <Button Style="{StaticResource SecondaryButtonStyle}" Click="OnScan" IsEnabled="{x:Bind Not(Vm.IsBusy), Mode=OneWay}"
+                        ToolTipService.ToolTip="Scan again (Ctrl+R)" AutomationProperties.Name="Scan">
+                    <Button.KeyboardAccelerators>
+                        <KeyboardAccelerator Key="R" Modifiers="Control" />
+                    </Button.KeyboardAccelerators>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Grid Width="16" Height="16">
+                            <FontIcon Glyph="&#xE72C;" FontSize="14" Visibility="{x:Bind Collapsed(Vm.IsScanning), Mode=OneWay}" />
+                            <ProgressRing Width="16" Height="16" IsActive="{x:Bind Vm.IsScanning, Mode=OneWay}" Foreground="{ThemeResource TextPrimaryBrush}" />
+                        </Grid>
+                        <TextBlock Text="Scan" />
+                    </StackPanel>
+                </Button>
+                <Button Style="{StaticResource PrimaryButtonStyle}" Click="OnRemove" IsEnabled="{x:Bind Vm.CanRemove, Mode=OneWay}"
+                        AutomationProperties.Name="{x:Bind Vm.RemoveButtonText, Mode=OneWay}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Grid Width="16" Height="16">
+                            <FontIcon Glyph="&#xE74D;" FontSize="14" Visibility="{x:Bind Collapsed(Vm.IsRemoving), Mode=OneWay}" />
+                            <ProgressRing Width="16" Height="16" IsActive="{x:Bind Vm.IsRemoving, Mode=OneWay}" Foreground="{ThemeResource OnActionPrimaryBrush}" />
+                        </Grid>
+                        <TextBlock Text="{x:Bind Vm.RemoveButtonText, Mode=OneWay}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="0,20,0,0" ColumnSpacing="8" Visibility="{x:Bind Vm.HasApps, Mode=OneWay}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <ToggleButton Style="{StaticResource ChipStyle}" IsChecked="{x:Bind IsFilter(Vm.Filter, 0), Mode=OneWay}" Click="OnFilterAll">
+                    <TextBlock><Run Text="All" /><Run Text="  " /><Run Text="{x:Bind Vm.AllCount, Mode=OneWay}" Foreground="{ThemeResource TextTertiaryBrush}" /></TextBlock>
+                </ToggleButton>
+                <ToggleButton Style="{StaticResource ChipStyle}" IsChecked="{x:Bind IsFilter(Vm.Filter, 1), Mode=OneWay}" Click="OnFilterPreinstalled"
+                              ToolTipService.ToolTip="Apps that came with Windows or your PC">
+                    <TextBlock><Run Text="Preinstalled extras" /><Run Text="  " /><Run Text="{x:Bind Vm.PreinstalledCount, Mode=OneWay}" Foreground="{ThemeResource TextTertiaryBrush}" /></TextBlock>
+                </ToggleButton>
+                <ToggleButton Style="{StaticResource ChipStyle}" IsChecked="{x:Bind IsFilter(Vm.Filter, 2), Mode=OneWay}" Click="OnFilterUnused"
+                              ToolTipService.ToolTip="Not opened from Start, the taskbar or File Explorer in 90 days">
+                    <TextBlock><Run Text="Not used in 90 days" /><Run Text="  " /><Run Text="{x:Bind Vm.UnusedCount, Mode=OneWay}" Foreground="{ThemeResource TextTertiaryBrush}" /></TextBlock>
+                </ToggleButton>
+            </StackPanel>
+            <AutoSuggestBox Grid.Column="1" PlaceholderText="Search apps" QueryIcon="Find" MaxWidth="280" HorizontalAlignment="Right"
+                            Text="{x:Bind Vm.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="Search apps" />
+            <ComboBox Grid.Column="2" x:Name="SortBox" MinWidth="180" SelectionChanged="OnSortChanged" AutomationProperties.Name="Sort by" />
+        </Grid>
+
+        <StackPanel Grid.Row="2" Margin="0,14,0,10" Spacing="10" Visibility="{x:Bind Vm.HasApps, Mode=OneWay}">
+            <CheckBox x:Name="SelectSafe" Content="Select all safe preinstalled extras" MinWidth="0"
+                      IsChecked="{x:Bind Vm.SelectSafeExtrasState, Mode=OneWay}" IsEnabled="{x:Bind Vm.HasSafeExtras, Mode=OneWay}"
+                      Click="OnSelectSafe" />
+            <InfoBar IsOpen="{x:Bind Vm.ShowTrackingOff, Mode=OneWay}" IsClosable="False" Severity="Informational"
+                     Title="Windows isn't recording app launches"
+                     Message="So Tidy can't tell which apps go unused. Turn on 'Let Windows track app launches' to see it.">
+                <InfoBar.ActionButton>
+                    <HyperlinkButton Content="Open privacy settings" Click="OnOpenPrivacy" />
+                </InfoBar.ActionButton>
+            </InfoBar>
+        </StackPanel>
+
+        <InfoBar Grid.Row="3" Margin="0,0,0,10" IsOpen="{x:Bind Vm.IsResultOpen, Mode=TwoWay}"
+                 Title="{x:Bind Vm.ResultTitle, Mode=OneWay}" Message="{x:Bind Vm.ResultMessage, Mode=OneWay}"
+                 Severity="{x:Bind ResultSeverity(Vm.ResultHasFailures), Mode=OneWay}">
+            <ItemsControl ItemsSource="{x:Bind Vm.ResultFailures}" Margin="0,0,0,12" Visibility="{x:Bind Vm.ResultHasFailures, Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:AppProblem">
+                        <StackPanel Margin="0,2">
+                            <TextBlock Text="{x:Bind Name}" Style="{StaticResource CaptionTextBlockStyle}" FontWeight="SemiBold" />
+                            <TextBlock Text="{x:Bind Reason}" Style="{StaticResource CaptionSecondaryStyle}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </InfoBar>
+
+        <ListView Grid.Row="4" ItemsSource="{x:Bind Vm.Visible}" SelectionMode="None" IsItemClickEnabled="True"
+                  ItemClick="OnItemClick" ContainerContentChanging="OnContainerContentChanging"
+                  Padding="0,0,0,24" Margin="-12,0,-12,0" ItemContainerStyle="{StaticResource CardListViewItemStyle}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="vm:AppViewModel">
+                    <Grid ColumnSpacing="14" Background="Transparent">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <CheckBox IsChecked="{x:Bind IsSelected, Mode=OneWay}" Tag="{x:Bind}" Click="OnRowCheckClick"
+                                  MinWidth="0" Padding="0" VerticalAlignment="Center" AutomationProperties.Name="{x:Bind Name}" />
+                        <Border Grid.Column="1" Width="36" Height="36" CornerRadius="8" Background="{ThemeResource FillSecondaryBrush}">
+                            <Grid>
+                                <FontIcon Glyph="&#xE737;" FontSize="18" Foreground="{ThemeResource TextSecondaryBrush}" Visibility="{x:Bind HasNoIcon, Mode=OneWay}" />
+                                <Image Source="{x:Bind Icon, Mode=OneWay}" Width="26" Height="26" />
+                            </Grid>
+                        </Border>
+                        <StackPanel Grid.Column="2" Spacing="2" VerticalAlignment="Center">
+                            <TextBlock Text="{x:Bind Name}" Style="{StaticResource RowTitleStyle}" />
+                            <TextBlock Style="{StaticResource CaptionSecondaryStyle}" TextTrimming="CharacterEllipsis">
+                                <Run Text="{x:Bind Subtitle}" /><Run Text=" · " /><Run Text="{x:Bind UsageText}" />
+                            </TextBlock>
+                            <TextBlock Text="{x:Bind Explanation}" Visibility="{x:Bind HasExplanation}" Style="{StaticResource CaptionSecondaryStyle}"
+                                       TextWrapping="Wrap" MaxLines="2" TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="3" Spacing="6" VerticalAlignment="Center" MinWidth="96">
+                            <TextBlock Text="{x:Bind SizeText}" Style="{StaticResource SizeTextStyle}" />
+                            <Border HorizontalAlignment="Right" Padding="7,2" CornerRadius="4" Visibility="{x:Bind IsSafe}"
+                                    Background="{ThemeResource StatusSafeFillBrush}">
+                                <TextBlock Text="Safe to Remove" Style="{StaticResource CaptionTextBlockStyle}" FontWeight="SemiBold" Foreground="{ThemeResource StatusSafeTextBrush}" />
+                            </Border>
+                            <Border HorizontalAlignment="Right" Padding="7,2" CornerRadius="4" Visibility="{x:Bind IsCheckFirst}"
+                                    Background="{ThemeResource StatusCheckFillBrush}">
+                                <TextBlock Text="Check First" Style="{StaticResource CaptionTextBlockStyle}" FontWeight="SemiBold" Foreground="{ThemeResource StatusCheckTextBrush}" />
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <StackPanel Grid.Row="1" Grid.RowSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12"
+                    Visibility="{x:Bind Vm.IsFirstScan, Mode=OneWay}">
+            <ProgressRing IsActive="{x:Bind Vm.IsFirstScan, Mode=OneWay}" Width="32" Height="32" />
+            <TextBlock Text="Looking at your installed apps…" Style="{StaticResource SecondaryTextStyle}" />
+        </StackPanel>
+        <TextBlock Grid.Row="4" Text="No apps match." Style="{StaticResource SecondaryTextStyle}"
+                   HorizontalAlignment="Center" Margin="0,40,0,0" Visibility="{x:Bind Vm.NothingMatches, Mode=OneWay}" />
+    </Grid>
+</Page>

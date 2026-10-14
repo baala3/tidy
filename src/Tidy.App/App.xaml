@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generated tokens mirror purge-app's docs/design-system.md: warm graphite neutrals,
+     Okabe-Ito chart colours, graphite as the one accent. -->
+<Application
+    x:Class="Tidy.App.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="ChartAppsBrush" Color="#D55E00" />
+                    <SolidColorBrush x:Key="ChartAppsTileBrush" Color="#C0560A" />
+                    <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#F4F2EF" />
+                    <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="#EFEDEA" />
+                    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#2E2D2B" />
+                    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#64625E" />
+                    <SolidColorBrush x:Key="TextTertiaryBrush" Color="#85827C" />
+                    <SolidColorBrush x:Key="SurfaceBaseBrush" Color="#F6F5F3" />
+                    <SolidColorBrush x:Key="SurfaceCardBrush" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="SurfaceRaisedBrush" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="SurfaceCardHoverBrush" Color="#F4F2EF" />
+                    <SolidColorBrush x:Key="FillSecondaryBrush" Color="#EFEDEA" />
+                    <SolidColorBrush x:Key="FillSecondaryHoverBrush" Color="#E8E6E2" />
+                    <SolidColorBrush x:Key="FillSecondaryPressedBrush" Color="#DFDCD8" />
+                    <SolidColorBrush x:Key="BorderSubtleBrush" Color="#E6E3DF" />
+                    <SolidColorBrush x:Key="BorderStrongBrush" Color="#D5D2CD" />
+                    <SolidColorBrush x:Key="ActionPrimaryBrush" Color="#353431" />
+                    <SolidColorBrush x:Key="ActionPrimaryHoverBrush" Color="#42403D" />
+                    <SolidColorBrush x:Key="ActionPrimaryPressedBrush" Color="#2A2927" />
+                    <SolidColorBrush x:Key="OnActionPrimaryBrush" Color="#FFFFFF" />
+                    <SolidColorBrush x:Key="ActionDestructiveBrush" Color="#D1312A" />
+                    <SolidColorBrush x:Key="ActionDestructiveHoverBrush" Color="#BC2B25" />
+                    <SolidColorBrush x:Key="ActionDestructivePressedBrush" Color="#A92620" />
+                    <SolidColorBrush x:Key="StatusSafeTextBrush" Color="#1F7A35" />
+                    <SolidColorBrush x:Key="StatusSafeFillBrush" Color="#E6F4EA" />
+                    <SolidColorBrush x:Key="StatusCheckTextBrush" Color="#8A5300" />
+                    <SolidColorBrush x:Key="StatusCheckFillBrush" Color="#FAEEDA" />
+                    <SolidColorBrush x:Key="StatusDangerTextBrush" Color="#B4302A" />
+                    <SolidColorBrush x:Key="StatusDangerFillBrush" Color="#FBE8E5" />
+                    <SolidColorBrush x:Key="ChartAppCachesBrush" Color="#56B4E9" />
+                    <SolidColorBrush x:Key="ChartDevToolsBrush" Color="#0072B2" />
+                    <SolidColorBrush x:Key="ChartLargeFilesBrush" Color="#E69F00" />
+                    <SolidColorBrush x:Key="ChartAppCachesTileBrush" Color="#3399D3" />
+                    <SolidColorBrush x:Key="ChartDevToolsTileBrush" Color="#0072B2" />
+                    <SolidColorBrush x:Key="ChartLargeFilesTileBrush" Color="#D18F00" />
+                    <SolidColorBrush x:Key="ChartEverythingElseBrush" Color="#8C8983" />
+                    <SolidColorBrush x:Key="ChartFreeSpaceBrush" Color="#DAD7D2" />
+                    <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent" />
+                    <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush" Color="Transparent" />
+                    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent" />
+                    <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="Transparent" />
+                    <SolidColorBrush x:Key="NavigationViewTopPaneBackground" Color="Transparent" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="ChartAppsBrush" Color="#E8772A" />
+                    <SolidColorBrush x:Key="ChartAppsTileBrush" Color="#D4691F" />
+                    <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#2A2927" />
+                    <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="#282725" />
+                    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#ECEAE6" />
+                    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#A6A39D" />
+                    <SolidColorBrush x:Key="TextTertiaryBrush" Color="#807D78" />
+                    <SolidColorBrush x:Key="SurfaceBaseBrush" Color="#171615" />
+                    <SolidColorBrush x:Key="SurfaceCardBrush" Color="#1E1D1C" />
+                    <SolidColorBrush x:Key="SurfaceRaisedBrush" Color="#2B2A28" />
+                    <SolidColorBrush x:Key="SurfaceCardHoverBrush" Color="#2A2927" />
+                    <SolidColorBrush x:Key="FillSecondaryBrush" Color="#282725" />
+                    <SolidColorBrush x:Key="FillSecondaryHoverBrush" Color="#2F2E2C" />
+                    <SolidColorBrush x:Key="FillSecondaryPressedBrush" Color="#373533" />
+                    <SolidColorBrush x:Key="BorderSubtleBrush" Color="#302F2D" />
+                    <SolidColorBrush x:Key="BorderStrongBrush" Color="#3D3B38" />
+                    <SolidColorBrush x:Key="ActionPrimaryBrush" Color="#ECEAE6" />
+                    <SolidColorBrush x:Key="ActionPrimaryHoverBrush" Color="#F6F4F1" />
+                    <SolidColorBrush x:Key="ActionPrimaryPressedBrush" Color="#D8D5D0" />
+                    <SolidColorBrush x:Key="OnActionPrimaryBrush" Color="#171615" />
+                    <SolidColorBrush x:Key="ActionDestructiveBrush" Color="#D9372D" />
+                    <SolidColorBrush x:Key="ActionDestructiveHoverBrush" Color="#E2453B" />
+                    <SolidColorBrush x:Key="ActionDestructivePressedBrush" Color="#C4302A" />
+                    <SolidColorBrush x:Key="StatusSafeTextBrush" Color="#5FD36B" />
+                    <SolidColorBrush x:Key="StatusSafeFillBrush" Color="#1B2E22" />
+                    <SolidColorBrush x:Key="StatusCheckTextBrush" Color="#F2B84B" />
+                    <SolidColorBrush x:Key="StatusCheckFillBrush" Color="#332910" />
+                    <SolidColorBrush x:Key="StatusDangerTextBrush" Color="#F47468" />
+                    <SolidColorBrush x:Key="StatusDangerFillBrush" Color="#321B19" />
+                    <SolidColorBrush x:Key="ChartAppCachesBrush" Color="#6CC3F0" />
+                    <SolidColorBrush x:Key="ChartDevToolsBrush" Color="#3A94D0" />
+                    <SolidColorBrush x:Key="ChartLargeFilesBrush" Color="#F0B020" />
+                    <SolidColorBrush x:Key="ChartAppCachesTileBrush" Color="#3A9BD5" />
+                    <SolidColorBrush x:Key="ChartDevToolsTileBrush" Color="#1E78BA" />
+                    <SolidColorBrush x:Key="ChartLargeFilesTileBrush" Color="#D99A0B" />
+                    <SolidColorBrush x:Key="ChartEverythingElseBrush" Color="#A8A49D" />
+                    <SolidColorBrush x:Key="ChartFreeSpaceBrush" Color="#4E4B47" />
+                    <SolidColorBrush x:Key="NavigationViewContentBackground" Color="Transparent" />
+                    <SolidColorBrush x:Key="NavigationViewContentGridBorderBrush" Color="Transparent" />
+                    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent" />
+                    <SolidColorBrush x:Key="NavigationViewDefaultPaneBackground" Color="Transparent" />
+                    <SolidColorBrush x:Key="NavigationViewTopPaneBackground" Color="Transparent" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+
+            <!-- Tidy's accent is graphite, as on the Mac. Every WinUI accent brush derives from
+                 these: light theme uses Dark1 (and Dark2/Dark3 for text and hover),
+                 dark theme uses Light2 (and Light1/Light3). -->
+            <Color x:Key="SystemAccentColor">#8C8983</Color>
+            <Color x:Key="SystemAccentColorDark1">#353431</Color>
+            <Color x:Key="SystemAccentColorDark2">#2E2D2B</Color>
+            <Color x:Key="SystemAccentColorDark3">#2A2927</Color>
+            <Color x:Key="SystemAccentColorLight1">#D8D5D0</Color>
+            <Color x:Key="SystemAccentColorLight2">#ECEAE6</Color>
+            <Color x:Key="SystemAccentColorLight3">#F6F4F1</Color>
+
+            <x:Double x:Key="PageMaxWidth">1100</x:Double>
+            <Thickness x:Key="PagePadding">40,28,40,32</Thickness>
+            <CornerRadius x:Key="CardCornerRadius">8</CornerRadius>
+            <CornerRadius x:Key="TagCornerRadius">4</CornerRadius>
+            <FontFamily x:Key="IconFont">Segoe Fluent Icons,Segoe MDL2 Assets</FontFamily>
+
+            <Style x:Key="CardStyle" TargetType="Border">
+                <Setter Property="Background" Value="{ThemeResource SurfaceCardBrush}" />
+                <Setter Property="BorderBrush" Value="{ThemeResource BorderSubtleBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="{StaticResource CardCornerRadius}" />
+            </Style>
+
+            <!-- A list row drawn as a card: the hover shade comes from ListViewItemBackgroundPointerOver. -->
+            <Style x:Key="CardListViewItemStyle" TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
+                <Setter Property="Background" Value="{ThemeResource SurfaceCardBrush}" />
+                <Setter Property="BorderBrush" Value="{ThemeResource BorderSubtleBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="8" />
+                <Setter Property="Padding" Value="14,12,16,12" />
+                <Setter Property="Margin" Value="12,0,12,6" />
+                <Setter Property="MinHeight" Value="0" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+
+            <Style x:Key="PageTitleStyle" TargetType="TextBlock" BasedOn="{StaticResource TitleTextBlockStyle}">
+                <Setter Property="Foreground" Value="{ThemeResource TextPrimaryBrush}" />
+            </Style>
+            <Style x:Key="SecondaryTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
+                <Setter Property="Foreground" Value="{ThemeResource TextSecondaryBrush}" />
+            </Style>
+            <Style x:Key="CaptionSecondaryStyle" TargetType="TextBlock" BasedOn="{StaticResource CaptionTextBlockStyle}">
+                <Setter Property="Foreground" Value="{ThemeResource TextSecondaryBrush}" />
+            </Style>
+            <Style x:Key="RowTitleStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyStrongTextBlockStyle}">
+                <Setter Property="Foreground" Value="{ThemeResource TextPrimaryBrush}" />
+                <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+                <Setter Property="TextWrapping" Value="NoWrap" />
+            </Style>
+            <Style x:Key="SizeTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyStrongTextBlockStyle}">
+                <Setter Property="Foreground" Value="{ThemeResource TextPrimaryBrush}" />
+                <Setter Property="HorizontalAlignment" Value="Right" />
+                <Setter Property="Typography.NumeralAlignment" Value="Tabular" />
+            </Style>
+            <Style x:Key="GroupHeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyStrongTextBlockStyle}">
+                <Setter Property="Foreground" Value="{ThemeResource TextSecondaryBrush}" />
+            </Style>
+
+            <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="{ThemeResource ActionPrimaryBrush}" />
+                <Setter Property="Foreground" Value="{ThemeResource OnActionPrimaryBrush}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="16,0" />
+                <Setter Property="MinHeight" Value="34" />
+                <Setter Property="CornerRadius" Value="17" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="UseSystemFocusVisuals" Value="True" />
+                <Setter Property="FocusVisualMargin" Value="-3" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid x:Name="Root" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="PointerOver">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource ActionPrimaryHoverBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource ActionPrimaryPressedBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Opacity" Value="0.45" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  Padding="{TemplateBinding Padding}"
+                                                  Foreground="{TemplateBinding Foreground}"
+                                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  AutomationProperties.AccessibilityView="Raw" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="{ThemeResource FillSecondaryBrush}" />
+                <Setter Property="Foreground" Value="{ThemeResource TextPrimaryBrush}" />
+                <Setter Property="BorderBrush" Value="{ThemeResource BorderStrongBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="16,0" />
+                <Setter Property="MinHeight" Value="34" />
+                <Setter Property="CornerRadius" Value="17" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="UseSystemFocusVisuals" Value="True" />
+                <Setter Property="FocusVisualMargin" Value="-3" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid x:Name="Root" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="PointerOver">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource FillSecondaryHoverBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource FillSecondaryPressedBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Opacity" Value="0.45" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  Padding="{TemplateBinding Padding}"
+                                                  Foreground="{TemplateBinding Foreground}"
+                                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  AutomationProperties.AccessibilityView="Raw" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="DestructiveButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="{ThemeResource ActionDestructiveBrush}" />
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="16,0" />
+                <Setter Property="MinHeight" Value="34" />
+                <Setter Property="CornerRadius" Value="17" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="UseSystemFocusVisuals" Value="True" />
+                <Setter Property="FocusVisualMargin" Value="-3" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid x:Name="Root" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="PointerOver">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource ActionDestructiveHoverBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource ActionDestructivePressedBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Opacity" Value="0.45" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  Padding="{TemplateBinding Padding}"
+                                                  Foreground="{TemplateBinding Foreground}"
+                                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  AutomationProperties.AccessibilityView="Raw" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style x:Key="QuietButtonStyle" TargetType="Button">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="{ThemeResource TextPrimaryBrush}" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="16,0" />
+                <Setter Property="MinHeight" Value="34" />
+                <Setter Property="CornerRadius" Value="17" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="FontSize" Value="14" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="UseSystemFocusVisuals" Value="True" />
+                <Setter Property="FocusVisualMargin" Value="-3" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid x:Name="Root" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="PointerOver">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource FillSecondaryHoverBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource FillSecondaryPressedBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Opacity" Value="0.45" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}"
+                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                  Padding="{TemplateBinding Padding}"
+                                                  Foreground="{TemplateBinding Foreground}"
+                                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  AutomationProperties.AccessibilityView="Raw" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Filter chips: a pill that shows whether it is the active filter. -->
+            <Style x:Key="ChipStyle" TargetType="ToggleButton">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="{ThemeResource TextSecondaryBrush}" />
+                <Setter Property="BorderBrush" Value="{ThemeResource BorderStrongBrush}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Padding" Value="12,0" />
+                <Setter Property="MinHeight" Value="30" />
+                <Setter Property="CornerRadius" Value="15" />
+                <Setter Property="FontSize" Value="13" />
+                <Setter Property="UseSystemFocusVisuals" Value="True" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ToggleButton">
+                            <Grid x:Name="Root" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="PointerOver">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource FillSecondaryHoverBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource FillSecondaryPressedBrush}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Checked">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource FillSecondaryBrush}" />
+                                                <Setter Target="Root.BorderBrush" Value="{ThemeResource BorderStrongBrush}" />
+                                                <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource TextPrimaryBrush}" />
+                                                <Setter Target="ContentPresenter.FontWeight" Value="SemiBold" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="CheckedPointerOver">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource FillSecondaryHoverBrush}" />
+                                                <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource TextPrimaryBrush}" />
+                                                <Setter Target="ContentPresenter.FontWeight" Value="SemiBold" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="CheckedPressed">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Background" Value="{ThemeResource FillSecondaryPressedBrush}" />
+                                                <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource TextPrimaryBrush}" />
+                                                <Setter Target="ContentPresenter.FontWeight" Value="SemiBold" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <VisualState.Setters>
+                                                <Setter Target="Root.Opacity" Value="0.45" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}"
+                                                  Padding="{TemplateBinding Padding}" Foreground="{TemplateBinding Foreground}"
+                                                  VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                                                  AutomationProperties.AccessibilityView="Raw" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

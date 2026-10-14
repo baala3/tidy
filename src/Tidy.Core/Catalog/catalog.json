@@ -1,0 +1,307 @@
+{
+  "entries": [
+    {
+      "key": "windows-temp", "name": "Temporary Files", "tier": "safe", "scope": "app_caches", "kind": "temp",
+      "explanation": "Files that apps and installers leave in your temp folder and forget to remove. Only items nobody has touched for a day are included, and anything still open is skipped.",
+      "paths": ["{Temp}"], "contentsOnly": true, "minAgeHours": 24
+    },
+    {
+      "key": "crash-dumps", "name": "Crash Dumps", "tier": "safe", "scope": "app_caches", "kind": "logs",
+      "explanation": "Memory snapshots Windows saves when an app crashes, for the developer to debug. Safe to clean unless you were about to send one to support.",
+      "paths": ["{Local}\\CrashDumps"], "contentsOnly": true
+    },
+    {
+      "key": "wer-reports", "name": "Error Reports", "tier": "safe", "scope": "app_caches", "kind": "logs",
+      "explanation": "Problem reports Windows Error Reporting has queued or already sent to Microsoft. Safe to clean; Windows writes new ones if something crashes again.",
+      "paths": ["{Local}\\Microsoft\\Windows\\WER\\ReportArchive", "{Local}\\Microsoft\\Windows\\WER\\ReportQueue"], "contentsOnly": true
+    },
+    {
+      "key": "inet-cache", "name": "Windows Web Cache", "tier": "safe", "scope": "app_caches", "kind": "browser",
+      "explanation": "Web pages and images cached by Windows components and older apps that use the system web engine. Safe to clean; files are downloaded again when needed.",
+      "paths": ["{Local}\\Microsoft\\Windows\\INetCache"], "contentsOnly": true, "minAgeHours": 24
+    },
+    {
+      "key": "directx-shader-cache", "name": "DirectX Shader Cache", "tier": "safe", "scope": "app_caches", "kind": "graphics",
+      "explanation": "Compiled graphics shaders Windows keeps so games and apps start faster. Safe to clean. The first launch of a game afterwards may stutter briefly while shaders compile again.",
+      "paths": ["{Local}\\D3DSCache"], "contentsOnly": true
+    },
+    {
+      "key": "nvidia-shader-cache", "name": "NVIDIA Shader Cache", "tier": "safe", "scope": "app_caches", "kind": "graphics",
+      "explanation": "Compiled shaders the NVIDIA driver caches for games and apps. Safe to clean. Games rebuild them on their next launch, which may cause brief stutters.",
+      "paths": ["{Local}\\NVIDIA\\DXCache", "{Local}\\NVIDIA\\GLCache", "{LocalLow}\\NVIDIA\\PerDriverVersion\\DXCache", "{LocalLow}\\NVIDIA\\PerDriverVersion\\GLCache"], "contentsOnly": true
+    },
+    {
+      "key": "amd-shader-cache", "name": "AMD Shader Cache", "tier": "safe", "scope": "app_caches", "kind": "graphics",
+      "explanation": "Compiled shaders the AMD driver caches for games and apps. Safe to clean. Games rebuild them on their next launch, which may cause brief stutters.",
+      "paths": ["{Local}\\AMD\\DxCache", "{Local}\\AMD\\DxcCache", "{Local}\\AMD\\GLCache", "{Local}\\AMD\\VkCache"], "contentsOnly": true
+    },
+    {
+      "key": "intel-shader-cache", "name": "Intel Shader Cache", "tier": "safe", "scope": "app_caches", "kind": "graphics",
+      "explanation": "Compiled shaders the Intel graphics driver caches for games and apps. Safe to clean; they are rebuilt as you play.",
+      "paths": ["{LocalLow}\\Intel\\ShaderCache"], "contentsOnly": true
+    },
+    {
+      "key": "chrome-cache", "name": "Google Chrome Cache", "tier": "safe", "scope": "app_caches", "kind": "browser",
+      "explanation": "Pages, images and scripts Chrome saved so sites load faster, for every Chrome profile. Your bookmarks, passwords, history and sign-ins are not touched. Sites may load a little slower at first.",
+      "paths": ["{Local}\\Google\\Chrome\\User Data\\*\\Cache", "{Local}\\Google\\Chrome\\User Data\\*\\Code Cache", "{Local}\\Google\\Chrome\\User Data\\*\\GPUCache", "{Local}\\Google\\Chrome\\User Data\\ShaderCache", "{Local}\\Google\\Chrome\\User Data\\GrShaderCache", "{Local}\\Google\\Chrome\\User Data\\GraphiteDawnCache"],
+      "closeFirst": { "app": "Google Chrome", "processes": ["chrome"] }
+    },
+    {
+      "key": "edge-cache", "name": "Microsoft Edge Cache", "tier": "safe", "scope": "app_caches", "kind": "browser",
+      "explanation": "Pages, images and scripts Edge saved so sites load faster, for every Edge profile. Your favorites, passwords, history and sign-ins are not touched. Sites may load a little slower at first.",
+      "paths": ["{Local}\\Microsoft\\Edge\\User Data\\*\\Cache", "{Local}\\Microsoft\\Edge\\User Data\\*\\Code Cache", "{Local}\\Microsoft\\Edge\\User Data\\*\\GPUCache", "{Local}\\Microsoft\\Edge\\User Data\\ShaderCache", "{Local}\\Microsoft\\Edge\\User Data\\GrShaderCache", "{Local}\\Microsoft\\Edge\\User Data\\GraphiteDawnCache"],
+      "closeFirst": { "app": "Microsoft Edge", "processes": ["msedge"] }
+    },
+    {
+      "key": "brave-cache", "name": "Brave Cache", "tier": "safe", "scope": "app_caches", "kind": "browser",
+      "explanation": "Pages, images and scripts Brave saved so sites load faster, for every Brave profile. Your bookmarks, passwords, history and wallet are not touched.",
+      "paths": ["{Local}\\BraveSoftware\\Brave-Browser\\User Data\\*\\Cache", "{Local}\\BraveSoftware\\Brave-Browser\\User Data\\*\\Code Cache", "{Local}\\BraveSoftware\\Brave-Browser\\User Data\\*\\GPUCache", "{Local}\\BraveSoftware\\Brave-Browser\\User Data\\ShaderCache", "{Local}\\BraveSoftware\\Brave-Browser\\User Data\\GrShaderCache"],
+      "closeFirst": { "app": "Brave", "processes": ["brave"] }
+    },
+    {
+      "key": "vivaldi-cache", "name": "Vivaldi Cache", "tier": "safe", "scope": "app_caches", "kind": "browser",
+      "explanation": "Pages, images and scripts Vivaldi saved so sites load faster. Your bookmarks, passwords, notes and history are not touched.",
+      "paths": ["{Local}\\Vivaldi\\User Data\\*\\Cache", "{Local}\\Vivaldi\\User Data\\*\\Code Cache", "{Local}\\Vivaldi\\User Data\\*\\GPUCache"],
+      "closeFirst": { "app": "Vivaldi", "processes": ["vivaldi"] }
+    },
+    {
+      "key": "opera-cache", "name": "Opera Cache", "tier": "safe", "scope": "app_caches", "kind": "browser",
+      "explanation": "Pages, images and scripts Opera saved so sites load faster. Your bookmarks, passwords and history are not touched.",
+      "paths": ["{Local}\\Opera Software\\Opera Stable\\Cache", "{Local}\\Opera Software\\Opera GX Stable\\Cache"],
+      "closeFirst": { "app": "Opera", "processes": ["opera"] }
+    },
+    {
+      "key": "firefox-cache", "name": "Firefox Cache", "tier": "safe", "scope": "app_caches", "kind": "browser",
+      "explanation": "Pages, images and scripts Firefox saved so sites load faster, for every Firefox profile. Your bookmarks, passwords, history and add-ons live elsewhere and are not touched.",
+      "paths": ["{Local}\\Mozilla\\Firefox\\Profiles\\*\\cache2", "{Local}\\Mozilla\\Firefox\\Profiles\\*\\startupCache"],
+      "closeFirst": { "app": "Firefox", "processes": ["firefox"] }
+    },
+    {
+      "key": "steam-web-cache", "name": "Steam Web Cache", "tier": "safe", "scope": "app_caches", "kind": "games",
+      "explanation": "Store pages, images and community content cached by the Steam client. Your games and saves are not touched. Steam downloads what it needs again.",
+      "paths": ["{Local}\\Steam\\htmlcache"],
+      "closeFirst": { "app": "Steam", "processes": ["steam", "steamwebhelper"] }
+    },
+    {
+      "key": "adobe-media-cache-files", "name": "Adobe Media Cache Files", "tier": "safe", "scope": "app_caches", "kind": "media",
+      "explanation": "Premiere Pro and After Effects store rendered previews and conformed audio here. Safe to clean. The apps rebuild it on next launch, which can take a few minutes for large projects.",
+      "paths": ["{Roaming}\\Adobe\\Common\\Media Cache Files", "{Roaming}\\Adobe\\Common\\Media Cache"],
+      "closeFirst": { "app": "Adobe Premiere Pro or After Effects", "processes": ["Adobe Premiere Pro", "AfterFX", "Adobe Media Encoder"] }
+    },
+
+    {
+      "key": "npm-cache", "name": "npm Package Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Cached packages downloaded by npm, plus npx downloads and npm logs. Safe to delete and re-downloaded when you run npm install.",
+      "paths": ["{Local}\\npm-cache"]
+    },
+    {
+      "key": "pnpm-store", "name": "pnpm Package Store", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "The central package store pnpm shares across projects. Installed projects keep working; packages are downloaded again on the next pnpm install.",
+      "paths": ["{Local}\\pnpm\\store", "{Local}\\pnpm-cache"]
+    },
+    {
+      "key": "yarn-cache", "name": "Yarn Package Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Cached packages downloaded by Yarn. Safe to delete and re-downloaded when you run yarn install.",
+      "paths": ["{Local}\\Yarn\\Cache", "{Local}\\Yarn\\Berry\\cache"]
+    },
+    {
+      "key": "bun-cache", "name": "Bun Package Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Cached packages downloaded by Bun. Safe to delete and re-downloaded the next time you run bun install.",
+      "paths": ["{Home}\\.bun\\install\\cache"]
+    },
+    {
+      "key": "deno-cache", "name": "Deno Module Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Modules and npm packages Deno downloaded and compiled. Saved local storage for Deno apps is left alone. Safe to delete; re-downloaded on your next run.",
+      "paths": ["{Local}\\deno\\deps", "{Local}\\deno\\gen", "{Local}\\deno\\npm", "{Local}\\deno\\remote"]
+    },
+    {
+      "key": "corepack-cache", "name": "Corepack Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Package manager versions Corepack downloaded. Safe to delete; Corepack fetches them again on next use.",
+      "paths": ["{Local}\\node\\corepack"]
+    },
+    {
+      "key": "electron-cache", "name": "Electron Download Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Electron runtimes and build tools downloaded by electron and electron-builder. Safe to delete; downloaded again on your next install or build.",
+      "paths": ["{Local}\\electron\\Cache", "{Local}\\electron-builder\\Cache"]
+    },
+    {
+      "key": "nuget-http-cache", "name": "NuGet HTTP Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Package listings and downloads NuGet caches between restores. Safe to delete; the next restore fetches what it needs.",
+      "paths": ["{Local}\\NuGet\\v3-cache", "{Local}\\NuGet\\plugins-cache"]
+    },
+    {
+      "key": "nuget-packages", "name": "NuGet Package Cache", "tier": "medium", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Downloaded .NET packages that NuGet restores your projects from. Nothing is lost, but your next restore downloads them all again, which can take a while and needs an internet connection.",
+      "paths": ["{Home}\\.nuget\\packages"]
+    },
+    {
+      "key": "gradle-global-cache", "name": "Gradle Dependency Cache", "tier": "medium", "scope": "dev_tools", "kind": "build",
+      "explanation": "Libraries, build caches and Gradle versions downloaded for Java, Kotlin and Android projects. Nothing is lost, but your next build downloads everything again, which can take a long time.",
+      "paths": ["{Home}\\.gradle\\caches", "{Home}\\.gradle\\wrapper\\dists"]
+    },
+    {
+      "key": "maven", "name": "Maven Package Cache", "tier": "medium", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Java libraries downloaded by Maven, plus anything you built and installed locally with mvn install. Downloaded libraries come back on your next build; locally installed ones need rebuilding.",
+      "paths": ["{Home}\\.m2\\repository"]
+    },
+    {
+      "key": "ivy-cache", "name": "Ivy Dependency Cache", "tier": "medium", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Java and Scala libraries downloaded by sbt and Ivy. Nothing is lost, but your next build downloads all of them again.",
+      "paths": ["{Home}\\.ivy2\\cache"]
+    },
+    {
+      "key": "android-sdk", "name": "Android Build Cache", "tier": "safe", "scope": "dev_tools", "kind": "devices",
+      "explanation": "Build caches Android Studio and Gradle keep in .android. Your emulators, the key your phones trust for debugging, and your debug signing key are left alone. Safe to delete; the next build recreates them.",
+      "paths": ["{Home}\\.android\\cache", "{Home}\\.android\\build-cache"]
+    },
+    {
+      "key": "cargo", "name": "Rust Package Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Crates and git dependencies Cargo downloaded. Your installed tools in .cargo\\bin are left alone. Safe to delete; re-downloaded when you next build.",
+      "paths": ["{Home}\\.cargo\\registry", "{Home}\\.cargo\\git"]
+    },
+    {
+      "key": "go", "name": "Go Build and Module Cache", "tier": "safe", "scope": "dev_tools", "kind": "build",
+      "explanation": "Compiled Go packages and downloaded module archives. Safe to delete; rebuilt and re-downloaded when you build your Go projects again.",
+      "paths": ["{Local}\\go-build", "{Home}\\go\\pkg\\mod\\cache"]
+    },
+    {
+      "key": "pip-cache", "name": "pip Package Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Python packages pip downloaded and built. Your installed packages and environments are not touched. Safe to delete; re-downloaded the next time you install.",
+      "paths": ["{Local}\\pip\\Cache"]
+    },
+    {
+      "key": "uv-cache", "name": "uv Package Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Cached Python packages downloaded by uv. Python versions uv installed and your environments are left alone. Safe to delete; re-downloaded when you next install.",
+      "paths": ["{Local}\\uv\\cache"]
+    },
+    {
+      "key": "poetry-cache", "name": "Poetry Package Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Package downloads and build artifacts Poetry caches. The virtual environments Poetry manages are left alone. Safe to delete.",
+      "paths": ["{Local}\\pypoetry\\Cache\\cache", "{Local}\\pypoetry\\Cache\\artifacts"]
+    },
+    {
+      "key": "conda-packages", "name": "Conda Package Cache", "tier": "medium", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Packages conda downloaded and unpacked to build your environments. Environments may link to these files, so run conda clean --all yourself if you are unsure.",
+      "paths": ["{Home}\\miniconda3\\pkgs", "{Home}\\anaconda3\\pkgs", "{Home}\\miniforge3\\pkgs", "{Home}\\mambaforge\\pkgs", "{Home}\\.conda\\pkgs"]
+    },
+    {
+      "key": "pre-commit-cache", "name": "pre-commit Environments", "tier": "safe", "scope": "dev_tools", "kind": "build",
+      "explanation": "Tool environments pre-commit sets up to run your git hooks. Safe to delete; they are set up again on your next commit, which makes that commit slower.",
+      "paths": ["{Home}\\.cache\\pre-commit"]
+    },
+    {
+      "key": "composer", "name": "Composer Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Cached PHP packages downloaded by Composer. Safe to delete and re-downloaded when you run composer install.",
+      "paths": ["{Local}\\Composer"]
+    },
+    {
+      "key": "vcpkg-cache", "name": "vcpkg Binary Cache", "tier": "safe", "scope": "dev_tools", "kind": "build",
+      "explanation": "Prebuilt C and C++ libraries vcpkg caches so it does not rebuild them. Safe to delete; the next install builds them again, which can be slow.",
+      "paths": ["{Local}\\vcpkg\\archives"]
+    },
+    {
+      "key": "scoop-cache", "name": "Scoop Download Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
+      "explanation": "Installers Scoop downloaded. The apps you installed are not touched. Safe to delete; Scoop downloads them again if you reinstall.",
+      "paths": ["{Home}\\scoop\\cache"]
+    },
+    {
+      "key": "terraform", "name": "Terraform Plugin Cache", "tier": "safe", "scope": "dev_tools", "kind": "build",
+      "explanation": "Cached Terraform provider plugins. Safe to delete and re-downloaded when you run terraform init.",
+      "paths": ["{Roaming}\\terraform.d\\plugin-cache"]
+    },
+    {
+      "key": "ms-playwright", "name": "Playwright Browsers", "tier": "medium", "scope": "dev_tools", "kind": "browser",
+      "explanation": "Browsers Playwright downloaded for automated website testing. Your tests fail until you run npx playwright install, which downloads them again.",
+      "paths": ["{Local}\\ms-playwright"]
+    },
+    {
+      "key": "puppeteer-browsers", "name": "Puppeteer Browsers", "tier": "medium", "scope": "dev_tools", "kind": "browser",
+      "explanation": "Browsers Puppeteer downloaded for automated testing. Your scripts fail until the browser is installed again, which happens on your next npm install.",
+      "paths": ["{Home}\\.cache\\puppeteer"]
+    },
+    {
+      "key": "cypress-cache", "name": "Cypress Test Binaries", "tier": "medium", "scope": "dev_tools", "kind": "browser",
+      "explanation": "The Cypress app downloaded for end-to-end testing. Cypress needs to download it again before your next test run.",
+      "paths": ["{Local}\\Cypress\\Cache"]
+    },
+    {
+      "key": "vscode-cache", "name": "Visual Studio Code Cache", "tier": "safe", "scope": "dev_tools", "kind": "editor",
+      "explanation": "Web content, compiled code and extension downloads VS Code caches. Your settings, extensions and workspaces are not touched. Safe to delete; rebuilt on next launch.",
+      "paths": ["{Roaming}\\Code\\Cache", "{Roaming}\\Code\\CachedData", "{Roaming}\\Code\\CachedExtensionVSIXs", "{Roaming}\\Code\\Code Cache", "{Roaming}\\Code\\GPUCache", "{Roaming}\\Code\\DawnGraphiteCache", "{Roaming}\\Code\\DawnWebGPUCache"],
+      "closeFirst": { "app": "Visual Studio Code", "processes": ["Code"] }
+    },
+    {
+      "key": "cursor-cache", "name": "Cursor Cache", "tier": "safe", "scope": "dev_tools", "kind": "editor",
+      "explanation": "Web content, compiled code and extension downloads Cursor caches. Your settings, extensions, workspaces and chat history are not touched. Safe to delete; rebuilt on next launch.",
+      "paths": ["{Roaming}\\Cursor\\Cache", "{Roaming}\\Cursor\\CachedData", "{Roaming}\\Cursor\\CachedExtensionVSIXs", "{Roaming}\\Cursor\\Code Cache", "{Roaming}\\Cursor\\GPUCache", "{Roaming}\\Cursor\\DawnGraphiteCache", "{Roaming}\\Cursor\\DawnWebGPUCache"],
+      "closeFirst": { "app": "Cursor", "processes": ["Cursor"] }
+    },
+    {
+      "key": "jetbrains-caches", "name": "JetBrains IDE Caches", "tier": "medium", "scope": "dev_tools", "kind": "editor",
+      "explanation": "Indexes and caches IntelliJ IDEA, Rider, PyCharm, WebStorm and other JetBrains IDEs build for your projects. Settings, plugins and Local History are left alone. The next time you open a project, the IDE re-indexes it, which can take a while.",
+      "paths": ["{Local}\\JetBrains\\*\\caches"]
+    },
+    {
+      "key": "visual-studio-mef-cache", "name": "Visual Studio Component Cache", "tier": "safe", "scope": "dev_tools", "kind": "editor",
+      "explanation": "The component catalog Visual Studio builds at startup. Safe to delete, and a common fix when Visual Studio misbehaves; it is rebuilt on next launch.",
+      "paths": ["{Local}\\Microsoft\\VisualStudio\\*\\ComponentModelCache"],
+      "closeFirst": { "app": "Visual Studio", "processes": ["devenv"] }
+    }
+  ],
+
+  "chromiumApps": {
+    "explanation": "Web content {app} saved so it loads faster. Your messages, files, settings and sign-in are stored elsewhere and are not touched. Safe to clean; {app} downloads what it needs again.",
+    "folders": ["Cache", "Code Cache", "GPUCache", "DawnCache", "DawnGraphiteCache", "DawnWebGPUCache"],
+    "names": {
+      "discord": "Discord", "discordptb": "Discord PTB", "discordcanary": "Discord Canary",
+      "Slack": "Slack", "Notion": "Notion", "Figma": "Figma", "obsidian": "Obsidian", "Signal": "Signal",
+      "Claude": "Claude", "ChatGPT": "ChatGPT", "Microsoft Teams": "Microsoft Teams", "Zoom": "Zoom",
+      "Postman": "Postman", "GitHub Desktop": "GitHub Desktop", "Windsurf": "Windsurf", "Code - Insiders": "VS Code Insiders",
+      "VSCodium": "VSCodium", "Docker Desktop": "Docker Desktop", "Spotify": "Spotify", "WhatsApp": "WhatsApp",
+      "Linear": "Linear", "Loom": "Loom", "Microsoft Teams (work or school)": "Microsoft Teams", "Insomnia": "Insomnia"
+    },
+    "devTools": ["GitHub Desktop", "Windsurf", "Code - Insiders", "VSCodium", "Postman", "Docker Desktop", "Insomnia"]
+  },
+
+  "artifacts": {
+    "node-modules": { "name": "Node.js Packages", "explanation": "Code libraries installed for this project. Safe to remove for a project you are not working on; npm install brings them back." },
+    "next-build": { "name": "Next.js Build Output", "explanation": "Compiled pages and assets produced by Next.js. Safe to delete and rebuilt the next time you run or build the site." },
+    "nuxt-build": { "name": "Nuxt Build Cache", "explanation": "Temporary build files created by Nuxt. Safe to delete and rebuilt the next time you run or build the site." },
+    "nuxt-output": { "name": "Nuxt Output", "explanation": "The built site Nuxt produces for deployment. Safe to delete and rebuilt on your next build." },
+    "sveltekit-build": { "name": "SvelteKit Build Cache", "explanation": "Generated files SvelteKit keeps between builds. Safe to delete and rebuilt the next time you run the project." },
+    "astro-build": { "name": "Astro Build Cache", "explanation": "Temporary build files created by Astro. Safe to delete and rebuilt on your next build." },
+    "angular-cache": { "name": "Angular Build Cache", "explanation": "Build cache kept by the Angular CLI to make repeat builds faster. Safe to delete and rebuilt automatically." },
+    "turbo-cache": { "name": "Turborepo Build Cache", "explanation": "Saved build outputs from Turborepo. Safe to delete. Your next build simply takes a little longer." },
+    "parcel-cache": { "name": "Parcel Build Cache", "explanation": "Saved build outputs from the Parcel bundler. Safe to delete and rebuilt next time you run a Parcel build." },
+    "rust-target": { "name": "Rust Build Output", "explanation": "Compiled Rust project files. Safe to delete; your project recompiles on the next build." },
+    "venv": { "name": "Python Environment", "explanation": "A self-contained Python environment holding packages installed for this project. Safe to delete and recreated by reinstalling from requirements.txt or pyproject.toml." },
+    "pytest-cache": { "name": "pytest Cache", "explanation": "Test results and lookup data cached by pytest. Safe to delete and recreated the next time you run your tests." },
+    "mypy-cache": { "name": "Mypy Type Check Cache", "explanation": "Saved results from Mypy. Safe to delete and rebuilt next time Mypy runs." },
+    "ruff-cache": { "name": "Ruff Linter Cache", "explanation": "Saved results from Ruff. Safe to delete and recreated on the next run." },
+    "tox-environments": { "name": "tox Environments", "explanation": "Throwaway Python environments tox builds to run tests in. Safe to delete and rebuilt on your next tox run." },
+    "dart-tool": { "name": "Dart Tool Folder", "explanation": "A temporary folder used by the Dart and Flutter tools. Safe to delete and recreated the next time you run a Flutter command." },
+    "flutter-cache": { "name": "Flutter Build Output", "explanation": "Build files created by Flutter. Safe to delete and recreated the next time you build your app." },
+    "gradle-cache": { "name": "Gradle Project Cache", "explanation": "Build files and caches Gradle keeps for this project. Safe to delete; your next build recreates them." },
+    "maven-target": { "name": "Maven Build Output", "explanation": "Compiled classes and packaged output produced by Maven. Safe to delete and rebuilt by your next build." },
+    "gradle-build": { "name": "Gradle Build Output", "explanation": "Compiled output produced by a Gradle build. Safe to delete and rebuilt by your next build." },
+    "sbt-target": { "name": "sbt Build Output", "explanation": "Compiled output produced by sbt for a Scala project. Safe to delete and rebuilt by your next build." },
+    "dotnet-bin": { "name": ".NET Build Output", "explanation": "Compiled programs and libraries produced by a .NET build. Safe to delete and rebuilt by your next dotnet build." },
+    "dotnet-obj": { "name": ".NET Intermediate Files", "explanation": "Temporary files .NET creates while compiling. Safe to delete and recreated on your next build." },
+    "elixir-build": { "name": "Elixir Build Output", "explanation": "Compiled output created by Mix. Safe to delete and rebuilt from your source the next time you compile." },
+    "elixir-deps": { "name": "Elixir Dependencies", "explanation": "Dependency source code downloaded by Mix. Safe to delete and re-downloaded on your next build." },
+    "composer-vendor": { "name": "PHP Packages", "explanation": "Third-party PHP packages downloaded by Composer. Safe to delete and re-downloaded by composer install." },
+    "bundler-vendor": { "name": "Ruby Gems", "explanation": "Ruby gems installed into the project by Bundler. Safe to delete and reinstalled by bundle install." },
+    "stack-work": { "name": "Stack Build Output", "explanation": "Compiled output and dependencies kept by Stack for a Haskell project. Safe to delete and rebuilt by your next build, which can take a while." },
+    "cabal-dist": { "name": "Cabal Build Output", "explanation": "Compiled output produced by Cabal for a Haskell project. Safe to delete and rebuilt by your next build." },
+    "zig-cache": { "name": "Zig Build Cache", "explanation": "Compilation cache kept by Zig. Safe to delete and rebuilt on your next build." },
+    "zig-out": { "name": "Zig Build Output", "explanation": "Programs and libraries produced by a Zig build. Safe to delete and rebuilt on your next build." },
+    "dune-build": { "name": "Dune Build Output", "explanation": "Compiled output produced by Dune for an OCaml project. Safe to delete and rebuilt by your next build." },
+    "cmake-build": { "name": "CMake Build Output", "explanation": "Compiled output and build configuration produced by CMake. Safe to delete, though you need to configure and build the project again." },
+    "terraform-plugins": { "name": "Terraform Plugins", "explanation": "Provider plugins and modules Terraform downloads for a workspace. Re-downloaded by terraform init." },
+    "godot-cache": { "name": "Godot Project Cache", "explanation": "Imported assets and editor data Godot keeps for a project. Safe to delete and rebuilt the next time you open the project." },
+    "unity-library": { "name": "Unity Library Folder", "explanation": "Unity's imported-asset database for this project. It rebuilds itself, but reimporting a large project can take a long time." },
+    "unity-temp": { "name": "Unity Temp Folder", "explanation": "Scratch files Unity writes while the editor is running. Do not remove it while the project is open in Unity." },
+    "unreal-intermediate": { "name": "Unreal Intermediate Files", "explanation": "Generated build files Unreal creates while compiling a project. They come back on the next build, which takes longer than usual." },
+    "unreal-derived-data": { "name": "Unreal Derived Data Cache", "explanation": "Cooked assets and compiled shaders Unreal caches for a project. Rebuilt automatically, but the first build afterwards can be very slow." }
+  }
+}

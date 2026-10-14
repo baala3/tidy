@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Tidy.Core/Tidy.Core.csproj" />
+    <Project Path="src/Tidy.App/Tidy.App.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Tidy.Core.Tests/Tidy.Core.Tests.csproj" />
+  </Folder>
+</Solution>
