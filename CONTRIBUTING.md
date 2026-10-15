@@ -35,5 +35,7 @@ If PowerShell blocks scripts, run them as `powershell -ExecutionPolicy Bypass -F
 - Every removal goes through `FileDeleter`, which re-checks the policy at the moment of removal.
   Never add another way to delete files.
 - When you switch over one of Tidy's enums, list every case and leave out `default`.
+- `main` only changes through pull requests, and CI must pass before one merges.
+  Pull requests are squash merged, so the title becomes the commit message.
 - Make one fix or one feature per pull request, and open an issue first for anything bigger than a small fix.
 - For UI changes, add before and after screenshots in light and dark mode.
