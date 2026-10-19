@@ -47,13 +47,13 @@ public sealed partial class OverviewPage : Page
     {
         var state = App.State;
         var disk = state.Disk;
-        var scanning = state.IsScanningEverything || state.IsScanningCaches || state.IsScanningProjects || state.IsScanningLargeFiles || state.IsScanningApps;
+        var scanning = state.IsScanningEverything || state.IsScanningCaches || state.IsScanningProjects || state.IsScanningLargeFiles || state.IsScanningDuplicates || state.IsScanningApps;
 
         ScanIcon.Visibility = scanning ? Visibility.Collapsed : Visibility.Visible;
         ScanRing.IsActive = scanning;
         ScanAllText.Text = scanning ? "Scanning…" : "Scan Everything";
         ScanAllButton.IsEnabled = !scanning;
-        var lastScan = new[] { state.CachesScannedUtc, state.ProjectsScannedUtc, state.LargeFilesScannedUtc, state.AppsScannedUtc }.Where(t => t is not null).Max();
+        var lastScan = new[] { state.CachesScannedUtc, state.ProjectsScannedUtc, state.LargeFilesScannedUtc, state.DuplicatesScannedUtc, state.AppsScannedUtc }.Where(t => t is not null).Max();
         ScannedText.Text = scanning ? "Scanning one category at a time…"
             : lastScan is { } t ? $"Scanned {Format.RelativeTime(t, DateTime.UtcNow)}" : "Not scanned yet";
 

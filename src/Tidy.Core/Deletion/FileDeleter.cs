@@ -8,6 +8,9 @@ public sealed record CleanFailure(string Path, string Reason);
 
 public sealed record CleanResult(long FreedBytes, IReadOnlyList<string> Removed, IReadOnlyList<CleanFailure> Failures);
 
+/// <summary>Removes <paramref name="Path"/>, an extra copy of <paramref name="KeepPath"/>, which stays.</summary>
+public sealed record DuplicateRemoval(string Path, string KeepPath);
+
 public enum DeletionKind
 {
     /// <summary>Cache folders and project artifacts, gated by <see cref="DeletionSafetyPolicy"/>.</summary>
@@ -27,7 +30,18 @@ public sealed class FileDeleter(DeletionSafetyPolicy cachePolicy, LargeFilePolic
     internal Func<string, string?>? RecycleOverride { get; init; }
 
     public Task<CleanResult> MoveToRecycleBinAsync(
-        IReadOnlyList<string> paths, DeletionKind kind, IntPtr ownerWindow, IProgress<string>? progress = null)
+        IReadOnlyList<string> paths, DeletionKind kind, IntPtr ownerWindow, IProgress<string>? progress = null) =>
+        OnStaThread(() => Run(paths, kind, ownerWindow, progress));
+
+    /// <summary>
+    /// Extra copies from Duplicates. Each one is compared byte for byte with the copy that
+    /// stays, right before it moves, so a file that changed since the scan is never lost.
+    /// </summary>
+    public Task<CleanResult> MoveDuplicatesToRecycleBinAsync(
+        IReadOnlyList<DuplicateRemoval> removals, IntPtr ownerWindow, IProgress<string>? progress = null) =>
+        OnStaThread(() => RunDuplicates(removals, ownerWindow, progress));
+
+    private static Task<CleanResult> OnStaThread(Func<CleanResult> run)
     {
         var completion = new TaskCompletionSource<CleanResult>();
         // IFileOperation is apartment-threaded, so it gets a thread of its own.
@@ -35,7 +49,7 @@ public sealed class FileDeleter(DeletionSafetyPolicy cachePolicy, LargeFilePolic
         {
             try
             {
-                completion.SetResult(Run(paths, kind, ownerWindow, progress));
+                completion.SetResult(run());
             }
             catch (Exception e)
             {
@@ -51,18 +65,24 @@ public sealed class FileDeleter(DeletionSafetyPolicy cachePolicy, LargeFilePolic
         return completion.Task;
     }
 
-    internal CleanResult Run(IReadOnlyList<string> paths, DeletionKind kind, IntPtr ownerWindow, IProgress<string>? progress)
+    internal CleanResult Run(IReadOnlyList<string> paths, DeletionKind kind, IntPtr ownerWindow, IProgress<string>? progress) =>
+        Recycle(paths.Distinct(PathUtil.Comparer).Select(p => (p, (Func<string, string?>)(path => Refusal(path, kind)))), ownerWindow, progress);
+
+    internal CleanResult RunDuplicates(IReadOnlyList<DuplicateRemoval> removals, IntPtr ownerWindow, IProgress<string>? progress) =>
+        Recycle(removals.DistinctBy(r => r.Path, PathUtil.Comparer).Select(r => (r.Path, (Func<string, string?>)(path => DuplicateRefusal(path, r.KeepPath)))), ownerWindow, progress);
+
+    private CleanResult Recycle(IEnumerable<(string Path, Func<string, string?> Refusal)> items, IntPtr ownerWindow, IProgress<string>? progress)
     {
         var removed = new List<string>();
         var failures = new List<CleanFailure>();
         long freed = 0;
 
-        foreach (var raw in paths.Distinct(PathUtil.Comparer))
+        foreach (var (raw, check) in items)
         {
             var path = PathUtil.Normalize(raw) ?? raw;
             progress?.Report(path);
 
-            var refusal = Refusal(path, kind);
+            var refusal = check(path);
             if (refusal is not null)
             {
                 failures.Add(new CleanFailure(path, refusal));
@@ -115,5 +135,19 @@ public sealed class FileDeleter(DeletionSafetyPolicy cachePolicy, LargeFilePolic
             default:
                 throw new ArgumentOutOfRangeException(nameof(kind));
         }
+    }
+
+    private string? DuplicateRefusal(string path, string keepPath)
+    {
+        if (!largeFilePolicy.IsEligibleForDeletion(path)) return "Skipped for safety.";
+        var keep = PathUtil.Normalize(keepPath);
+        if (keep is null || PathUtil.AreSame(path, keep)) return "Tidy couldn't tell which copy stays, so it left this one alone.";
+        if (!File.Exists(keep) || (File.GetAttributes(keep) & (FileAttributes.ReparsePoint | FolderSizer.CloudOnly)) != 0)
+        {
+            return "The copy Tidy was keeping is no longer on this PC, so it left this one alone.";
+        }
+        if (FileIdentity.Of(path) is not { } identity || FileIdentity.Of(keep) is not { } kept) return "It is in use. Close the app using it and try again.";
+        if (identity == kept) return "Both names point at the same file, so removing one would free nothing.";
+        return FileContent.SameContent(path, keep) ? null : "It no longer matches the copy Tidy is keeping, so Tidy left it alone.";
     }
 }

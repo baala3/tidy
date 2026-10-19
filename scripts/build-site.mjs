@@ -164,6 +164,9 @@ ${cacheRows("dev_tools")}
 ${artifactRows}
     </tbody></table>
 
+    <h2>Duplicates</h2>
+    <p class="note">Files over 1 MB in Documents, Desktop, Downloads, Videos, Music and Pictures whose contents match byte for byte, outside project and app folders. A hard link is one file under two names, so it is never listed as a duplicate. Nothing is selected for you, one copy of every file always stays, and right before a copy moves it is compared again with the one that stays.</p>
+
     <h2>Preinstalled extras</h2>
     <p class="note">Apps are never selected for you. Store apps are removed for your account and can be reinstalled from the Microsoft Store. Desktop apps run their own uninstaller.</p>
     <table class="table"><thead><tr><th>App</th><th>Why</th><th>Package</th></tr></thead><tbody>

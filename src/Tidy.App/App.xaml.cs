@@ -25,6 +25,10 @@ public partial class App : Application
 
     public static ViewModels.LargeFilesViewModel LargeFiles => _large ??= new(State);
 
+    private static ViewModels.DuplicatesViewModel? _duplicates;
+
+    public static ViewModels.DuplicatesViewModel Duplicates => _duplicates ??= new(State);
+
     private static ViewModels.AppsViewModel? _apps;
 
     public static ViewModels.AppsViewModel Apps => _apps ??= new(State);

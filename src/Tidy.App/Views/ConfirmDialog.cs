@@ -33,6 +33,17 @@ public static class ConfirmDialog
             files.Sum(f => f.SizeBytes),
             "These are your own files. Tidy only moves them to the Recycle Bin, so you can restore any of them until you empty it.");
 
+    public static Task<bool> ConfirmDuplicatesAsync(XamlRoot root, IReadOnlyList<Core.Deletion.DuplicateRemoval> removals, IEnumerable<DuplicateGroupViewModel> groups)
+    {
+        var copies = groups.SelectMany(g => g.Copies).ToDictionary(c => c.Path, StringComparer.OrdinalIgnoreCase);
+        var rows = removals.Select(r => copies[r.Path]).OrderByDescending(c => c.SizeBytes).ToList();
+        return ShowAsync(root,
+            $"Move {Format.Count(rows.Count, "copy", "copies")} to the Recycle Bin?",
+            rows.Select(c => ($"{c.Name} · {c.Copy.File.SourceLabel}", c.SizeBytes, false)),
+            rows.Sum(c => c.SizeBytes),
+            "One copy of each file stays where it is. Right before moving a copy, Tidy compares it byte for byte with the one that stays, and leaves it alone if anything changed.");
+    }
+
     public static Task<bool> ConfirmAppsAsync(XamlRoot root, IReadOnlyList<AppViewModel> apps)
     {
         var store = apps.Count(a => a.App.Kind == Core.Apps.AppKind.Store);
