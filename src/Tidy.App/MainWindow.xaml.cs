@@ -22,6 +22,7 @@ public sealed partial class MainWindow : Window
         ["dev"] = (typeof(CleanPage), ScanCategory.DevTools),
         ["large"] = (typeof(LargeFilesPage), null),
         ["duplicates"] = (typeof(DuplicatesPage), null),
+        ["installers"] = (typeof(InstallersPage), null),
         ["apps"] = (typeof(AppsPage), null),
         ["settings"] = (typeof(SettingsPage), null),
         ["about"] = (typeof(AboutPage), null),
@@ -102,6 +103,7 @@ public sealed partial class MainWindow : Window
         DevSize.Text = state.DevToolItems.Count > 0 ? Format.Bytes(state.DevToolsBytes) : "";
         LargeSize.Text = state.LargeFiles.Count > 0 ? Format.Bytes(state.LargeFilesBytes) : "";
         DuplicatesSize.Text = state.Duplicates.Count > 0 ? Format.Bytes(state.DuplicatesBytes) : "";
+        InstallersSize.Text = state.Installers.Count > 0 ? Format.Bytes(state.InstallersBytes) : "";
         AppsSize.Text = state.Apps.Count > 0 ? Format.Bytes(state.AppsBytes) : "";
         RecycleBinSize.Text = Format.Bytes(state.RecycleBinBytes);
     }

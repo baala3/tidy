@@ -1,4 +1,7 @@
 using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Media.Imaging;
 
 namespace Tidy.App.Services;
 
@@ -8,6 +11,20 @@ namespace Tidy.App.Services;
 /// </summary>
 public static class ShellIcons
 {
+    /// <summary>The icon as an image to show, read off the UI thread. Call it on the UI thread.</summary>
+    public static async Task<ImageSource?> ImageAsync(string path, int size)
+    {
+        var pixels = await Task.Run(() => Pixels(path, size));
+        if (pixels is null) return null;
+        var bitmap = new WriteableBitmap(size, size);
+        using (var stream = bitmap.PixelBuffer.AsStream())
+        {
+            await stream.WriteAsync(pixels);
+        }
+        bitmap.Invalidate();
+        return bitmap;
+    }
+
     /// <summary>Premultiplied BGRA pixels, top row first, or null when the shell has no icon.</summary>
     public static byte[]? Pixels(string path, int size)
     {
