@@ -82,6 +82,20 @@ public sealed class DeletionSafetyPolicy(UserLocations locations)
         // Default Common media cache locations only, never a project or chosen scratch disk.
         @"{Roaming}\Adobe\Common\Media Cache Files",
         @"{Roaming}\Adobe\Common\Media Cache",
+        // Contents only: firmware files iTunes downloads again.
+        @"{Roaming}\Apple Computer\iTunes\iPhone Software Updates\*",
+        @"{Roaming}\Apple Computer\iTunes\iPad Software Updates\*",
+        @"{Roaming}\Apple Computer\iTunes\iPod Software Updates\*",
+        // The media cache only. tdata itself holds the sign-in and must never move.
+        @"{Roaming}\Telegram Desktop\tdata\user_data\cache",
+        @"{Roaming}\Telegram Desktop\tdata\user_data\media_cache",
+        @"{Roaming}\Telegram Desktop\tdata\user_data#2\cache",
+        @"{Roaming}\Telegram Desktop\tdata\user_data#2\media_cache",
+        @"{Roaming}\Telegram Desktop\tdata\user_data#3\cache",
+        @"{Roaming}\Telegram Desktop\tdata\user_data#3\media_cache",
+        // AUDIT: one whole iPhone or iPad backup per folder. Personal data, so always Check First.
+        @"{Roaming}\Apple Computer\MobileSync\Backup\*",
+        @"{Home}\Apple\MobileSync\Backup\*",
 
         // Developer download and build caches.
         @"{Local}\npm-cache",
@@ -186,6 +200,7 @@ public sealed class DeletionSafetyPolicy(UserLocations locations)
         {
             foreach (var p in entry.Paths) yield return CleanupCatalog.ResolveTokens(p, l);
         }
+        foreach (var p in CleanupCatalog.Default.DeviceBackups.Paths) yield return CleanupCatalog.ResolveTokens(p, l);
     }
 
     /// <summary>Locations whose path or anything below it is never removed.</summary>

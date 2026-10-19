@@ -248,11 +248,18 @@ public sealed partial class CleanListViewModel : ObservableObject
 
         var list = visible.ToList();
         var groups = new List<ItemGroup>();
-        var tools = list.Where(i => !i.Item.IsProjectArtifact).ToList();
+        var tools = list.Where(i => !i.Item.IsProjectArtifact && !i.Item.IsDeviceBackup).ToList();
         if (tools.Count > 0)
         {
             var group = new ItemGroup(Category == ScanCategory.DevTools ? "Tool caches" : "", "", null);
             group.AddRange(order(tools));
+            groups.Add(group);
+        }
+        var backups = list.Where(i => i.Item.IsDeviceBackup).ToList();
+        if (backups.Count > 0)
+        {
+            var group = new ItemGroup("iPhone and iPad backups", "Each is a whole device. Keep the newest backup of any device you still use.", null);
+            group.AddRange(order(backups));
             groups.Add(group);
         }
         var projects = list.Where(i => i.Item.IsProjectArtifact)

@@ -88,6 +88,23 @@
       "paths": ["{Roaming}\\Adobe\\Common\\Media Cache Files", "{Roaming}\\Adobe\\Common\\Media Cache"],
       "closeFirst": { "app": "Adobe Premiere Pro or After Effects", "processes": ["Adobe Premiere Pro", "AfterFX", "Adobe Media Encoder"] }
     },
+    {
+      "key": "apple-device-updates", "name": "iPhone and iPad Software Updates", "tier": "safe", "scope": "app_caches", "kind": "devices",
+      "explanation": "Copies of iOS and iPadOS that iTunes downloaded to update or restore a device, several gigabytes each. Safe to clean. iTunes downloads the current version again when a device needs it.",
+      "paths": ["{Roaming}\\Apple Computer\\iTunes\\iPhone Software Updates", "{Roaming}\\Apple Computer\\iTunes\\iPad Software Updates", "{Roaming}\\Apple Computer\\iTunes\\iPod Software Updates"],
+      "contentsOnly": true,
+      "closeFirst": { "app": "iTunes", "processes": ["iTunes"] }
+    },
+    {
+      "key": "telegram-media-cache", "name": "Telegram Media Cache", "tier": "safe", "scope": "app_caches", "kind": "media",
+      "explanation": "Photos, videos and voice messages Telegram Desktop kept after you viewed them. Your chats, and files you saved, are not touched. Safe to clean. Telegram downloads media again from its cloud when you open it.",
+      "paths": [
+        "{Roaming}\\Telegram Desktop\\tdata\\user_data\\cache", "{Roaming}\\Telegram Desktop\\tdata\\user_data\\media_cache",
+        "{Roaming}\\Telegram Desktop\\tdata\\user_data#2\\cache", "{Roaming}\\Telegram Desktop\\tdata\\user_data#2\\media_cache",
+        "{Roaming}\\Telegram Desktop\\tdata\\user_data#3\\cache", "{Roaming}\\Telegram Desktop\\tdata\\user_data#3\\media_cache"
+      ],
+      "closeFirst": { "app": "Telegram", "processes": ["Telegram"] }
+    },
 
     {
       "key": "npm-cache", "name": "npm Package Cache", "tier": "safe", "scope": "dev_tools", "kind": "packages",
@@ -261,6 +278,12 @@
       "Linear": "Linear", "Loom": "Loom", "Microsoft Teams (work or school)": "Microsoft Teams", "Insomnia": "Insomnia"
     },
     "devTools": ["GitHub Desktop", "Windsurf", "Code - Insiders", "VSCodium", "Postman", "Docker Desktop", "Insomnia"]
+  },
+
+  "deviceBackups": {
+    "explanation": "A full backup of {device}, last made {date}. Remove it only if you have a newer backup, in iCloud for example, or no longer need that device's data.",
+    "paths": ["{Roaming}\\Apple Computer\\MobileSync\\Backup", "{Home}\\Apple\\MobileSync\\Backup"],
+    "closeFirst": { "app": "Apple Devices or iTunes", "processes": ["AppleDevices", "iTunes"] }
   },
 
   "artifacts": {

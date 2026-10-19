@@ -47,6 +47,17 @@ public sealed record ChromiumAppsSection
     [JsonPropertyName("devTools")] public required string[] DevTools { get; init; }
 }
 
+/// <summary>
+/// Folders that hold one subfolder per device backup. Each backup is its own Check First
+/// row, named after the device it came from.
+/// </summary>
+public sealed record DeviceBackupsSection
+{
+    [JsonPropertyName("explanation")] public required string Explanation { get; init; }
+    [JsonPropertyName("paths")] public required string[] Paths { get; init; }
+    [JsonPropertyName("closeFirst")] public required CloseFirst CloseFirst { get; init; }
+}
+
 public sealed record ArtifactText(
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("explanation")] string Explanation);
@@ -60,6 +71,7 @@ public sealed class CleanupCatalog
 {
     [JsonPropertyName("entries")] public required List<CatalogEntry> Entries { get; init; }
     [JsonPropertyName("chromiumApps")] public required ChromiumAppsSection ChromiumApps { get; init; }
+    [JsonPropertyName("deviceBackups")] public required DeviceBackupsSection DeviceBackups { get; init; }
     [JsonPropertyName("artifacts")] public required Dictionary<string, ArtifactText> Artifacts { get; init; }
 
     private static readonly Lazy<CleanupCatalog> Embedded = new(LoadEmbedded);

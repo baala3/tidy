@@ -32,6 +32,45 @@ public sealed class CacheScanner(DeletionSafetyPolicy policy, CleanupCatalog cat
         {
             yield return item;
         }
+        foreach (var item in ScanDeviceBackups(cancellation))
+        {
+            yield return item;
+        }
+    }
+
+    /// <summary>One Check First row per iPhone or iPad backup, named after the device.</summary>
+    private IEnumerable<ScanItem> ScanDeviceBackups(CancellationToken cancellation)
+    {
+        var section = catalog.DeviceBackups;
+        var blocked = IsAnyRunning(section.CloseFirst.Processes) ? $"Close {section.CloseFirst.App} to clean this" : null;
+        foreach (var root in section.Paths.Select(p => CleanupCatalog.ResolveTokens(p, policy.Locations)))
+        {
+            if (!Directory.Exists(root) || PathUtil.IsReparsePoint(root)) continue;
+            foreach (var path in SafeSubdirectories(root))
+            {
+                cancellation.ThrowIfCancellationRequested();
+                if (policy.Evaluate(path) != SafetyDecision.Allow) continue;
+                var stats = FolderSizer.Measure(path, cancellation);
+                if (stats.SizeBytes < MinimumItemBytes) continue;
+                var backup = DeviceBackup.Read(path);
+                var date = backup.LastBackupUtc ?? stats.NewestWriteUtc;
+                yield return new ScanItem
+                {
+                    Id = ScanItem.DeviceBackupIdPrefix + Path.GetFileName(path).ToLowerInvariant(),
+                    Title = backup.DeviceName == DeviceBackup.UnknownDevice ? "iPhone or iPad Backup" : $"{backup.DeviceName} Backup",
+                    Explanation = section.Explanation
+                        .Replace("{device}", backup.DeviceName, StringComparison.Ordinal)
+                        .Replace("{date}", date.ToLocalTime().ToString("MMMM d, yyyy", CultureInfo.CurrentCulture), StringComparison.Ordinal),
+                    Safety = SafetyLevel.CheckFirst,
+                    Category = ScanCategory.AppCaches,
+                    Kind = "devices",
+                    Paths = [path],
+                    SizeBytes = stats.SizeBytes,
+                    LastModifiedUtc = date,
+                    BlockedReason = blocked,
+                };
+            }
+        }
     }
 
     private ScanItem? ScanEntry(CatalogEntry entry, HashSet<string> claimed, CancellationToken cancellation)

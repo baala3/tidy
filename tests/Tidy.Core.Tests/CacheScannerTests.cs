@@ -82,4 +82,50 @@ public sealed class CacheScannerTests : IDisposable
         Assert.Contains(items, i => i.Id == "vscode-cache" && i.Category == ScanCategory.DevTools);
         Assert.DoesNotContain(items, i => i.Id == "chromium:code");
     }
+
+    private const string InfoPlist = """
+        <?xml version="1.0" encoding="UTF-8"?>
+        <plist version="1.0">
+        <dict>
+            <key>Build Version</key>
+            <string>22D68</string>
+            <key>Device Name</key>
+            <string>Sam's iPhone</string>
+            <key>Last Backup Date</key>
+            <date>2025-03-03T10:15:00Z</date>
+        </dict>
+        </plist>
+        """;
+
+    [Fact]
+    public void EachDeviceBackupIsItsOwnCheckFirstRow()
+    {
+        _profile.File(@"home\AppData\Roaming\Apple Computer\MobileSync\Backup\00008110-001A\ab\abcdef", 900_000);
+        File.WriteAllText(_profile.P(@"home\AppData\Roaming\Apple Computer\MobileSync\Backup\00008110-001A\Info.plist"), InfoPlist);
+        _profile.File(@"home\Apple\MobileSync\Backup\00008030-002B\cd\cdef01", 700_000);
+
+        var backups = Scan().Where(i => i.IsDeviceBackup).OrderBy(i => i.Title, StringComparer.Ordinal).ToList();
+
+        Assert.Equal(["Sam's iPhone Backup", "iPhone or iPad Backup"], backups.Select(b => b.Title));
+        Assert.All(backups, b => Assert.Equal(SafetyLevel.CheckFirst, b.Safety));
+        Assert.Equal(new DateTime(2025, 3, 3, 10, 15, 0, DateTimeKind.Utc), backups[0].LastModifiedUtc);
+        Assert.Contains("Sam's iPhone", backups[0].Explanation, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void DeviceBackupsWaitForAppleDevicesToClose()
+    {
+        _profile.File(@"home\Apple\MobileSync\Backup\00008030-002B\cd\cdef01", 700_000);
+        var backup = Assert.Single(Scan(running: true), i => i.IsDeviceBackup);
+        Assert.Equal("Close Apple Devices or iTunes to clean this", backup.BlockedReason);
+    }
+
+    [Fact]
+    public void TelegramMediaCacheIsFoundButItsSignInIsNot()
+    {
+        _profile.File(@"home\AppData\Roaming\Telegram Desktop\tdata\user_data\media_cache\0\blob", 900_000);
+        _profile.File(@"home\AppData\Roaming\Telegram Desktop\tdata\key_datas", 900_000);
+        var telegram = Assert.Single(Scan(), i => i.Id == "telegram-media-cache");
+        Assert.EndsWith(@"user_data\media_cache", Assert.Single(telegram.Paths), StringComparison.Ordinal);
+    }
 }

@@ -45,6 +45,8 @@ Tidy runs on Windows 10 (version 2004) and Windows 11, on x64 and Arm64.
   Passwords, history, cookies and sign-ins sit next to these and are never touched.
   A browser that is open is skipped until you close it.
 - Caches of Electron apps like Discord, Slack, Notion and Teams, recognized by the cache's own file layout.
+- Telegram Desktop's media cache, and the iPhone and iPad software updates iTunes downloads.
+- iPhone and iPad backups from iTunes and Apple Devices, one Check First row per device with its name and the date of the backup.
 
 ### Dev Tools
 
