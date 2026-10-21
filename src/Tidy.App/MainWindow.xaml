@@ -91,6 +91,16 @@
                                    Style="{StaticResource CaptionSecondaryStyle}" VerticalAlignment="Center" />
                     </Grid>
                 </NavigationViewItem>
+                <NavigationViewItem x:Name="OneDriveItem" Tag="onedrive" AutomationProperties.Name="OneDrive">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE753;" />
+                    </NavigationViewItem.Icon>
+                    <Grid>
+                        <TextBlock Text="OneDrive" />
+                        <TextBlock x:Name="OneDriveSize" HorizontalAlignment="Right" Margin="0,0,12,0"
+                                   Style="{StaticResource CaptionSecondaryStyle}" VerticalAlignment="Center" />
+                    </Grid>
+                </NavigationViewItem>
                 <NavigationViewItem Tag="apps" AutomationProperties.Name="Apps">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE71D;" />

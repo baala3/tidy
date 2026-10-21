@@ -74,6 +74,12 @@ Tidy runs on Windows 10 (version 2004) and Windows 11, on x64 and Arm64.
 - One copy of each file always stays: Tidy suggests which, and won't let you pick the last one.
 - Right before a copy moves, Tidy compares it again with the copy that stays, and leaves it alone if anything changed.
 
+### OneDrive
+
+- Files in OneDrive that also take space on this PC, from 1 MB up, with the same search and filters as Large Files.
+- Free Up Space does what File Explorer's "Free up space" does: the file stays in OneDrive and in File Explorer, and downloads again when you open it. Nothing is deleted.
+- Only files that are fully synced are offered. Files still uploading, and files you set to "Always keep on this device", are left alone.
+
 ### Installers
 
 - Setup files in the same folders for apps you already have, like `SteamSetup.exe` once Steam is installed.

@@ -23,6 +23,7 @@ public sealed partial class MainWindow : Window
         ["large"] = (typeof(LargeFilesPage), null),
         ["duplicates"] = (typeof(DuplicatesPage), null),
         ["installers"] = (typeof(InstallersPage), null),
+        ["onedrive"] = (typeof(OneDrivePage), null),
         ["apps"] = (typeof(AppsPage), null),
         ["settings"] = (typeof(SettingsPage), null),
         ["about"] = (typeof(AboutPage), null),
@@ -63,6 +64,8 @@ public sealed partial class MainWindow : Window
         Root.ActualThemeChanged += (_, _) => UpdateCaptionButtons();
         AddAccelerators();
 
+        // Only people with OneDrive set up get its page.
+        OneDriveItem.Visibility = App.State.HasOneDrive ? Visibility.Visible : Visibility.Collapsed;
         ContentFrame.Navigate(typeof(OverviewPage));
         UpdateSidebar();
     }
@@ -104,6 +107,7 @@ public sealed partial class MainWindow : Window
         LargeSize.Text = state.LargeFiles.Count > 0 ? Format.Bytes(state.LargeFilesBytes) : "";
         DuplicatesSize.Text = state.Duplicates.Count > 0 ? Format.Bytes(state.DuplicatesBytes) : "";
         InstallersSize.Text = state.Installers.Count > 0 ? Format.Bytes(state.InstallersBytes) : "";
+        OneDriveSize.Text = state.OneDriveFiles.Count > 0 ? Format.Bytes(state.OneDriveBytes) : "";
         AppsSize.Text = state.Apps.Count > 0 ? Format.Bytes(state.AppsBytes) : "";
         RecycleBinSize.Text = Format.Bytes(state.RecycleBinBytes);
     }

@@ -54,7 +54,7 @@
 
         <Grid Grid.Row="1" Margin="0,20,0,0" ColumnSpacing="8" Visibility="{x:Bind Vm.HasFiles, Mode=OneWay}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MaxWidth="360" />
+                <ColumnDefinition Width="*" MinWidth="260" MaxWidth="360" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
