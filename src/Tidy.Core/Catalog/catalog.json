@@ -280,6 +280,53 @@
     "devTools": ["GitHub Desktop", "Windsurf", "Code - Insiders", "VSCodium", "Postman", "Docker Desktop", "Insomnia"]
   },
 
+  "windowsCleanup": [
+    {
+      "key": "Update Cleanup", "name": "Windows Update Cleanup", "tier": "medium",
+      "explanation": "Older copies of Windows components that newer updates replaced. Afterwards you can't uninstall the updates you have now. Checking and cleaning this one can take several minutes."
+    },
+    {
+      "key": "Delivery Optimization Files", "name": "Delivery Optimization Files", "tier": "safe",
+      "explanation": "Pieces of updates Windows downloaded and shares with other PCs. Safe to clean. Windows downloads what it needs again."
+    },
+    {
+      "key": "Previous Installations", "name": "Previous Version of Windows", "tier": "medium",
+      "explanation": "Your previous version of Windows, kept in Windows.old after an upgrade. Afterwards you can't go back to it. Windows removes it by itself after 10 days."
+    },
+    {
+      "key": "Temporary Setup Files", "name": "Temporary Setup Files", "tier": "safe",
+      "explanation": "Files Windows Setup used during an upgrade and left behind. Safe to clean."
+    },
+    {
+      "key": "Upgrade Discarded Files", "name": "Discarded Upgrade Files", "tier": "safe",
+      "explanation": "Files an upgrade set aside and no longer needs. Safe to clean."
+    },
+    {
+      "key": "Windows Upgrade Log Files", "name": "Upgrade Log Files", "tier": "safe",
+      "explanation": "Logs from Windows upgrades, used to look into one that failed. Safe to clean unless you're troubleshooting an upgrade."
+    },
+    {
+      "key": "Setup Log Files", "name": "Setup Log Files", "tier": "safe",
+      "explanation": "Logs Windows Setup writes. Safe to clean."
+    },
+    {
+      "key": "Windows Reset Log Files", "name": "Reset Log Files", "tier": "safe",
+      "explanation": "Logs from resetting this PC. Safe to clean."
+    },
+    {
+      "key": "System error memory dump files", "name": "System Memory Dump", "tier": "safe",
+      "explanation": "The memory snapshot Windows saved when it last crashed, often several gigabytes. Safe to clean unless you were about to send it to support."
+    },
+    {
+      "key": "System error minidump files", "name": "System Minidumps", "tier": "safe",
+      "explanation": "Small crash reports Windows saves each time it stops with an error. Safe to clean unless you're troubleshooting crashes."
+    },
+    {
+      "key": "Device Driver Packages", "name": "Old Driver Versions", "tier": "medium",
+      "explanation": "Earlier versions of drivers Windows keeps after an update. Afterwards you can't roll a driver back to one of them."
+    }
+  ],
+
   "deviceBackups": {
     "explanation": "A full backup of {device}, last made {date}. Remove it only if you have a newer backup, in iCloud for example, or no longer need that device's data.",
     "paths": ["{Roaming}\\Apple Computer\\MobileSync\\Backup", "{Home}\\Apple\\MobileSync\\Backup"],

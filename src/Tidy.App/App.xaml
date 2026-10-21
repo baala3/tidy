@@ -18,6 +18,8 @@
                     <SolidColorBrush x:Key="ChartOneDriveTileBrush" Color="#00875F" />
                     <SolidColorBrush x:Key="ChartVirtualDisksBrush" Color="#CC79A7" />
                     <SolidColorBrush x:Key="ChartVirtualDisksTileBrush" Color="#B5608F" />
+                    <SolidColorBrush x:Key="ChartWindowsBrush" Color="#F0E442" />
+                    <SolidColorBrush x:Key="ChartWindowsTileBrush" Color="#9A8C00" />
                     <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#F4F2EF" />
                     <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="#EFEDEA" />
                     <SolidColorBrush x:Key="TextPrimaryBrush" Color="#2E2D2B" />
@@ -66,6 +68,8 @@
                     <SolidColorBrush x:Key="ChartOneDriveTileBrush" Color="#159A72" />
                     <SolidColorBrush x:Key="ChartVirtualDisksBrush" Color="#D88BB6" />
                     <SolidColorBrush x:Key="ChartVirtualDisksTileBrush" Color="#B96A96" />
+                    <SolidColorBrush x:Key="ChartWindowsBrush" Color="#F0E442" />
+                    <SolidColorBrush x:Key="ChartWindowsTileBrush" Color="#A49612" />
                     <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#2A2927" />
                     <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="#282725" />
                     <SolidColorBrush x:Key="TextPrimaryBrush" Color="#ECEAE6" />

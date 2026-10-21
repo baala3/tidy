@@ -169,6 +169,12 @@ ${cacheRows("dev_tools")}
 ${artifactRows}
     </tbody></table>
 
+    <h2>Windows</h2>
+    <p class="note">Windows' own Disk Cleanup handlers, by name, run with administrator permission that Windows asks for each time. Tidy passes them no paths, and they decide what to remove. What they remove can't go to the Recycle Bin, so nothing is selected for you. No other handler is ever run.</p>
+    <table class="table"><thead><tr><th>Item</th><th>What it is</th><th>Handler</th></tr></thead><tbody>
+${catalog.windowsCleanup.map((e) => `<tr><td><strong>${escape(e.name)}</strong><br>${tag(e.tier)}</td><td>${escape(e.explanation)}</td><td><code>${escape(e.key)}</code></td></tr>`).join("\n")}
+    </tbody></table>
+
     <h2>WSL &amp; Docker</h2>
     <p class="note">The disk images of the WSL 2 distros WSL lists for you, and Docker Desktop's own disks in its folder; no other virtual disk is offered, and none behind a link. Compacting stops Docker Desktop and shuts WSL down first, then gives back the blocks the disk no longer uses. Nothing inside a disk is changed or removed.</p>
 

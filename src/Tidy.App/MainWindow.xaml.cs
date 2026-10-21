@@ -25,6 +25,7 @@ public sealed partial class MainWindow : Window
         ["installers"] = (typeof(InstallersPage), null),
         ["onedrive"] = (typeof(OneDrivePage), null),
         ["wsl"] = (typeof(VirtualDisksPage), null),
+        ["windows"] = (typeof(WindowsPage), null),
         ["apps"] = (typeof(AppsPage), null),
         ["settings"] = (typeof(SettingsPage), null),
         ["about"] = (typeof(AboutPage), null),
@@ -109,6 +110,7 @@ public sealed partial class MainWindow : Window
         DuplicatesSize.Text = state.Duplicates.Count > 0 ? Format.Bytes(state.DuplicatesBytes) : "";
         InstallersSize.Text = state.Installers.Count > 0 ? Format.Bytes(state.InstallersBytes) : "";
         OneDriveSize.Text = state.OneDriveFiles.Count > 0 ? Format.Bytes(state.OneDriveBytes) : "";
+        WindowsSize.Text = state.WindowsBytes > 0 ? Format.Bytes(state.WindowsBytes) : "";
         // Only people with WSL or Docker get the page; the size is what compacting gives back.
         VirtualDisksItem.Visibility = state.VirtualDisks.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         VirtualDisksSize.Text = state.VirtualDisksReclaimableBytes > 0 ? Format.Bytes(state.VirtualDisksReclaimableBytes) : "";

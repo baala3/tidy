@@ -58,6 +58,25 @@ public sealed record DeviceBackupsSection
     [JsonPropertyName("closeFirst")] public required CloseFirst CloseFirst { get; init; }
 }
 
+/// <summary>
+/// One of Windows' own Disk Cleanup handlers Tidy may run, by the name of its key under
+/// <c>Explorer\VolumeCaches</c>. Windows decides what each one removes; Tidy passes no paths.
+/// </summary>
+public sealed record WindowsCleanupEntry
+{
+    [JsonPropertyName("key")] public required string Key { get; init; }
+    [JsonPropertyName("name")] public required string Name { get; init; }
+    [JsonPropertyName("tier")] public required string Tier { get; init; }
+    [JsonPropertyName("explanation")] public required string Explanation { get; init; }
+
+    public SafetyLevel Safety => Tier switch
+    {
+        "safe" => SafetyLevel.Safe,
+        "medium" => SafetyLevel.CheckFirst,
+        _ => throw new InvalidDataException($"Unknown tier '{Tier}' on {Key}"),
+    };
+}
+
 public sealed record ArtifactText(
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("explanation")] string Explanation);
@@ -72,6 +91,7 @@ public sealed class CleanupCatalog
     [JsonPropertyName("entries")] public required List<CatalogEntry> Entries { get; init; }
     [JsonPropertyName("chromiumApps")] public required ChromiumAppsSection ChromiumApps { get; init; }
     [JsonPropertyName("deviceBackups")] public required DeviceBackupsSection DeviceBackups { get; init; }
+    [JsonPropertyName("windowsCleanup")] public required List<WindowsCleanupEntry> WindowsCleanup { get; init; }
     [JsonPropertyName("artifacts")] public required Dictionary<string, ArtifactText> Artifacts { get; init; }
 
     private static readonly Lazy<CleanupCatalog> Embedded = new(LoadEmbedded);
@@ -89,6 +109,7 @@ public sealed class CleanupCatalog
             _ = entry.Safety;
             _ = entry.Category;
         }
+        foreach (var entry in catalog.WindowsCleanup) _ = entry.Safety;
         return catalog;
     }
 

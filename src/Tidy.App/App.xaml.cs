@@ -29,6 +29,7 @@ public partial class App : Application
     private static ViewModels.InstallersViewModel? _installers;
     private static ViewModels.OneDriveViewModel? _oneDrive;
     private static ViewModels.VirtualDisksViewModel? _virtualDisks;
+    private static ViewModels.WindowsViewModel? _windows;
 
     public static ViewModels.DuplicatesViewModel Duplicates => _duplicates ??= new(State);
 
@@ -37,6 +38,8 @@ public partial class App : Application
     public static ViewModels.OneDriveViewModel OneDrive => _oneDrive ??= new(State);
 
     public static ViewModels.VirtualDisksViewModel VirtualDisks => _virtualDisks ??= new(State);
+
+    public static ViewModels.WindowsViewModel Windows => _windows ??= new(State);
 
     private static ViewModels.AppsViewModel? _apps;
 

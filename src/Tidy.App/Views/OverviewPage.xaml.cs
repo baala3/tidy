@@ -49,7 +49,7 @@ public sealed partial class OverviewPage : Page
     {
         var state = App.State;
         var disk = state.Disk;
-        var scanning = state.IsScanningEverything || state.IsScanningCaches || state.IsScanningProjects || state.IsScanningLargeFiles || state.IsScanningDuplicates || state.IsScanningApps || state.IsScanningInstallers || state.IsScanningOneDrive || state.IsScanningVirtualDisks;
+        var scanning = state.IsScanningEverything || state.IsScanningCaches || state.IsScanningProjects || state.IsScanningLargeFiles || state.IsScanningDuplicates || state.IsScanningApps || state.IsScanningInstallers || state.IsScanningOneDrive || state.IsScanningVirtualDisks || state.IsCheckingWindows;
 
         ScanIcon.Visibility = scanning ? Visibility.Collapsed : Visibility.Visible;
         ScanRing.IsActive = scanning;
@@ -69,7 +69,8 @@ public sealed partial class OverviewPage : Page
         var apps = state.AppsBytes;
         var oneDrive = state.OneDriveBytes;
         var disks = state.VirtualDisksBytes;
-        var known = caches + dev + large + apps + oneDrive + disks;
+        var windows = state.WindowsBytes;
+        var known = caches + dev + large + apps + oneDrive + disks + windows;
         var everythingElse = Math.Max(0, disk.UsedBytes - known);
 
         var categories = new List<Segment>
@@ -81,9 +82,10 @@ public sealed partial class OverviewPage : Page
             new("large", "Large Files", LargeSubtitle(), large, "ChartLargeFilesBrush", "ChartLargeFilesTileBrush", Glyphs.LargeFiles, "large", state.LargeFiles.Count > 0),
             new("apps", "Apps", AppsSubtitle(), apps, "ChartAppsBrush", "ChartAppsTileBrush", Glyphs.Apps, "apps", state.Apps.Count > 0),
         };
+        categories.Insert(2, new("windows", "Windows", WindowsSubtitle(), windows, "ChartWindowsBrush", "ChartWindowsTileBrush", Glyphs.Windows, "windows", false));
         if (state.VirtualDisks.Count > 0)
         {
-            categories.Insert(2, new("wsl", "WSL & Docker", VirtualDisksSubtitle(), disks, "ChartVirtualDisksBrush", "ChartVirtualDisksTileBrush", Glyphs.VirtualDisks, "wsl", false));
+            categories.Insert(3, new("wsl", "WSL & Docker", VirtualDisksSubtitle(), disks, "ChartVirtualDisksBrush", "ChartVirtualDisksTileBrush", Glyphs.VirtualDisks, "wsl", false));
         }
         if (state.HasOneDrive)
         {
@@ -119,6 +121,14 @@ public sealed partial class OverviewPage : Page
             return state.IsScanningLargeFiles ? "Scanning…" : state.LargeFilesScannedUtc is null ? "Not scanned yet" : "No files over 5 MB";
         }
         return Format.Count(state.LargeFiles.Count, "file over 5 MB", "files over 5 MB");
+    }
+
+    private static string WindowsSubtitle()
+    {
+        var state = App.State;
+        if (state.IsCheckingWindows) return "Checking…";
+        if (state.WindowsCheckedUtc is null) return "Not checked yet · needs administrator permission";
+        return state.WindowsBytes > 0 ? "Update leftovers and crash dumps to clean" : "Nothing to clean";
     }
 
     private static string VirtualDisksSubtitle()

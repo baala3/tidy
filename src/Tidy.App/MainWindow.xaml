@@ -60,6 +60,16 @@
                                    Style="{StaticResource CaptionSecondaryStyle}" VerticalAlignment="Center" />
                     </Grid>
                 </NavigationViewItem>
+                <NavigationViewItem Tag="windows" AutomationProperties.Name="Windows">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE770;" />
+                    </NavigationViewItem.Icon>
+                    <Grid>
+                        <TextBlock Text="Windows" />
+                        <TextBlock x:Name="WindowsSize" HorizontalAlignment="Right" Margin="0,0,12,0"
+                                   Style="{StaticResource CaptionSecondaryStyle}" VerticalAlignment="Center" />
+                    </Grid>
+                </NavigationViewItem>
                 <NavigationViewItem x:Name="VirtualDisksItem" Tag="wsl" AutomationProperties.Name="WSL &amp; Docker" Visibility="Collapsed">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE756;" />

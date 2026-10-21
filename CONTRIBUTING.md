@@ -33,6 +33,7 @@ If PowerShell blocks scripts, run them as `powershell -ExecutionPolicy Bypass -F
 - A new cache location needs an entry in `catalog.json` and a matching pattern in `DeletionSafetyPolicy.AllowedPatterns`.
   The catalog only proposes; the policy decides. A test fails if the two disagree.
 - Every removal goes through `FileDeleter`, which re-checks the policy at the moment of removal.
+  The one exception is the Windows page, which runs only the Disk Cleanup handlers listed in `catalog.json` from the elevated helper and passes them no paths.
   Never add another way to delete files.
 - When you switch over one of Tidy's enums, list every case and leave out `default`.
 - `main` only changes through pull requests, and CI must pass before one merges.
