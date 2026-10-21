@@ -28,12 +28,15 @@ public partial class App : Application
     private static ViewModels.DuplicatesViewModel? _duplicates;
     private static ViewModels.InstallersViewModel? _installers;
     private static ViewModels.OneDriveViewModel? _oneDrive;
+    private static ViewModels.VirtualDisksViewModel? _virtualDisks;
 
     public static ViewModels.DuplicatesViewModel Duplicates => _duplicates ??= new(State);
 
     public static ViewModels.InstallersViewModel Installers => _installers ??= new(State);
 
     public static ViewModels.OneDriveViewModel OneDrive => _oneDrive ??= new(State);
+
+    public static ViewModels.VirtualDisksViewModel VirtualDisks => _virtualDisks ??= new(State);
 
     private static ViewModels.AppsViewModel? _apps;
 

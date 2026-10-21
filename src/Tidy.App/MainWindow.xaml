@@ -60,6 +60,16 @@
                                    Style="{StaticResource CaptionSecondaryStyle}" VerticalAlignment="Center" />
                     </Grid>
                 </NavigationViewItem>
+                <NavigationViewItem x:Name="VirtualDisksItem" Tag="wsl" AutomationProperties.Name="WSL &amp; Docker" Visibility="Collapsed">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE756;" />
+                    </NavigationViewItem.Icon>
+                    <Grid>
+                        <TextBlock Text="WSL &amp; Docker" />
+                        <TextBlock x:Name="VirtualDisksSize" HorizontalAlignment="Right" Margin="0,0,12,0"
+                                   Style="{StaticResource CaptionSecondaryStyle}" VerticalAlignment="Center" />
+                    </Grid>
+                </NavigationViewItem>
                 <NavigationViewItemHeader Content="Review" />
                 <NavigationViewItem Tag="large" AutomationProperties.Name="Large Files">
                     <NavigationViewItem.Icon>
