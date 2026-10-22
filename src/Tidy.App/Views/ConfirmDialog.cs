@@ -21,6 +21,10 @@ public static class ConfirmDialog
         var note = checkFirst == 0
             ? "Everything here is Safe to Clean: its app rebuilds it by itself."
             : $"{Format.Count(checkFirst, "item is", "items are")} marked Check First. They come back, but it can cost time, a download or a sign-in. Read their notes if you are unsure.";
+        if (items.Any(i => i.Item.IsDeviceBackup))
+        {
+            note += " A device backup doesn't rebuild itself: it comes back only from the Recycle Bin, or by backing up that device again.";
+        }
         return ShowAsync(root,
             $"Move {Format.Count(items.Count, "item", "items")} to the Recycle Bin?",
             rows, items.Sum(i => i.SizeBytes), note);

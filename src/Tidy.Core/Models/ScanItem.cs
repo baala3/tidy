@@ -37,4 +37,9 @@ public sealed record ScanItem
     public string? BlockedReason { get; init; }
 
     public bool IsProjectArtifact => ProjectPath is not null;
+
+    public const string DeviceBackupIdPrefix = "device-backup:";
+
+    /// <summary>A whole iPhone or iPad backup, listed apart from the caches.</summary>
+    public bool IsDeviceBackup => Id.StartsWith(DeviceBackupIdPrefix, StringComparison.Ordinal);
 }

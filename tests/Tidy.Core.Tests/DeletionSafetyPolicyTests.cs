@@ -128,4 +128,22 @@ public sealed class DeletionSafetyPolicyTests : IDisposable
         _profile.File(@"home\Documents\Photos\CMakeLists.txt");
         Assert.Equal(SafetyDecision.Allow, _policy.Evaluate(build));
     }
+
+    [Fact]
+    public void ABackupCanGoButTheFolderHoldingBackupsCannot()
+    {
+        var root = _profile.Dir(@"home\AppData\Roaming\Apple Computer\MobileSync\Backup");
+        var backup = _profile.Dir(@"home\AppData\Roaming\Apple Computer\MobileSync\Backup\00008110-001A");
+        Assert.Equal(SafetyDecision.BlockedNeverDelete, _policy.Evaluate(root));
+        Assert.Equal(SafetyDecision.Allow, _policy.Evaluate(backup));
+    }
+
+    [Fact]
+    public void TelegramsSignInStaysOffTheList()
+    {
+        var tdata = _profile.Dir(@"home\AppData\Roaming\Telegram Desktop\tdata");
+        var cache = _profile.Dir(@"home\AppData\Roaming\Telegram Desktop\tdata\user_data\cache");
+        Assert.Equal(SafetyDecision.BlockedNotAllowlisted, _policy.Evaluate(tdata));
+        Assert.Equal(SafetyDecision.Allow, _policy.Evaluate(cache));
+    }
 }

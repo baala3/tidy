@@ -151,6 +151,11 @@ ${cacheRows("app_caches")}
 )} Only folders with a browser cache's own file layout qualify.</td><td>${catalog.chromiumApps.folders
   .map((f) => `<code>%APPDATA%\\&lt;app&gt;\\${escape(f)}</code>`)
   .join("<br>")}</td></tr>
+<tr><td><strong>iPhone and iPad backups</strong><br>${tag("medium")}</td><td>${escape(
+  catalog.deviceBackups.explanation.replaceAll("{device}", "the device").replaceAll("{date}", "on the date shown")
+)} One row per backup, named after its device. Skipped while ${escape(catalog.deviceBackups.closeFirst.app)} is open.</td><td>${catalog.deviceBackups.paths
+  .map((p) => `<code>${escape(prettyPath(p))}\\&lt;backup&gt;</code>`)
+  .join("<br>")}</td></tr>
     </tbody></table>
 
     <h2>Developer tools</h2>
