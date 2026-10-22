@@ -14,6 +14,8 @@
                 <ResourceDictionary x:Key="Light">
                     <SolidColorBrush x:Key="ChartAppsBrush" Color="#D55E00" />
                     <SolidColorBrush x:Key="ChartAppsTileBrush" Color="#C0560A" />
+                    <SolidColorBrush x:Key="ChartOneDriveBrush" Color="#009E73" />
+                    <SolidColorBrush x:Key="ChartOneDriveTileBrush" Color="#00875F" />
                     <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#F4F2EF" />
                     <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="#EFEDEA" />
                     <SolidColorBrush x:Key="TextPrimaryBrush" Color="#2E2D2B" />
@@ -58,6 +60,8 @@
                 <ResourceDictionary x:Key="Dark">
                     <SolidColorBrush x:Key="ChartAppsBrush" Color="#E8772A" />
                     <SolidColorBrush x:Key="ChartAppsTileBrush" Color="#D4691F" />
+                    <SolidColorBrush x:Key="ChartOneDriveBrush" Color="#1FB386" />
+                    <SolidColorBrush x:Key="ChartOneDriveTileBrush" Color="#159A72" />
                     <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#2A2927" />
                     <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="#282725" />
                     <SolidColorBrush x:Key="TextPrimaryBrush" Color="#ECEAE6" />

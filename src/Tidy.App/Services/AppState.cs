@@ -27,10 +27,12 @@ public sealed partial class AppState : ObservableObject
     private CancellationTokenSource? _largeFileScan;
     private CancellationTokenSource? _duplicateScan;
     private CancellationTokenSource? _installerScan;
+    private CancellationTokenSource? _oneDriveScan;
 
     public UserLocations Locations { get; }
     public DeletionSafetyPolicy Policy { get; }
     public LargeFilePolicy LargeFilePolicy { get; }
+    public OneDrivePolicy OneDrivePolicy { get; }
     public AppSettings Settings { get; }
 
     public ObservableCollection<ItemViewModel> AppCacheItems { get; } = [];
@@ -39,6 +41,7 @@ public sealed partial class AppState : ObservableObject
     public BulkObservableCollection<AppViewModel> Apps { get; } = [];
     public BulkObservableCollection<DuplicateGroupViewModel> Duplicates { get; } = [];
     public BulkObservableCollection<InstallerViewModel> Installers { get; } = [];
+    public BulkObservableCollection<LargeFileViewModel> OneDriveFiles { get; } = [];
 
     [ObservableProperty] public partial bool IsScanningCaches { get; private set; }
     [ObservableProperty] public partial bool IsScanningProjects { get; private set; }
@@ -55,6 +58,9 @@ public sealed partial class AppState : ObservableObject
     [ObservableProperty] public partial DuplicateScanProgress DuplicatesProgress { get; private set; }
     [ObservableProperty] public partial bool IsScanningInstallers { get; private set; }
     [ObservableProperty] public partial DateTime? InstallersScannedUtc { get; private set; }
+    [ObservableProperty] public partial bool IsScanningOneDrive { get; private set; }
+    [ObservableProperty] public partial DateTime? OneDriveScannedUtc { get; private set; }
+    [ObservableProperty] public partial bool IsOneDriveRunning { get; private set; }
     [ObservableProperty] public partial DiskUsage Disk { get; private set; }
     [ObservableProperty] public partial long RecycleBinBytes { get; private set; }
 
@@ -67,6 +73,7 @@ public sealed partial class AppState : ObservableObject
         Locations = UserLocations.Current();
         Policy = new DeletionSafetyPolicy(Locations);
         LargeFilePolicy = new LargeFilePolicy(Locations);
+        OneDrivePolicy = new OneDrivePolicy(Locations);
         Settings = AppSettings.Load(Locations.TidyData);
         _deleter = new FileDeleter(Policy, LargeFilePolicy);
         Disk = DiskUsage.ForProfileDrive(Locations);
@@ -82,6 +89,10 @@ public sealed partial class AppState : ObservableObject
     public long AppsBytes => Apps.Sum(a => a.SizeBytes);
     public long DuplicatesBytes => Duplicates.Sum(g => g.WastedBytes);
     public long InstallersBytes => Installers.Sum(i => i.SizeBytes);
+    public long OneDriveBytes => OneDriveFiles.Sum(f => f.SizeBytes);
+
+    /// <summary>OneDrive is signed in on this PC, whether or not it's running.</summary>
+    public bool HasOneDrive => OneDrivePolicy.Roots.Count > 0;
 
     public void SaveSettings() => Settings.Save(Locations.TidyData);
 
@@ -100,6 +111,8 @@ public sealed partial class AppState : ObservableObject
             await ScanDuplicatesAsync();
             await ScanAppsAsync();
             await ScanInstallersAsync();
+            // Last: listing a OneDrive folder waits on the OneDrive app, so a stuck one can't hold up the rest.
+            await ScanOneDriveAsync();
         }
         finally
         {
@@ -206,6 +219,54 @@ public sealed partial class AppState : ObservableObject
         finally
         {
             if (!cancel.IsCancellationRequested) IsScanningDuplicates = false;
+        }
+    }
+
+    public async Task ScanOneDriveAsync()
+    {
+        if (!HasOneDrive) return;
+        var cancel = Restart(ref _oneDriveScan);
+        IsScanningOneDrive = true;
+        var selected = OneDriveFiles.Where(f => f.IsSelected).Select(f => f.Path).ToHashSet(PathUtil.Comparer);
+        try
+        {
+            var scanner = new OneDriveScanner(OneDrivePolicy);
+            var (found, running) = await Task.Run(() => (
+                scanner.Scan(cancel.Token).OrderByDescending(f => f.SizeBytes).ToList(),
+                RunningApps.AnyRunning(["OneDrive"])), cancel.Token);
+            IsOneDriveRunning = running;
+            OneDriveFiles.ReplaceAll(found.Select(file => new LargeFileViewModel(file) { IsSelected = selected.Contains(file.Path) }));
+            OneDriveScannedUtc = DateTime.UtcNow;
+            NotifyTotals();
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        finally
+        {
+            if (!cancel.IsCancellationRequested) IsScanningOneDrive = false;
+        }
+    }
+
+    /// <summary>Makes files online-only. They stay in OneDrive, so they leave this list but nothing is deleted.</summary>
+    public async Task<CleanResult> FreeUpOneDriveAsync(IReadOnlyList<LargeFileViewModel> files)
+    {
+        var result = await new CloudSpaceFreer(OneDrivePolicy).FreeUpSpaceAsync(files.Select(f => f.Path).ToList());
+        var freed = result.Removed.ToHashSet(PathUtil.Comparer);
+        foreach (var file in OneDriveFiles.Where(f => freed.Contains(f.Path)).ToList()) OneDriveFiles.Remove(file);
+        NotifyTotals();
+        RefreshDisk();
+        // OneDrive drops the local copies on its own schedule; look at the disk again once it has.
+        if (freed.Count > 0) _ = RefreshDiskLaterAsync();
+        return result;
+    }
+
+    private async Task RefreshDiskLaterAsync()
+    {
+        foreach (var seconds in new[] { 20, 60 })
+        {
+            await Task.Delay(TimeSpan.FromSeconds(seconds));
+            RefreshDisk();
         }
     }
 

@@ -172,6 +172,9 @@ ${artifactRows}
     <h2>Duplicates</h2>
     <p class="note">Files over 1 MB in Documents, Desktop, Downloads, Videos, Music and Pictures whose contents match byte for byte, outside project and app folders. A hard link is one file under two names, so it is never listed as a duplicate. Nothing is selected for you, one copy of every file always stays, and right before a copy moves it is compared again with the one that stays.</p>
 
+    <h2>OneDrive</h2>
+    <p class="note">Files over 1 MB in your OneDrive folders that are fully synced and also kept on this PC. Free Up Space marks them online-only, as File Explorer's "Free up space" does, and OneDrive then removes the local copy. Nothing is deleted: each file stays in OneDrive and in File Explorer. Files still syncing, files set to always stay on this device, Personal Vault, and anything behind a link are never offered, and each file is checked again right before it changes.</p>
+
     <h2>Installers</h2>
     <p class="note">Installer files in the same folders, offered only for apps that are installed: an <code>.msi</code> by its ProductCode, an <code>.msix</code> or <code>.appx</code> by its package name, and an <code>.exe</code> by product name once it shows it is an installer (setup in its name or details, or the mark of an installer framework). Installers for anything else are never listed. Nothing is selected for you, and installers newer than the installed app are Check First.</p>
 

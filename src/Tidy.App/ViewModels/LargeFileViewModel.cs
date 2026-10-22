@@ -22,6 +22,9 @@ public sealed partial class LargeFileViewModel(LargeFile file) : ObservableObjec
     public string ModifiedText => File.LastWriteTimeText();
     public string Subtitle => $"{File.SourceLabel} · {DisplayFolder()}";
 
+    /// <summary>"~\OneDrive\Pictures": the folder alone, where the source is already in the path.</summary>
+    public string FolderText => DisplayFolder();
+
     private string DisplayFolder()
     {
         var home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);

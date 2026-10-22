@@ -57,6 +57,15 @@ public static class ConfirmDialog
                 ? "The apps stay installed. Installers marked Check First are newer than what you have, so you may still want to run them."
                 : "The apps stay installed. Only these installer files move, and you can restore any of them from the Recycle Bin.");
 
+    public static Task<bool> ConfirmFreeUpAsync(XamlRoot root, IReadOnlyList<LargeFileViewModel> files) =>
+        ShowAsync(root,
+            $"Keep {Format.Count(files.Count, "file", "files")} in OneDrive only?",
+            files.OrderByDescending(f => f.SizeBytes).Select(f => (f.Name, f.SizeBytes, false)),
+            files.Sum(f => f.SizeBytes),
+            "Nothing is deleted. Each file stays in OneDrive and in File Explorer, and downloads again when you open it, so you need to be online then. Tidy checks right before each one that OneDrive has it fully synced.",
+            primary: "Free Up Space",
+            summary: $"Frees about {Format.Bytes(files.Sum(f => f.SizeBytes))} on this PC.");
+
     public static Task<bool> ConfirmAppsAsync(XamlRoot root, IReadOnlyList<AppViewModel> apps)
     {
         var store = apps.Count(a => a.App.Kind == Core.Apps.AppKind.Store);

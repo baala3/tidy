@@ -10,7 +10,8 @@ namespace Tidy.App.Views;
 /// <summary>
 /// Where the space went: one bar for the whole drive, then a row per category. Each
 /// byte is counted once. Caches live in AppData, projects and large files in the user's
-/// own folders, and Large Files skips project folders, so the segments never overlap.
+/// own folders, and Large Files skips project folders and OneDrive's synced files, which have
+/// a row of their own, so the segments never overlap.
 /// </summary>
 public sealed partial class OverviewPage : Page
 {
@@ -47,13 +48,13 @@ public sealed partial class OverviewPage : Page
     {
         var state = App.State;
         var disk = state.Disk;
-        var scanning = state.IsScanningEverything || state.IsScanningCaches || state.IsScanningProjects || state.IsScanningLargeFiles || state.IsScanningDuplicates || state.IsScanningApps || state.IsScanningInstallers;
+        var scanning = state.IsScanningEverything || state.IsScanningCaches || state.IsScanningProjects || state.IsScanningLargeFiles || state.IsScanningDuplicates || state.IsScanningApps || state.IsScanningInstallers || state.IsScanningOneDrive;
 
         ScanIcon.Visibility = scanning ? Visibility.Collapsed : Visibility.Visible;
         ScanRing.IsActive = scanning;
         ScanAllText.Text = scanning ? "Scanning…" : "Scan Everything";
         ScanAllButton.IsEnabled = !scanning;
-        var lastScan = new[] { state.CachesScannedUtc, state.ProjectsScannedUtc, state.LargeFilesScannedUtc, state.DuplicatesScannedUtc, state.AppsScannedUtc, state.InstallersScannedUtc }.Where(t => t is not null).Max();
+        var lastScan = new[] { state.CachesScannedUtc, state.ProjectsScannedUtc, state.LargeFilesScannedUtc, state.DuplicatesScannedUtc, state.AppsScannedUtc, state.InstallersScannedUtc, state.OneDriveScannedUtc }.Where(t => t is not null).Max();
         ScannedText.Text = scanning ? "Scanning one category at a time…"
             : lastScan is { } t ? $"Scanned {Format.RelativeTime(t, DateTime.UtcNow)}" : "Not scanned yet";
 
@@ -65,7 +66,8 @@ public sealed partial class OverviewPage : Page
         var dev = state.DevToolsBytes;
         var large = state.LargeFilesBytes;
         var apps = state.AppsBytes;
-        var known = caches + dev + large + apps;
+        var oneDrive = state.OneDriveBytes;
+        var known = caches + dev + large + apps + oneDrive;
         var everythingElse = Math.Max(0, disk.UsedBytes - known);
 
         var categories = new List<Segment>
@@ -77,6 +79,10 @@ public sealed partial class OverviewPage : Page
             new("large", "Large Files", LargeSubtitle(), large, "ChartLargeFilesBrush", "ChartLargeFilesTileBrush", Glyphs.LargeFiles, "large", state.LargeFiles.Count > 0),
             new("apps", "Apps", AppsSubtitle(), apps, "ChartAppsBrush", "ChartAppsTileBrush", Glyphs.Apps, "apps", state.Apps.Count > 0),
         };
+        if (state.HasOneDrive)
+        {
+            categories.Add(new("onedrive", "OneDrive", OneDriveSubtitle(), oneDrive, "ChartOneDriveBrush", "ChartOneDriveTileBrush", Glyphs.OneDrive, "onedrive", false));
+        }
         var others = new List<Segment>
         {
             new("else", "Everything else", "Windows, your documents and photos, and files Tidy doesn't sort",
@@ -107,6 +113,16 @@ public sealed partial class OverviewPage : Page
             return state.IsScanningLargeFiles ? "Scanning…" : state.LargeFilesScannedUtc is null ? "Not scanned yet" : "No files over 5 MB";
         }
         return Format.Count(state.LargeFiles.Count, "file over 5 MB", "files over 5 MB");
+    }
+
+    private static string OneDriveSubtitle()
+    {
+        var state = App.State;
+        if (state.OneDriveFiles.Count == 0)
+        {
+            return state.IsScanningOneDrive ? "Scanning…" : state.OneDriveScannedUtc is null ? "Not scanned yet" : "Nothing to free up";
+        }
+        return $"{Format.Count(state.OneDriveFiles.Count, "file", "files")} you can keep online only";
     }
 
     private static string AppsSubtitle()

@@ -14,9 +14,9 @@ public sealed partial class LargeFilesPage : Page
     public LargeFilesPage()
     {
         InitializeComponent();
-        SizeBox.ItemsSource = LargeFilesViewModel.SizeOptions.Select(o => o.Label).ToList();
-        AgeBox.ItemsSource = LargeFilesViewModel.AgeOptions.Select(o => o.Label).ToList();
-        SortBox.ItemsSource = LargeFilesViewModel.SortOptions;
+        SizeBox.ItemsSource = Vm.SizeOptions.Select(o => o.Label).ToList();
+        AgeBox.ItemsSource = FileListViewModel.AgeOptions.Select(o => o.Label).ToList();
+        SortBox.ItemsSource = FileListViewModel.SortOptions;
         SizeBox.SelectedIndex = Vm.SizeIndex;
         AgeBox.SelectedIndex = Vm.AgeIndex;
         SortBox.SelectedIndex = Vm.SortIndex;
