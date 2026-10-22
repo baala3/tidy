@@ -14,6 +14,9 @@ public sealed class LargeFileScanner(LargeFilePolicy policy)
 {
     public long MinimumBytes { get; init; } = 5L * 1024 * 1024;
 
+    /// <summary>Only files of these kinds, or every file when null.</summary>
+    public IReadOnlySet<LargeFileKind>? Kinds { get; init; }
+
     public IEnumerable<LargeFile> Scan(CancellationToken cancellation = default)
     {
         var seen = new HashSet<string>(PathUtil.Comparer);
@@ -21,6 +24,7 @@ public sealed class LargeFileScanner(LargeFilePolicy policy)
         {
             if (!Directory.Exists(root)) continue;
             var minimum = MinimumBytes;
+            var kinds = Kinds;
             var files = new FileSystemEnumerable<LargeFile?>(
                 root,
                 (ref FileSystemEntry e) =>
@@ -28,7 +32,8 @@ public sealed class LargeFileScanner(LargeFilePolicy policy)
                     if (e.IsDirectory || e.Length < minimum) return null;
                     if ((e.Attributes & (FileAttributes.System | FileAttributes.ReparsePoint | FolderSizer.CloudOnly)) != 0) return null;
                     var path = e.ToFullPath();
-                    return new LargeFile(path, e.Length, e.LastWriteTimeUtc.UtcDateTime, LargeFile.KindFor(path), label);
+                    var kind = LargeFile.KindFor(path);
+                    return kinds is null || kinds.Contains(kind) ? new LargeFile(path, e.Length, e.LastWriteTimeUtc.UtcDateTime, kind, label) : null;
                 },
                 new EnumerationOptions { RecurseSubdirectories = true, IgnoreInaccessible = true, AttributesToSkip = 0 })
             {

@@ -44,6 +44,15 @@ public static class ConfirmDialog
             "One copy of each file stays where it is. Right before moving a copy, Tidy compares it byte for byte with the one that stays, and leaves it alone if anything changed.");
     }
 
+    public static Task<bool> ConfirmInstallersAsync(XamlRoot root, IReadOnlyList<InstallerViewModel> installers) =>
+        ShowAsync(root,
+            $"Move {Format.Count(installers.Count, "installer", "installers")} to the Recycle Bin?",
+            installers.OrderByDescending(i => i.SizeBytes).Select(i => (i.Name, i.SizeBytes, i.IsNewer)),
+            installers.Sum(i => i.SizeBytes),
+            installers.Any(i => i.IsNewer)
+                ? "The apps stay installed. Installers marked Check First are newer than what you have, so you may still want to run them."
+                : "The apps stay installed. Only these installer files move, and you can restore any of them from the Recycle Bin.");
+
     public static Task<bool> ConfirmAppsAsync(XamlRoot root, IReadOnlyList<AppViewModel> apps)
     {
         var store = apps.Count(a => a.App.Kind == Core.Apps.AppKind.Store);

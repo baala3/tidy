@@ -167,6 +167,9 @@ ${artifactRows}
     <h2>Duplicates</h2>
     <p class="note">Files over 1 MB in Documents, Desktop, Downloads, Videos, Music and Pictures whose contents match byte for byte, outside project and app folders. A hard link is one file under two names, so it is never listed as a duplicate. Nothing is selected for you, one copy of every file always stays, and right before a copy moves it is compared again with the one that stays.</p>
 
+    <h2>Installers</h2>
+    <p class="note">Installer files in the same folders, offered only for apps that are installed: an <code>.msi</code> by its ProductCode, an <code>.msix</code> or <code>.appx</code> by its package name, and an <code>.exe</code> by product name once it shows it is an installer (setup in its name or details, or the mark of an installer framework). Installers for anything else are never listed. Nothing is selected for you, and installers newer than the installed app are Check First.</p>
+
     <h2>Preinstalled extras</h2>
     <p class="note">Apps are never selected for you. Store apps are removed for your account and can be reinstalled from the Microsoft Store. Desktop apps run their own uninstaller.</p>
     <table class="table"><thead><tr><th>App</th><th>Why</th><th>Package</th></tr></thead><tbody>

@@ -1,10 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml.Media;
-using Microsoft.UI.Xaml.Media.Imaging;
 using Tidy.App.Services;
 using Tidy.Core.Apps;
 using Tidy.Core.Models;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Tidy.App.ViewModels;
 
@@ -60,16 +58,7 @@ public sealed partial class AppViewModel(InstalledApp app) : ObservableObject
     {
         if (_iconRequested || App.IconPath is not { } path) return;
         _iconRequested = true;
-        const int size = 64;
-        var pixels = await Task.Run(() => ShellIcons.Pixels(path, size));
-        if (pixels is null) return;
-        var bitmap = new WriteableBitmap(size, size);
-        using (var stream = bitmap.PixelBuffer.AsStream())
-        {
-            await stream.WriteAsync(pixels);
-        }
-        bitmap.Invalidate();
-        Icon = bitmap;
+        Icon = await ShellIcons.ImageAsync(path, 64);
         OnPropertyChanged(nameof(HasNoIcon));
     }
 }

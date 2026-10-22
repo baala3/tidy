@@ -26,6 +26,7 @@ public sealed partial class AppState : ObservableObject
     private CancellationTokenSource? _projectScan;
     private CancellationTokenSource? _largeFileScan;
     private CancellationTokenSource? _duplicateScan;
+    private CancellationTokenSource? _installerScan;
 
     public UserLocations Locations { get; }
     public DeletionSafetyPolicy Policy { get; }
@@ -37,6 +38,7 @@ public sealed partial class AppState : ObservableObject
     public BulkObservableCollection<LargeFileViewModel> LargeFiles { get; } = [];
     public BulkObservableCollection<AppViewModel> Apps { get; } = [];
     public BulkObservableCollection<DuplicateGroupViewModel> Duplicates { get; } = [];
+    public BulkObservableCollection<InstallerViewModel> Installers { get; } = [];
 
     [ObservableProperty] public partial bool IsScanningCaches { get; private set; }
     [ObservableProperty] public partial bool IsScanningProjects { get; private set; }
@@ -51,6 +53,8 @@ public sealed partial class AppState : ObservableObject
     [ObservableProperty] public partial bool IsScanningDuplicates { get; private set; }
     [ObservableProperty] public partial DateTime? DuplicatesScannedUtc { get; private set; }
     [ObservableProperty] public partial DuplicateScanProgress DuplicatesProgress { get; private set; }
+    [ObservableProperty] public partial bool IsScanningInstallers { get; private set; }
+    [ObservableProperty] public partial DateTime? InstallersScannedUtc { get; private set; }
     [ObservableProperty] public partial DiskUsage Disk { get; private set; }
     [ObservableProperty] public partial long RecycleBinBytes { get; private set; }
 
@@ -77,6 +81,7 @@ public sealed partial class AppState : ObservableObject
     public long LargeFilesBytes => LargeFiles.Sum(f => f.SizeBytes);
     public long AppsBytes => Apps.Sum(a => a.SizeBytes);
     public long DuplicatesBytes => Duplicates.Sum(g => g.WastedBytes);
+    public long InstallersBytes => Installers.Sum(i => i.SizeBytes);
 
     public void SaveSettings() => Settings.Save(Locations.TidyData);
 
@@ -94,6 +99,7 @@ public sealed partial class AppState : ObservableObject
             await ScanLargeFilesAsync();
             await ScanDuplicatesAsync();
             await ScanAppsAsync();
+            await ScanInstallersAsync();
         }
         finally
         {
@@ -228,6 +234,39 @@ public sealed partial class AppState : ObservableObject
         }
     }
 
+    /// <summary>Installers for apps that are installed, so it uses the app list, scanning apps first if it has none yet.</summary>
+    public async Task ScanInstallersAsync()
+    {
+        var cancel = Restart(ref _installerScan);
+        IsScanningInstallers = true;
+        var selected = Installers.Where(i => i.IsSelected).Select(i => i.Path).ToHashSet(PathUtil.Comparer);
+        try
+        {
+            if (AppsScannedUtc is null) await ScanAppsAsync();
+            if (cancel.IsCancellationRequested) return;
+            var apps = Apps.Select(a => a.App).ToList();
+            var scanner = new InstallerScanner(LargeFilePolicy);
+            var found = await Task.Run(() => scanner.Scan(apps, cancel.Token).OrderByDescending(f => f.File.SizeBytes).ToList(), cancel.Token);
+            Installers.ReplaceAll(found.Select(file => new InstallerViewModel(file) { IsSelected = selected.Contains(file.File.Path) }));
+            InstallersScannedUtc = DateTime.UtcNow;
+            NotifyTotals();
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        finally
+        {
+            if (!cancel.IsCancellationRequested) IsScanningInstallers = false;
+        }
+    }
+
+    public async Task<CleanResult> RecycleInstallersAsync(IReadOnlyList<InstallerViewModel> installers)
+    {
+        var result = await _deleter.MoveToRecycleBinAsync(installers.Select(i => i.Path).ToList(), DeletionKind.LargeFile, OwnerWindow);
+        Forget(result.Removed);
+        return result;
+    }
+
     /// <summary>Removes apps one at a time: a desktop uninstaller must finish before the next one starts.</summary>
     public async Task<List<AppRemovalResult>> RemoveAppsAsync(IReadOnlyList<AppViewModel> apps, Action<int, AppViewModel> progress)
     {
@@ -242,6 +281,8 @@ public sealed partial class AppState : ObservableObject
         }
         NotifyTotals();
         RefreshDisk();
+        // An installer for an app that is gone now is how the user would get it back.
+        if (results.Any(r => r.Removed)) _ = ScanInstallersAsync();
         return results;
     }
 
@@ -347,12 +388,13 @@ public sealed partial class AppState : ObservableObject
 
     /// <summary>
     /// Takes files that just moved to the Recycle Bin off every list that shows them: a big
-    /// duplicate is also a large file, and either page can remove it.
+    /// duplicate or installer is also a large file, and any of those pages can remove it.
     /// </summary>
     private void Forget(IReadOnlyList<string> paths)
     {
         var removed = paths.ToHashSet(PathUtil.Comparer);
         foreach (var file in LargeFiles.Where(f => removed.Contains(f.Path)).ToList()) LargeFiles.Remove(file);
+        foreach (var installer in Installers.Where(i => removed.Contains(i.Path)).ToList()) Installers.Remove(installer);
         var groups = Duplicates.Where(g => g.Remove(removed)).ToList();
         if (groups.Count > 0)
         {
