@@ -52,6 +52,11 @@ public sealed partial class MainWindow : Window
             if (e.PropertyName == nameof(AppState.RecycleBinBytes)) UpdateSidebar();
         };
         App.State.RefreshDisk();
+        // The Recycle Bin can be emptied, and space freed, outside Tidy; look again on coming back.
+        Activated += (_, e) =>
+        {
+            if (e.WindowActivationState != WindowActivationState.Deactivated) App.State.RefreshDisk();
+        };
         ApplyAppearance(App.State.Settings.Appearance);
         Root.ActualThemeChanged += (_, _) => UpdateCaptionButtons();
         AddAccelerators();
