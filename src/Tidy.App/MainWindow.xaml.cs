@@ -21,6 +21,7 @@ public sealed partial class MainWindow : Window
         ["caches"] = (typeof(CleanPage), ScanCategory.AppCaches),
         ["dev"] = (typeof(CleanPage), ScanCategory.DevTools),
         ["large"] = (typeof(LargeFilesPage), null),
+        ["duplicates"] = (typeof(DuplicatesPage), null),
         ["apps"] = (typeof(AppsPage), null),
         ["settings"] = (typeof(SettingsPage), null),
         ["about"] = (typeof(AboutPage), null),
@@ -100,6 +101,7 @@ public sealed partial class MainWindow : Window
         CachesSize.Text = state.AppCacheItems.Count > 0 ? Format.Bytes(state.AppCachesBytes) : "";
         DevSize.Text = state.DevToolItems.Count > 0 ? Format.Bytes(state.DevToolsBytes) : "";
         LargeSize.Text = state.LargeFiles.Count > 0 ? Format.Bytes(state.LargeFilesBytes) : "";
+        DuplicatesSize.Text = state.Duplicates.Count > 0 ? Format.Bytes(state.DuplicatesBytes) : "";
         AppsSize.Text = state.Apps.Count > 0 ? Format.Bytes(state.AppsBytes) : "";
         RecycleBinSize.Text = Format.Bytes(state.RecycleBinBytes);
     }

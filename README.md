@@ -66,6 +66,12 @@ Tidy runs on Windows 10 (version 2004) and Windows 11, on x64 and Arm64.
 - Big files in Documents, Desktop, Downloads, Videos, Music and Pictures, with search, size and age filters, and type chips.
 - Nothing is selected for you, and files that live only in OneDrive are left alone.
 
+### Duplicates
+
+- Files over 1 MB in the same folders whose contents match byte for byte, grouped so you can see every copy.
+- One copy of each file always stays: Tidy suggests which, and won't let you pick the last one.
+- Right before a copy moves, Tidy compares it again with the copy that stays, and leaves it alone if anything changed.
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/apps-dark.png">
   <img src="docs/screenshots/apps-light.png" width="760" alt="Apps: installed apps with when each was last opened, and preinstalled extras tagged">

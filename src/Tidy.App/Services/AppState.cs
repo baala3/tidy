@@ -25,6 +25,7 @@ public sealed partial class AppState : ObservableObject
     private CancellationTokenSource? _cacheScan;
     private CancellationTokenSource? _projectScan;
     private CancellationTokenSource? _largeFileScan;
+    private CancellationTokenSource? _duplicateScan;
 
     public UserLocations Locations { get; }
     public DeletionSafetyPolicy Policy { get; }
@@ -35,6 +36,7 @@ public sealed partial class AppState : ObservableObject
     public ObservableCollection<ItemViewModel> DevToolItems { get; } = [];
     public BulkObservableCollection<LargeFileViewModel> LargeFiles { get; } = [];
     public BulkObservableCollection<AppViewModel> Apps { get; } = [];
+    public BulkObservableCollection<DuplicateGroupViewModel> Duplicates { get; } = [];
 
     [ObservableProperty] public partial bool IsScanningCaches { get; private set; }
     [ObservableProperty] public partial bool IsScanningProjects { get; private set; }
@@ -46,6 +48,9 @@ public sealed partial class AppState : ObservableObject
     [ObservableProperty] public partial DateTime? CachesScannedUtc { get; private set; }
     [ObservableProperty] public partial DateTime? ProjectsScannedUtc { get; private set; }
     [ObservableProperty] public partial DateTime? LargeFilesScannedUtc { get; private set; }
+    [ObservableProperty] public partial bool IsScanningDuplicates { get; private set; }
+    [ObservableProperty] public partial DateTime? DuplicatesScannedUtc { get; private set; }
+    [ObservableProperty] public partial DuplicateScanProgress DuplicatesProgress { get; private set; }
     [ObservableProperty] public partial DiskUsage Disk { get; private set; }
     [ObservableProperty] public partial long RecycleBinBytes { get; private set; }
 
@@ -71,6 +76,7 @@ public sealed partial class AppState : ObservableObject
     public long DevToolsSafeBytes => DevToolItems.Where(i => i.IsSafe).Sum(i => i.SizeBytes);
     public long LargeFilesBytes => LargeFiles.Sum(f => f.SizeBytes);
     public long AppsBytes => Apps.Sum(a => a.SizeBytes);
+    public long DuplicatesBytes => Duplicates.Sum(g => g.WastedBytes);
 
     public void SaveSettings() => Settings.Save(Locations.TidyData);
 
@@ -86,6 +92,7 @@ public sealed partial class AppState : ObservableObject
             await ScanCachesAsync();
             await ScanProjectsAsync();
             await ScanLargeFilesAsync();
+            await ScanDuplicatesAsync();
             await ScanAppsAsync();
         }
         finally
@@ -165,6 +172,34 @@ public sealed partial class AppState : ObservableObject
         finally
         {
             if (!cancel.IsCancellationRequested) IsScanningLargeFiles = false;
+        }
+    }
+
+    /// <summary>Reads every look-alike file, so it reports how far it got while it runs.</summary>
+    public async Task ScanDuplicatesAsync()
+    {
+        var cancel = Restart(ref _duplicateScan);
+        IsScanningDuplicates = true;
+        DuplicatesProgress = default;
+        var selected = Duplicates.SelectMany(g => g.Copies).Where(c => c.IsSelected).Select(c => c.Path).ToHashSet(PathUtil.Comparer);
+        try
+        {
+            var scanner = new DuplicateScanner(LargeFilePolicy);
+            var progress = new Progress<DuplicateScanProgress>(p =>
+            {
+                if (!cancel.IsCancellationRequested) DuplicatesProgress = p;
+            });
+            var found = await Task.Run(() => scanner.Scan(progress, cancel.Token).OrderByDescending(g => g.WastedBytes).ToList(), cancel.Token);
+            Duplicates.ReplaceAll(found.Select(group => new DuplicateGroupViewModel(group, selected)));
+            DuplicatesScannedUtc = DateTime.UtcNow;
+            NotifyTotals();
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        finally
+        {
+            if (!cancel.IsCancellationRequested) IsScanningDuplicates = false;
         }
     }
 
@@ -298,11 +333,35 @@ public sealed partial class AppState : ObservableObject
     public async Task<CleanResult> RecycleLargeFilesAsync(IReadOnlyList<LargeFileViewModel> files)
     {
         var result = await _deleter.MoveToRecycleBinAsync(files.Select(f => f.Path).ToList(), DeletionKind.LargeFile, OwnerWindow);
-        var removed = result.Removed.ToHashSet(PathUtil.Comparer);
-        foreach (var file in files.Where(f => removed.Contains(f.Path)).ToList()) LargeFiles.Remove(file);
+        Forget(result.Removed);
+        return result;
+    }
+
+    /// <summary>Removes extra copies. A group left with a single file is no longer a duplicate and drops off the list.</summary>
+    public async Task<CleanResult> RecycleDuplicatesAsync(IReadOnlyList<DuplicateRemoval> removals)
+    {
+        var result = await _deleter.MoveDuplicatesToRecycleBinAsync(removals, OwnerWindow);
+        Forget(result.Removed);
+        return result;
+    }
+
+    /// <summary>
+    /// Takes files that just moved to the Recycle Bin off every list that shows them: a big
+    /// duplicate is also a large file, and either page can remove it.
+    /// </summary>
+    private void Forget(IReadOnlyList<string> paths)
+    {
+        var removed = paths.ToHashSet(PathUtil.Comparer);
+        foreach (var file in LargeFiles.Where(f => removed.Contains(f.Path)).ToList()) LargeFiles.Remove(file);
+        var groups = Duplicates.Where(g => g.Remove(removed)).ToList();
+        if (groups.Count > 0)
+        {
+            // A group that lost a copy is the same object with fewer rows, which a list can't
+            // see; one reset redraws them all.
+            Duplicates.ReplaceAll(Duplicates.Where(g => g.Copies.Count > 1).ToList());
+        }
         NotifyTotals();
         RefreshDisk();
-        return result;
     }
 
     public void RefreshDisk()

@@ -76,6 +76,16 @@ public sealed class FakeProfile : IDisposable
         if (p.ExitCode != 0) throw new InvalidOperationException("mklink failed");
     }
 
+    /// <summary>A second name for <paramref name="target"/>: one file on disk, two paths.</summary>
+    public static void HardLink(string link, string target)
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(link)!);
+        if (!CreateHardLinkW(link, target, IntPtr.Zero)) throw new InvalidOperationException("CreateHardLink failed");
+    }
+
+    [System.Runtime.InteropServices.DllImport("kernel32.dll", CharSet = System.Runtime.InteropServices.CharSet.Unicode, SetLastError = true)]
+    private static extern bool CreateHardLinkW(string link, string target, IntPtr securityAttributes);
+
     public void Dispose()
     {
         // Junctions first, so deleting the tree never follows one.
