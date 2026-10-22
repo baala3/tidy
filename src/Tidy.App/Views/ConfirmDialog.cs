@@ -85,6 +85,21 @@ public static class ConfirmDialog
             summary: total > 0 ? $"Gives back at least {Format.Bytes(total)}." : "Gives back what the disks no longer use.");
     }
 
+    public static Task<bool> ConfirmWindowsCleanupAsync(XamlRoot root, IReadOnlyList<WindowsCleanupItemViewModel> items)
+    {
+        var total = items.Sum(i => i.SizeBytes ?? 0);
+        var checkFirst = items.Where(i => i.IsCheckFirst).Select(i => i.Name).ToList();
+        var note = "Windows' own Disk Cleanup removes these, and they can't go to the Recycle Bin. Windows asks for permission first.";
+        if (checkFirst.Count > 0) note += $" Read the notes on {string.Join(" and ", checkFirst)}: afterwards some things can't be undone.";
+        return ShowAsync(root,
+            $"Clean {Format.Count(items.Count, "item", "items")} for good?",
+            items.OrderByDescending(i => i.SizeBytes).Select(i => (i.Name, i.SizeBytes ?? 0, i.IsCheckFirst)),
+            total,
+            note,
+            primary: "Clean",
+            summary: $"Frees about {Format.Bytes(total)}.");
+    }
+
     public static Task<bool> ConfirmAppsAsync(XamlRoot root, IReadOnlyList<AppViewModel> apps)
     {
         var store = apps.Count(a => a.App.Kind == Core.Apps.AppKind.Store);

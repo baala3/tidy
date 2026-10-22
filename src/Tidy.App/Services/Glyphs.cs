@@ -12,6 +12,7 @@ public static class Glyphs
     public const string Apps = "\uE71D";
     public const string OneDrive = "\uE753";
     public const string VirtualDisks = "\uE756";
+    public const string Windows = "\uE770";
     public const string Settings = "\uE713";
     public const string About = "\uE946";
     public const string RecycleBin = "\uE74D";

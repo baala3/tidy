@@ -11,6 +11,7 @@ using Tidy.Core.Safety;
 using Tidy.Core.Scanning;
 using Tidy.Core.Settings;
 using Tidy.Core.VirtualDisks;
+using Tidy.Core.WindowsCleanup;
 
 namespace Tidy.App.Services;
 
@@ -45,6 +46,10 @@ public sealed partial class AppState : ObservableObject
     public BulkObservableCollection<LargeFileViewModel> OneDriveFiles { get; } = [];
     public BulkObservableCollection<VirtualDiskViewModel> VirtualDisks { get; } = [];
 
+    /// <summary>Every handler in the catalog, sized once the user checks with administrator rights.</summary>
+    public IReadOnlyList<WindowsCleanupItemViewModel> WindowsItems { get; } =
+        CleanupCatalog.Default.WindowsCleanup.Select(e => new WindowsCleanupItemViewModel(e)).ToList();
+
     [ObservableProperty] public partial bool IsScanningCaches { get; private set; }
     [ObservableProperty] public partial bool IsScanningProjects { get; private set; }
     [ObservableProperty] public partial bool IsScanningLargeFiles { get; private set; }
@@ -65,6 +70,10 @@ public sealed partial class AppState : ObservableObject
     [ObservableProperty] public partial bool IsOneDriveRunning { get; private set; }
     [ObservableProperty] public partial bool IsScanningVirtualDisks { get; private set; }
     [ObservableProperty] public partial DateTime? VirtualDisksScannedUtc { get; private set; }
+    [ObservableProperty] public partial bool IsCheckingWindows { get; private set; }
+    [ObservableProperty] public partial bool IsCleaningWindows { get; private set; }
+    [ObservableProperty] public partial DateTime? WindowsCheckedUtc { get; private set; }
+    [ObservableProperty] public partial string WindowsProgress { get; private set; } = "";
     [ObservableProperty] public partial DiskUsage Disk { get; private set; }
     [ObservableProperty] public partial long RecycleBinBytes { get; private set; }
 
@@ -96,6 +105,7 @@ public sealed partial class AppState : ObservableObject
     public long OneDriveBytes => OneDriveFiles.Sum(f => f.SizeBytes);
     public long VirtualDisksBytes => VirtualDisks.Sum(d => d.Disk.FileBytes);
     public long VirtualDisksReclaimableBytes => VirtualDisks.Sum(d => d.Disk.KnownReclaimableBytes);
+    public long WindowsBytes => WindowsItems.Sum(i => i.SizeBytes ?? 0);
 
     /// <summary>OneDrive is signed in on this PC, whether or not it's running.</summary>
     public bool HasOneDrive => OneDrivePolicy.Roots.Count > 0;
@@ -255,6 +265,97 @@ public sealed partial class AppState : ObservableObject
         await ScanVirtualDisksAsync();
         RefreshDisk();
         return result;
+    }
+
+    /// <summary>
+    /// Sizes Windows' own cleanups. Most can only be measured with administrator rights, so this
+    /// asks once through UAC and runs nothing but the measuring. Returns why it didn't run, or null.
+    /// </summary>
+    public async Task<string?> CheckWindowsAsync()
+    {
+        IsCheckingWindows = true;
+        try
+        {
+            var outcome = await ElevatedSession.RunAsync(ElevatedHelper.Measure, WindowsItems.Select(i => i.Key).ToList(), message =>
+            {
+                var item = WindowsItems.First(i => i.Key == message.Key);
+                switch (message.Type)
+                {
+                    case ElevatedMessageType.Working:
+                        foreach (var other in WindowsItems) other.IsWorking = other == item;
+                        WindowsProgress = item.Key == "Update Cleanup" ? $"Checking {item.Name}… this one can take a few minutes" : $"Checking {item.Name}…";
+                        break;
+                    case ElevatedMessageType.Size:
+                        item.IsWorking = false;
+                        item.SizeBytes = message.Bytes;
+                        NotifyTotals();
+                        break;
+                    case ElevatedMessageType.Progress:
+                    case ElevatedMessageType.Done:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(message));
+                }
+            });
+            if (outcome.Started) WindowsCheckedUtc = DateTime.UtcNow;
+            return outcome.Problem;
+        }
+        finally
+        {
+            foreach (var item in WindowsItems) item.IsWorking = false;
+            WindowsProgress = "";
+            IsCheckingWindows = false;
+        }
+    }
+
+    /// <summary>Runs the chosen cleanups with administrator rights. What they remove can't come back.</summary>
+    public async Task<(CleanResult Result, string? Problem)> CleanWindowsAsync(IReadOnlyList<WindowsCleanupItemViewModel> items)
+    {
+        IsCleaningWindows = true;
+        var cleaned = new List<string>();
+        var failures = new List<CleanFailure>();
+        long freed = 0;
+        try
+        {
+            var outcome = await ElevatedSession.RunAsync(ElevatedHelper.Clean, items.Select(i => i.Key).ToList(), message =>
+            {
+                var item = WindowsItems.First(i => i.Key == message.Key);
+                switch (message.Type)
+                {
+                    case ElevatedMessageType.Working:
+                        foreach (var other in WindowsItems) other.IsWorking = other == item;
+                        WindowsProgress = $"Cleaning {item.Name}…";
+                        break;
+                    case ElevatedMessageType.Progress:
+                        WindowsProgress = $"Cleaning {item.Name}… {Format.Bytes(message.Bytes)}";
+                        break;
+                    case ElevatedMessageType.Done:
+                        item.IsWorking = false;
+                        if (message.Error is { } error)
+                        {
+                            failures.Add(new CleanFailure(item.Name, error));
+                            break;
+                        }
+                        cleaned.Add(item.Name);
+                        freed += message.Bytes;
+                        item.SizeBytes = 0;
+                        NotifyTotals();
+                        break;
+                    case ElevatedMessageType.Size:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(message));
+                }
+            });
+            RefreshDisk();
+            return (new CleanResult(freed, cleaned, failures), outcome.Problem);
+        }
+        finally
+        {
+            foreach (var item in WindowsItems) item.IsWorking = false;
+            WindowsProgress = "";
+            IsCleaningWindows = false;
+        }
     }
 
     public async Task ScanOneDriveAsync()

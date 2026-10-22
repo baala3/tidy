@@ -57,7 +57,7 @@
             <Border Style="{StaticResource CardStyle}" Padding="20,16">
                 <StackPanel Spacing="10">
                     <TextBlock TextWrapping="Wrap" Style="{StaticResource BodyTextBlockStyle}" Foreground="{ThemeResource TextPrimaryBrush}"
-                               Text="Everything Tidy removes goes to the Recycle Bin, so it can come back. If the Recycle Bin is turned off for a drive, or an item is too big for it, Tidy leaves that item alone rather than delete it for good." />
+                               Text="Everything Tidy removes goes to the Recycle Bin, so it can come back. If the Recycle Bin is turned off for a drive, or an item is too big for it, Tidy leaves that item alone rather than delete it for good. The one exception is the Windows page: Windows' own Disk Cleanup removes those files for good, and Windows asks for permission first." />
                     <TextBlock TextWrapping="Wrap" Style="{StaticResource CaptionSecondaryStyle}"
                                Text="Tidy only shows folders it knows about. Each path is checked again against its safety rules at the moment it is moved, and anything behind a link or junction is skipped." />
                 </StackPanel>

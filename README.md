@@ -63,6 +63,12 @@ Tidy runs on Windows 10 (version 2004) and Windows 11, on x64 and Arm64.
 - Store apps are removed for your account and can be reinstalled from the Microsoft Store.
   Desktop apps run their own uninstaller, the same one Settings > Apps opens.
 
+### Windows
+
+- Windows Update leftovers, Delivery Optimization files, your previous version of Windows, old driver versions, upgrade logs and crash dumps.
+- Tidy has Windows' own Disk Cleanup handlers measure and remove them, the same ones Disk Cleanup and Storage Sense run, and passes them no paths.
+- Checking and cleaning each ask for administrator permission once. What's cleaned can't go to the Recycle Bin, so nothing is selected for you.
+
 ### WSL & Docker
 
 - The disk images of your WSL distros and Docker Desktop, which grow as Linux writes and never shrink by themselves.
@@ -105,6 +111,7 @@ Tidy deletes files, so it is built to be sure rather than thorough.
 - Every path is checked again at the moment it is removed, not just when it was scanned.
 - Anything behind a link or junction is refused, and so are credential stores and password managers.
 - Files go to the Recycle Bin. If the Recycle Bin is off for a drive, or an item is too big for it, Tidy leaves the item alone rather than delete it for good.
+- The Windows page is the exception, and says so: Windows' own Disk Cleanup removes those files, they can't go to the Recycle Bin, and Windows asks for administrator permission each time.
 - Tidy makes no network requests and collects no data.
 
 The [safety page](https://baala3.github.io/tidy/safety.html) lists everything Tidy may clear and everything it refuses.

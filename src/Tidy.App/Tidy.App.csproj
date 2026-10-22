@@ -22,6 +22,8 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <SelfContained>true</SelfContained>
     <Nullable>enable</Nullable>
+    <!-- Program.cs is the entry point: it runs the elevated helper without starting XAML. -->
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
     <!-- Tidy's UI is English only; leave out the Windows App SDK's other languages. -->
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <!-- Release builds are what users install: no debug symbols beside the exe. -->
