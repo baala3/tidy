@@ -11,7 +11,8 @@ namespace Tidy.App.Views;
 /// Where the space went: one bar for the whole drive, then a row per category. Each
 /// byte is counted once. Caches live in AppData, projects and large files in the user's
 /// own folders, and Large Files skips project folders and OneDrive's synced files, which have
-/// a row of their own, so the segments never overlap.
+/// a row of their own. WSL and Docker disks sit in AppData folders no cache entry names. So the
+/// segments never overlap.
 /// </summary>
 public sealed partial class OverviewPage : Page
 {
@@ -48,7 +49,7 @@ public sealed partial class OverviewPage : Page
     {
         var state = App.State;
         var disk = state.Disk;
-        var scanning = state.IsScanningEverything || state.IsScanningCaches || state.IsScanningProjects || state.IsScanningLargeFiles || state.IsScanningDuplicates || state.IsScanningApps || state.IsScanningInstallers || state.IsScanningOneDrive;
+        var scanning = state.IsScanningEverything || state.IsScanningCaches || state.IsScanningProjects || state.IsScanningLargeFiles || state.IsScanningDuplicates || state.IsScanningApps || state.IsScanningInstallers || state.IsScanningOneDrive || state.IsScanningVirtualDisks;
 
         ScanIcon.Visibility = scanning ? Visibility.Collapsed : Visibility.Visible;
         ScanRing.IsActive = scanning;
@@ -67,7 +68,8 @@ public sealed partial class OverviewPage : Page
         var large = state.LargeFilesBytes;
         var apps = state.AppsBytes;
         var oneDrive = state.OneDriveBytes;
-        var known = caches + dev + large + apps + oneDrive;
+        var disks = state.VirtualDisksBytes;
+        var known = caches + dev + large + apps + oneDrive + disks;
         var everythingElse = Math.Max(0, disk.UsedBytes - known);
 
         var categories = new List<Segment>
@@ -79,6 +81,10 @@ public sealed partial class OverviewPage : Page
             new("large", "Large Files", LargeSubtitle(), large, "ChartLargeFilesBrush", "ChartLargeFilesTileBrush", Glyphs.LargeFiles, "large", state.LargeFiles.Count > 0),
             new("apps", "Apps", AppsSubtitle(), apps, "ChartAppsBrush", "ChartAppsTileBrush", Glyphs.Apps, "apps", state.Apps.Count > 0),
         };
+        if (state.VirtualDisks.Count > 0)
+        {
+            categories.Insert(2, new("wsl", "WSL & Docker", VirtualDisksSubtitle(), disks, "ChartVirtualDisksBrush", "ChartVirtualDisksTileBrush", Glyphs.VirtualDisks, "wsl", false));
+        }
         if (state.HasOneDrive)
         {
             categories.Add(new("onedrive", "OneDrive", OneDriveSubtitle(), oneDrive, "ChartOneDriveBrush", "ChartOneDriveTileBrush", Glyphs.OneDrive, "onedrive", false));
@@ -113,6 +119,12 @@ public sealed partial class OverviewPage : Page
             return state.IsScanningLargeFiles ? "Scanning…" : state.LargeFilesScannedUtc is null ? "Not scanned yet" : "No files over 5 MB";
         }
         return Format.Count(state.LargeFiles.Count, "file over 5 MB", "files over 5 MB");
+    }
+
+    private static string VirtualDisksSubtitle()
+    {
+        var reclaimable = App.State.VirtualDisksReclaimableBytes;
+        return reclaimable > 0 ? $"{Format.Bytes(reclaimable)} can be given back" : "Nothing known to give back";
     }
 
     private static string OneDriveSubtitle()

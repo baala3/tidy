@@ -66,6 +66,25 @@ public static class ConfirmDialog
             primary: "Free Up Space",
             summary: $"Frees about {Format.Bytes(files.Sum(f => f.SizeBytes))} on this PC.");
 
+    public static Task<bool> ConfirmCompactAsync(XamlRoot root, IReadOnlyList<VirtualDiskViewModel> disks, IReadOnlyList<string> runningDistros, bool dockerRunning)
+    {
+        var stops = new List<string>();
+        if (runningDistros.Count > 0) stops.Add($"running Linux distros stop ({string.Join(", ", runningDistros)})");
+        if (dockerRunning) stops.Add("Docker Desktop quits");
+        var what = stops.Count == 0
+            ? "WSL shuts down while Tidy compacts."
+            : $"WSL shuts down while Tidy compacts: {string.Join(", and ", stops)}. Save your work in them first.";
+        var total = disks.Sum(d => d.Disk.KnownReclaimableBytes);
+        var trimmed = disks.Any(d => d.SizeAfterTrim) ? " Docker's disk is trimmed first, so what it gives back shows afterwards." : "";
+        return ShowAsync(root,
+            $"Compact {Format.Count(disks.Count, "disk", "disks")}?",
+            disks.OrderByDescending(d => d.Disk.KnownReclaimableBytes).Select(d => (d.Name, d.Disk.KnownReclaimableBytes, false)),
+            total,
+            $"{what} Nothing inside the disks changes. A large disk can take a few minutes.{trimmed}",
+            primary: "Compact",
+            summary: total > 0 ? $"Gives back at least {Format.Bytes(total)}." : "Gives back what the disks no longer use.");
+    }
+
     public static Task<bool> ConfirmAppsAsync(XamlRoot root, IReadOnlyList<AppViewModel> apps)
     {
         var store = apps.Count(a => a.App.Kind == Core.Apps.AppKind.Store);
@@ -108,7 +127,8 @@ public static class ConfirmDialog
                 name.Children.Add(tag);
             }
             grid.Children.Add(name);
-            var sizeText = new TextBlock { Text = Format.Bytes(size), Foreground = Theme(root, "TextSecondaryBrush") };
+            // An unknown size reads as nothing rather than "0 bytes".
+            var sizeText = new TextBlock { Text = size > 0 ? Format.Bytes(size) : "", Foreground = Theme(root, "TextSecondaryBrush") };
             Grid.SetColumn(sizeText, 1);
             grid.Children.Add(sizeText);
             list.Children.Add(grid);

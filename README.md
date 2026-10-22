@@ -63,6 +63,12 @@ Tidy runs on Windows 10 (version 2004) and Windows 11, on x64 and Arm64.
 - Store apps are removed for your account and can be reinstalled from the Microsoft Store.
   Desktop apps run their own uninstaller, the same one Settings > Apps opens.
 
+### WSL & Docker
+
+- The disk images of your WSL distros and Docker Desktop, which grow as Linux writes and never shrink by themselves.
+- Tidy reads each disk's block table to show how much compacting gives back, without starting or stopping anything.
+- Compact stops Docker Desktop and shuts WSL down (you're told which distros are running first), then compacts with the same Windows call `Optimize-VHD` uses. Nothing inside the disks changes, and it needs no admin rights.
+
 ### Large Files
 
 - Big files in Documents, Desktop, Downloads, Videos, Music and Pictures, with search, size and age filters, and type chips.

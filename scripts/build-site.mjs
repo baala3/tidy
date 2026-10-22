@@ -169,6 +169,9 @@ ${cacheRows("dev_tools")}
 ${artifactRows}
     </tbody></table>
 
+    <h2>WSL &amp; Docker</h2>
+    <p class="note">The disk images of the WSL 2 distros WSL lists for you, and Docker Desktop's own disks in its folder; no other virtual disk is offered, and none behind a link. Compacting stops Docker Desktop and shuts WSL down first, then gives back the blocks the disk no longer uses. Nothing inside a disk is changed or removed.</p>
+
     <h2>Duplicates</h2>
     <p class="note">Files over 1 MB in Documents, Desktop, Downloads, Videos, Music and Pictures whose contents match byte for byte, outside project and app folders. A hard link is one file under two names, so it is never listed as a duplicate. Nothing is selected for you, one copy of every file always stays, and right before a copy moves it is compared again with the one that stays.</p>
 

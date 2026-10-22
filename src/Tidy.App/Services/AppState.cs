@@ -10,6 +10,7 @@ using Tidy.Core.Platform;
 using Tidy.Core.Safety;
 using Tidy.Core.Scanning;
 using Tidy.Core.Settings;
+using Tidy.Core.VirtualDisks;
 
 namespace Tidy.App.Services;
 
@@ -42,6 +43,7 @@ public sealed partial class AppState : ObservableObject
     public BulkObservableCollection<DuplicateGroupViewModel> Duplicates { get; } = [];
     public BulkObservableCollection<InstallerViewModel> Installers { get; } = [];
     public BulkObservableCollection<LargeFileViewModel> OneDriveFiles { get; } = [];
+    public BulkObservableCollection<VirtualDiskViewModel> VirtualDisks { get; } = [];
 
     [ObservableProperty] public partial bool IsScanningCaches { get; private set; }
     [ObservableProperty] public partial bool IsScanningProjects { get; private set; }
@@ -61,6 +63,8 @@ public sealed partial class AppState : ObservableObject
     [ObservableProperty] public partial bool IsScanningOneDrive { get; private set; }
     [ObservableProperty] public partial DateTime? OneDriveScannedUtc { get; private set; }
     [ObservableProperty] public partial bool IsOneDriveRunning { get; private set; }
+    [ObservableProperty] public partial bool IsScanningVirtualDisks { get; private set; }
+    [ObservableProperty] public partial DateTime? VirtualDisksScannedUtc { get; private set; }
     [ObservableProperty] public partial DiskUsage Disk { get; private set; }
     [ObservableProperty] public partial long RecycleBinBytes { get; private set; }
 
@@ -90,6 +94,8 @@ public sealed partial class AppState : ObservableObject
     public long DuplicatesBytes => Duplicates.Sum(g => g.WastedBytes);
     public long InstallersBytes => Installers.Sum(i => i.SizeBytes);
     public long OneDriveBytes => OneDriveFiles.Sum(f => f.SizeBytes);
+    public long VirtualDisksBytes => VirtualDisks.Sum(d => d.Disk.FileBytes);
+    public long VirtualDisksReclaimableBytes => VirtualDisks.Sum(d => d.Disk.KnownReclaimableBytes);
 
     /// <summary>OneDrive is signed in on this PC, whether or not it's running.</summary>
     public bool HasOneDrive => OneDrivePolicy.Roots.Count > 0;
@@ -106,6 +112,7 @@ public sealed partial class AppState : ObservableObject
         try
         {
             await ScanCachesAsync();
+            await ScanVirtualDisksAsync();
             await ScanProjectsAsync();
             await ScanLargeFilesAsync();
             await ScanDuplicatesAsync();
@@ -220,6 +227,34 @@ public sealed partial class AppState : ObservableObject
         {
             if (!cancel.IsCancellationRequested) IsScanningDuplicates = false;
         }
+    }
+
+    /// <summary>Reads WSL's own list and each disk's allocation table; nothing starts or stops.</summary>
+    public async Task ScanVirtualDisksAsync()
+    {
+        IsScanningVirtualDisks = true;
+        var selected = VirtualDisks.Where(d => d.IsSelected).Select(d => d.Disk.Path).ToHashSet(PathUtil.Comparer);
+        try
+        {
+            var scanner = new VirtualDiskScanner(Locations);
+            var found = await Task.Run(scanner.Scan);
+            VirtualDisks.ReplaceAll(found.OrderByDescending(d => d.ReclaimableBytes).Select(d => new VirtualDiskViewModel(d) { IsSelected = selected.Contains(d.Path) }));
+            VirtualDisksScannedUtc = DateTime.UtcNow;
+            NotifyTotals();
+        }
+        finally
+        {
+            IsScanningVirtualDisks = false;
+        }
+    }
+
+    public async Task<CleanResult> CompactVirtualDisksAsync(IReadOnlyList<VirtualDiskViewModel> disks, IProgress<string> progress)
+    {
+        var compactor = new VirtualDiskCompactor(new VirtualDiskScanner(Locations));
+        var result = await compactor.CompactAsync(disks.Select(d => d.Disk.Path).ToList(), progress);
+        await ScanVirtualDisksAsync();
+        RefreshDisk();
+        return result;
     }
 
     public async Task ScanOneDriveAsync()
