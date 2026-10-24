@@ -54,8 +54,28 @@ public partial class App : Application
     {
         State = new AppState(DispatcherQueue.GetForCurrentThread());
         _window = new MainWindow();
+        // Clicks on Tidy's notifications come here, including the one Windows started Tidy for.
+        ToastActivator.Clicked += OnNotificationClicked;
+        ToastActivator.Start();
+        _window.Closed += (_, _) => ToastActivator.Stop();
         _window.Activate();
         // Like the Mac app: open and it scans everything, one category at a time.
         _ = State.ScanEverythingAsync();
+        // Points the task and notifications at this copy of Tidy, in case the app moved.
+        if (State.Settings.NeedsBackgroundTask)
+        {
+            _ = State.ApplyBackgroundTaskAsync();
+            _ = Task.Run(() => Notifications.Register(Environment.ProcessPath!));
+        }
+    }
+
+    private void OnNotificationClicked(string arguments)
+    {
+        var page = Notifications.PageOf(arguments);
+        _window?.DispatcherQueue.TryEnqueue(() =>
+        {
+            if (page is not null) Window.NavigateTo(page);
+            Window.BringToFront();
+        });
     }
 }

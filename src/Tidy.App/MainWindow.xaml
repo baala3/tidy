@@ -134,6 +134,11 @@
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
+                <NavigationViewItem Tag="history" Content="History">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE81C;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem Tag="settings" Content="Settings">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE713;" />

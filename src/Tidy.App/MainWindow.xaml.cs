@@ -27,6 +27,7 @@ public sealed partial class MainWindow : Window
         ["wsl"] = (typeof(VirtualDisksPage), null),
         ["windows"] = (typeof(WindowsPage), null),
         ["apps"] = (typeof(AppsPage), null),
+        ["history"] = (typeof(HistoryPage), null),
         ["settings"] = (typeof(SettingsPage), null),
         ["about"] = (typeof(AboutPage), null),
     };
@@ -76,6 +77,14 @@ public sealed partial class MainWindow : Window
     {
         var item = Nav.MenuItems.Concat(Nav.FooterMenuItems).OfType<NavigationViewItem>().FirstOrDefault(i => (string)i.Tag == tag);
         if (item is not null) Nav.SelectedItem = item;
+    }
+
+    /// <summary>Restores the window if it was minimized and puts it in front, as a notification click should.</summary>
+    public void BringToFront()
+    {
+        if (AppWindow.Presenter is OverlappedPresenter { State: OverlappedPresenterState.Minimized } presenter) presenter.Restore();
+        Activate();
+        SetForegroundWindow(WinRT.Interop.WindowNative.GetWindowHandle(this));
     }
 
     public void ApplyAppearance(AppearanceMode mode)
@@ -156,4 +165,7 @@ public sealed partial class MainWindow : Window
 
     [DllImport("user32.dll")]
     private static extern uint GetDpiForWindow(IntPtr hwnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hwnd);
 }

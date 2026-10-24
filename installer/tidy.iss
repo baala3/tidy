@@ -51,6 +51,10 @@ Name: "{userprograms}\Tidy"; Filename: "{app}\Tidy.exe"; Comment: "Free up your 
 [Run]
 Filename: "{app}\Tidy.exe"; Description: "Open Tidy"; Flags: nowait postinstall skipifsilent
 
+[UninstallRun]
+; Removes Tidy's scheduled task and its notification registration, before the files go.
+Filename: "{app}\Tidy.exe"; Parameters: "--uninstall"; Flags: runhidden waituntilterminated; RunOnceId: "RemoveSchedule"
+
 [UninstallDelete]
 ; Tidy's settings.
 Type: filesandordirs; Name: "{localappdata}\Tidy"

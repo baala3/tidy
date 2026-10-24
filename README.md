@@ -103,6 +103,15 @@ Tidy runs on Windows 10 (version 2004) and Windows 11, on x64 and Arm64.
   <img src="docs/screenshots/apps-light.png" width="760" alt="Apps: installed apps with when each was last opened, and preinstalled extras tagged">
 </picture>
 
+## Automatic cleaning
+
+- In Settings, Tidy can clean caches by itself every week or every month. It is off until you turn it on.
+- It cleans only rows App Caches and Dev Tools mark Safe to Clean, never project folders or iPhone backups, and everything goes to the Recycle Bin.
+- A browser or app that is open is skipped. Tidy waits up to a day for it to close, then cleans the rest without it.
+- Tidy can also tell you when the drive Windows is on has less than 10% free, or less than 20 GB on a big drive, at most once a day.
+- Both run from one Task Scheduler task that starts `Tidy.exe --background` once an hour, as you, without administrator rights. Turning both off removes the task, and so does uninstalling Tidy.
+- History lists every clean, the ones you run and the automatic ones, with what was removed.
+
 ## Safety
 
 Tidy deletes files, so it is built to be sure rather than thorough.
@@ -112,6 +121,7 @@ Tidy deletes files, so it is built to be sure rather than thorough.
 - Anything behind a link or junction is refused, and so are credential stores and password managers.
 - Files go to the Recycle Bin. If the Recycle Bin is off for a drive, or an item is too big for it, Tidy leaves the item alone rather than delete it for good.
 - The Windows page is the exception, and says so: Windows' own Disk Cleanup removes those files, they can't go to the Recycle Bin, and Windows asks for administrator permission each time.
+- An automatic clean takes only what is marked Safe to Clean, and nothing runs in the background unless you turn it on.
 - Tidy makes no network requests and collects no data.
 
 The [safety page](https://baala3.github.io/tidy/safety.html) lists everything Tidy may clear and everything it refuses.
