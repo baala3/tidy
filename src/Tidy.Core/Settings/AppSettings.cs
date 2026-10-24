@@ -29,6 +29,9 @@ public sealed class AppSettings
     /// <summary>"Consider stale after", in days. Zero shows every project.</summary>
     public int StaleDays { get; set; } = DefaultStaleDays;
 
+    /// <summary>Ask GitHub for a newer Tidy when the app opens and once a day.</summary>
+    public bool CheckForUpdates { get; set; } = true;
+
     /// <summary>Clean the caches marked Safe to Clean on a schedule. Off until the user turns it on.</summary>
     public CleanSchedule AutoClean { get; set; } = CleanSchedule.Off;
 

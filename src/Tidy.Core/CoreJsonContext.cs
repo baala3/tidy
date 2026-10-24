@@ -11,4 +11,5 @@ namespace Tidy.Core;
 [JsonSerializable(typeof(Apps.AppCatalog))]
 [JsonSerializable(typeof(Scheduling.BackgroundState))]
 [JsonSerializable(typeof(List<Scheduling.HistoryEntry>))]
+[JsonSerializable(typeof(Updates.GitHubRelease))]
 internal sealed partial class CoreJsonContext : JsonSerializerContext;

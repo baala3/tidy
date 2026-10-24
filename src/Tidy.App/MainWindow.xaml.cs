@@ -57,6 +57,10 @@ public sealed partial class MainWindow : Window
         {
             if (e.PropertyName == nameof(AppState.RecycleBinBytes)) UpdateSidebar();
         };
+        App.Updates.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(UpdateState.Release)) UpdateUpdateButton();
+        };
         App.State.RefreshDisk();
         // The Recycle Bin can be emptied, and space freed, outside Tidy; look again on coming back.
         Activated += (_, e) =>
@@ -71,6 +75,7 @@ public sealed partial class MainWindow : Window
         OneDriveItem.Visibility = App.State.HasOneDrive ? Visibility.Visible : Visibility.Collapsed;
         ContentFrame.Navigate(typeof(OverviewPage));
         UpdateSidebar();
+        UpdateUpdateButton();
     }
 
     public void NavigateTo(string tag)
@@ -135,6 +140,15 @@ public sealed partial class MainWindow : Window
             ContentFrame.Navigate(target.Page, target.Parameter, new EntranceNavigationTransitionInfo());
         }
     }
+
+    private void UpdateUpdateButton()
+    {
+        var release = App.Updates.Release;
+        UpdateButton.Visibility = release is null ? Visibility.Collapsed : Visibility.Visible;
+        UpdateText.Text = release is null ? "" : $"Tidy {release.Version.ToString(3)} is out";
+    }
+
+    private void OnUpdateClick(object sender, RoutedEventArgs e) => NavigateTo("about");
 
     private void OnRecycleBinClick(object sender, RoutedEventArgs e) => Shell.OpenRecycleBin();
 

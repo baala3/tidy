@@ -50,6 +50,14 @@ Name: "{userprograms}\Tidy"; Filename: "{app}\Tidy.exe"; Comment: "Free up your 
 
 [Run]
 Filename: "{app}\Tidy.exe"; Description: "Open Tidy"; Flags: nowait postinstall skipifsilent
+; Tidy's own updates run silently with /RELAUNCH=1 and reopen the app once it is replaced.
+Filename: "{app}\Tidy.exe"; Flags: nowait; Check: ShouldRelaunch
+
+[Code]
+function ShouldRelaunch: Boolean;
+begin
+  Result := WizardSilent and (ExpandConstant('{param:relaunch|0}') = '1');
+end;
 
 [UninstallRun]
 ; Removes Tidy's scheduled task and its notification registration, before the files go.

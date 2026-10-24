@@ -20,6 +20,7 @@ public sealed partial class SettingsPage : Page
         AutoCleanBox.SelectedIndex = (int)settings.AutoClean;
         LowSpaceSwitch.IsOn = settings.LowSpaceAlerts;
         ShowLastClean();
+        UpdatesSwitch.IsOn = settings.CheckForUpdates;
         _ready = true;
     }
 
@@ -96,4 +97,12 @@ public sealed partial class SettingsPage : Page
     }
 
     private static string Day(DateTime utc) => utc.ToLocalTime().ToString("MMMM d", CultureInfo.CurrentCulture);
+
+    private void OnUpdatesToggled(object sender, RoutedEventArgs e)
+    {
+        if (!_ready || App.State.Settings.CheckForUpdates == UpdatesSwitch.IsOn) return;
+        App.State.Settings.CheckForUpdates = UpdatesSwitch.IsOn;
+        App.State.SaveSettings();
+        App.Updates.ApplySchedule();
+    }
 }

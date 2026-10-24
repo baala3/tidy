@@ -101,6 +101,25 @@
                     </StackPanel>
                 </Border>
 
+                <TextBlock Text="Updates" Style="{StaticResource GroupHeaderStyle}" Margin="2,20,0,4" />
+                <Border Style="{StaticResource CardStyle}" Padding="20,16">
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE895;" FontSize="20" Foreground="{ThemeResource TextSecondaryBrush}" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Check for updates automatically" Style="{StaticResource RowTitleStyle}" />
+                            <TextBlock TextWrapping="Wrap" Style="{StaticResource CaptionSecondaryStyle}"
+                                       Text="When Tidy opens, and once a day while it stays open, it asks GitHub for its latest release. That is the only connection Tidy makes, and it sends nothing about your PC. Updates install only when you choose." />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="2" x:Name="UpdatesSwitch" OnContent="" OffContent="" MinWidth="0" VerticalAlignment="Center" Margin="0,0,-12,0"
+                                      Toggled="OnUpdatesToggled" AutomationProperties.Name="Check for updates automatically" />
+                    </Grid>
+                </Border>
+
                 <TextBlock Text="Safety" Style="{StaticResource GroupHeaderStyle}" Margin="2,20,0,4" />
                 <Border Style="{StaticResource CardStyle}" Padding="20,16">
                     <StackPanel Spacing="10">
