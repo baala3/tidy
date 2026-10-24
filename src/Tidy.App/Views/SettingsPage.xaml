@@ -54,6 +54,72 @@
                     </Grid>
                 </Border>
 
+                <TextBlock Text="Automatic cleaning" Style="{StaticResource GroupHeaderStyle}" Margin="2,20,0,4" />
+                <InfoBar x:Name="ScheduleProblem" Severity="Error" Title="Tidy couldn't change its scheduled task" IsClosable="True" />
+                <Border Style="{StaticResource CardStyle}">
+                    <StackPanel>
+                        <Grid ColumnSpacing="16" Padding="20,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <FontIcon Glyph="&#xE787;" FontSize="20" Foreground="{ThemeResource TextSecondaryBrush}" />
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Clean caches automatically" Style="{StaticResource RowTitleStyle}" />
+                                <TextBlock TextWrapping="Wrap" Style="{StaticResource CaptionSecondaryStyle}"
+                                           Text="Cleans only what App Caches and Dev Tools mark Safe to Clean, never project folders or backups. Everything goes to the Recycle Bin, and a browser or app that is open is skipped until it closes." />
+                            </StackPanel>
+                            <ComboBox Grid.Column="2" x:Name="AutoCleanBox" MinWidth="160" VerticalAlignment="Center" SelectionChanged="OnAutoCleanChanged" AutomationProperties.Name="Clean caches automatically">
+                                <x:String>Off</x:String>
+                                <x:String>Every week</x:String>
+                                <x:String>Every month</x:String>
+                            </ComboBox>
+                        </Grid>
+                        <Border Height="1" Background="{ThemeResource BorderSubtleBrush}" />
+                        <Grid ColumnSpacing="16" Padding="20,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <FontIcon Glyph="&#xEDA2;" FontSize="20" Foreground="{ThemeResource TextSecondaryBrush}" />
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="Warn when space runs low" Style="{StaticResource RowTitleStyle}" />
+                                <TextBlock TextWrapping="Wrap" Style="{StaticResource CaptionSecondaryStyle}"
+                                           Text="A notification when the drive Windows or your user folder is on has less than 10% free, or less than 20 GB on a big drive. At most once a day." />
+                            </StackPanel>
+                            <ToggleSwitch Grid.Column="2" x:Name="LowSpaceSwitch" OnContent="" OffContent="" MinWidth="0" VerticalAlignment="Center" Margin="0,0,-12,0"
+                                          Toggled="OnLowSpaceToggled" AutomationProperties.Name="Warn when space runs low" />
+                        </Grid>
+                        <Border Height="1" Background="{ThemeResource BorderSubtleBrush}" />
+                        <StackPanel Padding="20,12,20,14" Spacing="4">
+                            <TextBlock x:Name="LastCleanText" Style="{StaticResource CaptionSecondaryStyle}" TextWrapping="Wrap" />
+                            <TextBlock Style="{StaticResource CaptionSecondaryStyle}" TextWrapping="Wrap"
+                                       Text="Tidy checks once an hour with a task in Task Scheduler that runs as you, without administrator rights, and only while you're signed in. Turning both off removes the task." />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="Updates" Style="{StaticResource GroupHeaderStyle}" Margin="2,20,0,4" />
+                <Border Style="{StaticResource CardStyle}" Padding="20,16">
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <FontIcon Glyph="&#xE895;" FontSize="20" Foreground="{ThemeResource TextSecondaryBrush}" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Check for updates automatically" Style="{StaticResource RowTitleStyle}" />
+                            <TextBlock TextWrapping="Wrap" Style="{StaticResource CaptionSecondaryStyle}"
+                                       Text="When Tidy opens, and once a day while it stays open, it asks GitHub for its latest release. That is the only connection Tidy makes, and it sends nothing about your PC. Updates install only when you choose." />
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="2" x:Name="UpdatesSwitch" OnContent="" OffContent="" MinWidth="0" VerticalAlignment="Center" Margin="0,0,-12,0"
+                                      Toggled="OnUpdatesToggled" AutomationProperties.Name="Check for updates automatically" />
+                    </Grid>
+                </Border>
+
                 <TextBlock Text="Safety" Style="{StaticResource GroupHeaderStyle}" Margin="2,20,0,4" />
                 <Border Style="{StaticResource CardStyle}" Padding="20,16">
                     <StackPanel Spacing="10">

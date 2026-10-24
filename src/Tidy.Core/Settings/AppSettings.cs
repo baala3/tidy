@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Tidy.Core.Settings;
 
@@ -7,6 +8,14 @@ public enum AppearanceMode
     System,
     Light,
     Dark,
+}
+
+/// <summary>How often Tidy cleans caches by itself, from a scheduled task.</summary>
+public enum CleanSchedule
+{
+    Off,
+    Weekly,
+    Monthly,
 }
 
 /// <summary>User preferences, stored as JSON in Tidy's own AppData folder.</summary>
@@ -19,6 +28,19 @@ public sealed class AppSettings
 
     /// <summary>"Consider stale after", in days. Zero shows every project.</summary>
     public int StaleDays { get; set; } = DefaultStaleDays;
+
+    /// <summary>Ask GitHub for a newer Tidy when the app opens and once a day.</summary>
+    public bool CheckForUpdates { get; set; } = true;
+
+    /// <summary>Clean the caches marked Safe to Clean on a schedule. Off until the user turns it on.</summary>
+    public CleanSchedule AutoClean { get; set; } = CleanSchedule.Off;
+
+    /// <summary>Show a notification when the Windows or profile drive runs low on space.</summary>
+    public bool LowSpaceAlerts { get; set; }
+
+    /// <summary>Either needs Tidy's scheduled task, which runs <c>Tidy.exe --background</c> once an hour.</summary>
+    [JsonIgnore]
+    public bool NeedsBackgroundTask => AutoClean != CleanSchedule.Off || LowSpaceAlerts;
 
     public static AppSettings Load(string folder)
     {

@@ -10,6 +10,7 @@ using Tidy.Core.Models;
 using Tidy.Core.Platform;
 using Tidy.Core.Safety;
 using Tidy.Core.Scanning;
+using Tidy.Core.Scheduling;
 using Tidy.Core.Settings;
 using Tidy.Core.VirtualDisks;
 using Tidy.Core.WindowsCleanup;
@@ -119,6 +120,17 @@ public sealed partial class AppState : ObservableObject
     public bool HasOneDrive => OneDrivePolicy.Roots.Count > 0;
 
     public void SaveSettings() => Settings.Save(Locations.TidyData);
+
+    /// <summary>
+    /// Creates Tidy's scheduled task when automatic cleaning or low space alerts are on, and
+    /// removes it when both are off. Creating it again also points it at this copy of Tidy,
+    /// in case the app moved. Returns why it failed, or null.
+    /// </summary>
+    public Task<string?> ApplyBackgroundTaskAsync()
+    {
+        var needed = Settings.NeedsBackgroundTask;
+        return Task.Run(() => needed ? ScheduledTask.Register(Environment.ProcessPath!) : ScheduledTask.Unregister());
+    }
 
     // MARK: Scanning
 
@@ -271,6 +283,8 @@ public sealed partial class AppState : ObservableObject
     {
         var compactor = new VirtualDiskCompactor(new VirtualDiskScanner(Locations));
         var result = await compactor.CompactAsync(disks.Select(d => d.Disk.Path).ToList(), progress);
+        var compacted = result.Removed.ToHashSet(PathUtil.Comparer);
+        Record("WSL & Docker", result.FreedBytes, disks.Where(d => compacted.Contains(d.Disk.Path)).Select(d => d.Disk.Name), result.Failures.Count);
         await ScanVirtualDisksAsync();
         RefreshDisk();
         return result;
@@ -357,6 +371,7 @@ public sealed partial class AppState : ObservableObject
                 }
             });
             RefreshDisk();
+            Record("Windows", freed, cleaned, failures.Count);
             return (new CleanResult(freed, cleaned, failures), outcome.Problem);
         }
         finally
@@ -398,6 +413,7 @@ public sealed partial class AppState : ObservableObject
     {
         var result = await new CloudSpaceFreer(OneDrivePolicy).FreeUpSpaceAsync(files.Select(f => f.Path).ToList());
         var freed = result.Removed.ToHashSet(PathUtil.Comparer);
+        RecordFiles("OneDrive", result);
         foreach (var file in OneDriveFiles.Where(f => freed.Contains(f.Path)).ToList()) OneDriveFiles.Remove(file);
         NotifyTotals();
         RefreshDisk();
@@ -510,6 +526,7 @@ public sealed partial class AppState : ObservableObject
     public async Task<CleanResult> RecycleInstallersAsync(IReadOnlyList<InstallerViewModel> installers)
     {
         var result = await _deleter.MoveToRecycleBinAsync(installers.Select(i => i.Path).ToList(), DeletionKind.LargeFile, OwnerWindow);
+        RecordFiles("Installers", result);
         Forget(result.Removed);
         return result;
     }
@@ -528,6 +545,8 @@ public sealed partial class AppState : ObservableObject
             results.Add(result);
             if (result.Removed) Apps.Remove(apps[i]);
         }
+        var removed = results.Where(r => r.Removed).Select(r => r.App).ToList();
+        Record("Apps", removed.Sum(a => a.SizeBytes), removed.Select(a => a.Name), results.Count - removed.Count);
         NotifyTotals();
         RefreshDisk();
         if (results.Any(r => r.Removed))
@@ -607,6 +626,12 @@ public sealed partial class AppState : ObservableObject
         var paths = items.SelectMany(i => i.Item.Paths).ToList();
         var result = await _deleter.MoveToRecycleBinAsync(paths, DeletionKind.Cache, OwnerWindow);
         var removed = result.Removed.ToHashSet(PathUtil.Comparer);
+        // Each Clean page cleans only its own category.
+        if (items.Count > 0)
+        {
+            var cleaned = items.Where(i => i.Item.Paths.Any(removed.Contains)).Select(i => i.Item.ProjectName is { } project ? $"{i.Item.Title} in {project}" : i.Item.Title);
+            Record(PageName(items[0].Item.Category), result.FreedBytes, cleaned, result.Failures.Count);
+        }
         foreach (var item in items)
         {
             var remaining = item.Item.Paths.Where(p => !removed.Contains(p)).ToList();
@@ -628,6 +653,7 @@ public sealed partial class AppState : ObservableObject
     public async Task<CleanResult> RecycleLargeFilesAsync(IReadOnlyList<LargeFileViewModel> files)
     {
         var result = await _deleter.MoveToRecycleBinAsync(files.Select(f => f.Path).ToList(), DeletionKind.LargeFile, OwnerWindow);
+        RecordFiles("Large Files", result);
         Forget(result.Removed);
         return result;
     }
@@ -636,6 +662,7 @@ public sealed partial class AppState : ObservableObject
     public async Task<CleanResult> RecycleDuplicatesAsync(IReadOnlyList<DuplicateRemoval> removals)
     {
         var result = await _deleter.MoveDuplicatesToRecycleBinAsync(removals, OwnerWindow);
+        RecordFiles("Duplicates", result);
         Forget(result.Removed);
         return result;
     }
@@ -659,6 +686,22 @@ public sealed partial class AppState : ObservableObject
         NotifyTotals();
         RefreshDisk();
     }
+
+    // MARK: History
+
+    private void RecordFiles(string page, CleanResult result) =>
+        Record(page, result.FreedBytes, result.Removed.Select(Path.GetFileName).OfType<string>(), result.Failures.Count);
+
+    /// <summary>Adds a clean to History, by the names the user saw: row titles, file names, app names.</summary>
+    private void Record(string page, long freedBytes, IEnumerable<string> names, int failed) =>
+        CleanHistory.Add(Locations.TidyData, DateTime.UtcNow, CleanSource.Manual, page, freedBytes, names.ToList(), failed);
+
+    private static string PageName(ScanCategory category) => category switch
+    {
+        ScanCategory.AppCaches => "App Caches",
+        ScanCategory.DevTools => "Dev Tools",
+        _ => throw new ArgumentOutOfRangeException(nameof(category)),
+    };
 
     public void RefreshDisk()
     {

@@ -16,5 +16,6 @@ You should hear back within a few days.
 - A link, junction or path trick that makes a removal land somewhere else.
 - Anything deleted for good when Tidy said it would go to the Recycle Bin.
 - An app removal that breaks Windows or another app, when Tidy did not warn about it.
+- A way to make Tidy's updater download or run anything other than an installer from Tidy's own GitHub releases.
 
 Fixed incidents are logged in [docs/safety-notes.md](docs/safety-notes.md).

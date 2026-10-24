@@ -28,6 +28,7 @@ public sealed partial class MainWindow : Window
         ["windows"] = (typeof(WindowsPage), null),
         ["apps"] = (typeof(AppsPage), null),
         ["leftovers"] = (typeof(LeftoversPage), null),
+        ["history"] = (typeof(HistoryPage), null),
         ["settings"] = (typeof(SettingsPage), null),
         ["about"] = (typeof(AboutPage), null),
     };
@@ -57,6 +58,10 @@ public sealed partial class MainWindow : Window
         {
             if (e.PropertyName == nameof(AppState.RecycleBinBytes)) UpdateSidebar();
         };
+        App.Updates.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(UpdateState.Release)) UpdateUpdateButton();
+        };
         App.State.RefreshDisk();
         // The Recycle Bin can be emptied, and space freed, outside Tidy; look again on coming back.
         Activated += (_, e) =>
@@ -71,12 +76,21 @@ public sealed partial class MainWindow : Window
         OneDriveItem.Visibility = App.State.HasOneDrive ? Visibility.Visible : Visibility.Collapsed;
         ContentFrame.Navigate(typeof(OverviewPage));
         UpdateSidebar();
+        UpdateUpdateButton();
     }
 
     public void NavigateTo(string tag)
     {
         var item = Nav.MenuItems.Concat(Nav.FooterMenuItems).OfType<NavigationViewItem>().FirstOrDefault(i => (string)i.Tag == tag);
         if (item is not null) Nav.SelectedItem = item;
+    }
+
+    /// <summary>Restores the window if it was minimized and puts it in front, as a notification click should.</summary>
+    public void BringToFront()
+    {
+        if (AppWindow.Presenter is OverlappedPresenter { State: OverlappedPresenterState.Minimized } presenter) presenter.Restore();
+        Activate();
+        SetForegroundWindow(WinRT.Interop.WindowNative.GetWindowHandle(this));
     }
 
     public void ApplyAppearance(AppearanceMode mode)
@@ -129,6 +143,15 @@ public sealed partial class MainWindow : Window
         }
     }
 
+    private void UpdateUpdateButton()
+    {
+        var release = App.Updates.Release;
+        UpdateButton.Visibility = release is null ? Visibility.Collapsed : Visibility.Visible;
+        UpdateText.Text = release is null ? "" : $"Tidy {release.Version.ToString(3)} is out";
+    }
+
+    private void OnUpdateClick(object sender, RoutedEventArgs e) => NavigateTo("about");
+
     private void OnRecycleBinClick(object sender, RoutedEventArgs e) => Shell.OpenRecycleBin();
 
     private void AddAccelerators()
@@ -158,4 +181,7 @@ public sealed partial class MainWindow : Window
 
     [DllImport("user32.dll")]
     private static extern uint GetDpiForWindow(IntPtr hwnd);
+
+    [DllImport("user32.dll")]
+    private static extern bool SetForegroundWindow(IntPtr hwnd);
 }

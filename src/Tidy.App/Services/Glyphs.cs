@@ -13,6 +13,10 @@ public static class Glyphs
     public const string OneDrive = "\uE753";
     public const string VirtualDisks = "\uE756";
     public const string Windows = "\uE770";
+    public const string Duplicates = "\uE8C8";
+    public const string Installers = "\uE896";
+    public const string History = "\uE81C";
+    public const string Schedule = "\uE787";
     public const string Settings = "\uE713";
     public const string About = "\uE946";
     public const string RecycleBin = "\uE74D";

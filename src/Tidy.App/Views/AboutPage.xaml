@@ -12,6 +12,32 @@
                     <TextBlock x:Name="VersionText" Style="{StaticResource SecondaryTextStyle}" />
                 </StackPanel>
             </StackPanel>
+            <Border Style="{StaticResource CardStyle}" Padding="20,16">
+                <Grid ColumnSpacing="16" RowSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid Width="20" Height="20" VerticalAlignment="Center">
+                        <FontIcon x:Name="UpdateIcon" Glyph="&#xE895;" FontSize="20" Foreground="{ThemeResource TextSecondaryBrush}" />
+                        <ProgressRing x:Name="UpdateRing" Width="20" Height="20" IsActive="False" />
+                    </Grid>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBlock x:Name="UpdateTitle" Style="{StaticResource RowTitleStyle}" />
+                        <TextBlock x:Name="UpdateDetail" TextWrapping="Wrap" Style="{StaticResource CaptionSecondaryStyle}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                        <Button x:Name="NotesButton" Content="What's New" Style="{StaticResource SecondaryButtonStyle}" Click="OnNotesClick" />
+                        <Button x:Name="UpdateAction" Click="OnUpdateActionClick" />
+                    </StackPanel>
+                    <ProgressBar x:Name="DownloadBar" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Maximum="1" Visibility="Collapsed" />
+                </Grid>
+            </Border>
             <TextBlock TextWrapping="Wrap" Style="{StaticResource BodyTextBlockStyle}" Foreground="{ThemeResource TextPrimaryBrush}"
                        Text="Tidy your PC. Safely. Tidy finds the cache and junk Windows and your apps pile up, marks what is safe, and moves it to the Recycle Bin so anything can come back." />
             <TextBlock TextWrapping="Wrap" Style="{StaticResource SecondaryTextStyle}">

@@ -144,6 +144,11 @@
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>
+                <NavigationViewItem Tag="history" Content="History">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE81C;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
                 <NavigationViewItem Tag="settings" Content="Settings">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE713;" />
@@ -157,18 +162,29 @@
             </NavigationView.FooterMenuItems>
 
             <NavigationView.PaneFooter>
-                <Button x:Name="RecycleBinButton" Click="OnRecycleBinClick" Margin="8,4,8,12" Padding="12,10"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
-                        Background="{ThemeResource FillSecondaryBrush}" BorderThickness="0" CornerRadius="8"
-                        ToolTipService.ToolTip="Open the Recycle Bin">
-                    <StackPanel Orientation="Horizontal" Spacing="10">
-                        <FontIcon Glyph="&#xE74D;" FontSize="14" Foreground="{ThemeResource TextSecondaryBrush}" />
-                        <TextBlock>
-                            <Run x:Name="RecycleBinSize" FontWeight="SemiBold" Text="…" />
-                            <Run Text=" in Recycle Bin" Foreground="{ThemeResource TextSecondaryBrush}" />
-                        </TextBlock>
-                    </StackPanel>
-                </Button>
+                <StackPanel>
+                    <Button x:Name="UpdateButton" Click="OnUpdateClick" Margin="8,4,8,0" Padding="12,10" Visibility="Collapsed"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                            Background="{ThemeResource FillSecondaryBrush}" BorderThickness="0" CornerRadius="8"
+                            ToolTipService.ToolTip="See what's new and install it">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE896;" FontSize="14" Foreground="{ThemeResource TextPrimaryBrush}" />
+                            <TextBlock x:Name="UpdateText" FontWeight="SemiBold" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="RecycleBinButton" Click="OnRecycleBinClick" Margin="8,4,8,12" Padding="12,10"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"
+                            Background="{ThemeResource FillSecondaryBrush}" BorderThickness="0" CornerRadius="8"
+                            ToolTipService.ToolTip="Open the Recycle Bin">
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <FontIcon Glyph="&#xE74D;" FontSize="14" Foreground="{ThemeResource TextSecondaryBrush}" />
+                            <TextBlock>
+                                <Run x:Name="RecycleBinSize" FontWeight="SemiBold" Text="…" />
+                                <Run Text=" in Recycle Bin" Foreground="{ThemeResource TextSecondaryBrush}" />
+                            </TextBlock>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
             </NavigationView.PaneFooter>
 
             <Border Background="{ThemeResource SurfaceBaseBrush}" BorderBrush="{ThemeResource BorderSubtleBrush}"
