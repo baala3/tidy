@@ -375,5 +375,30 @@
     "Microsoft Windows SDK",
     "Compatibility Fix",
     "Maintenance Service"
+  ],
+  "leftovers": [
+    { "app": "Discord", "folders": ["{Roaming}\\discord", "{Local}\\Discord"] },
+    { "app": "Slack", "folders": ["{Roaming}\\Slack", "{Local}\\slack"] },
+    { "app": "Zoom", "folders": ["{Roaming}\\Zoom"] },
+    { "app": "Spotify", "folders": ["{Roaming}\\Spotify", "{Local}\\Spotify"] },
+    { "app": "Microsoft Teams classic", "folders": ["{Roaming}\\Microsoft\\Teams", "{Local}\\Microsoft\\Teams"] },
+    { "app": "GitHub Desktop", "folders": ["{Roaming}\\GitHub Desktop", "{Local}\\GitHubDesktop"] },
+    { "app": "Postman", "folders": ["{Roaming}\\Postman", "{Local}\\Postman"] },
+    { "app": "Figma", "folders": ["{Roaming}\\Figma", "{Local}\\Figma"] },
+    { "app": "Notion", "folders": ["{Roaming}\\Notion"] },
+    { "app": "Obsidian", "folders": ["{Roaming}\\obsidian"] },
+    { "app": "WhatsApp", "folders": ["{Roaming}\\WhatsApp", "{Local}\\WhatsApp"] },
+    { "app": "Epic Games Launcher", "folders": ["{Local}\\EpicGamesLauncher"] },
+    { "app": "Battle.net", "folders": ["{Roaming}\\Battle.net", "{Local}\\Battle.net"] },
+    { "app": "Ubisoft Connect", "folders": ["{Local}\\Ubisoft Game Launcher"] },
+    { "app": "Origin", "folders": ["{Roaming}\\Origin", "{Local}\\Origin"] },
+    { "app": "Steam", "folders": ["{Local}\\Steam"] },
+    { "app": "OBS Studio", "folders": ["{Roaming}\\obs-studio"] },
+    { "app": "VLC media player", "folders": ["{Roaming}\\vlc"] },
+    { "app": "Audacity", "folders": ["{Roaming}\\audacity"] },
+    { "app": "GIMP", "folders": ["{Roaming}\\GIMP"] },
+    { "app": "Blender", "folders": ["{Roaming}\\Blender Foundation"] },
+    { "app": "Visual Studio Code", "folders": ["{Roaming}\\Code"] },
+    { "app": "Unity Hub", "folders": ["{Roaming}\\UnityHub"] }
   ]
 }

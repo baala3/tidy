@@ -240,6 +240,9 @@ public sealed class DeletionSafetyPolicy(UserLocations locations)
         return PathUtil.HasReparsePointBetween(path, Path.GetPathRoot(path)!) ? SafetyDecision.BlockedLink : SafetyDecision.Allow;
     }
 
+    /// <summary>On the never-delete list: a protected location, inside one, or credential state.</summary>
+    public bool IsNeverDelete(string path) => NeverDeleteCheck(path) is not null;
+
     private SafetyDecision? NeverDeleteCheck(string path)
     {
         if (NeverDeleteExact().Any(p => PathUtil.AreSame(path, p))) return SafetyDecision.BlockedNeverDelete;
@@ -251,7 +254,13 @@ public sealed class DeletionSafetyPolicy(UserLocations locations)
     private bool HasProtectedFragment(string path)
     {
         var relative = PathUtil.IsStrictlyUnder(path, Locations.Home) ? path[(Locations.Home.Length + 1)..] : path;
-        var lower = relative.ToLowerInvariant();
+        return IsProtectedName(relative);
+    }
+
+    /// <summary>Whether a name or relative path mentions credential, identity or password-manager state.</summary>
+    public static bool IsProtectedName(string name)
+    {
+        var lower = name.ToLowerInvariant();
         return ProtectedFragments.Any(lower.Contains);
     }
 

@@ -9,4 +9,5 @@ namespace Tidy.Core;
 [JsonSerializable(typeof(CleanupCatalog))]
 [JsonSerializable(typeof(AppSettings))]
 [JsonSerializable(typeof(Apps.AppCatalog))]
+[JsonSerializable(typeof(Leftovers.KnownApps))]
 internal sealed partial class CoreJsonContext : JsonSerializerContext;

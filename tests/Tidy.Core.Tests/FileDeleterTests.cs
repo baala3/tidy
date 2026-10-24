@@ -11,7 +11,7 @@ public sealed class FileDeleterTests : IDisposable
     public void Dispose() => _profile.Dispose();
 
     private FileDeleter Deleter() =>
-        new(new DeletionSafetyPolicy(_profile.Locations), new LargeFilePolicy(_profile.Locations))
+        new(new DeletionSafetyPolicy(_profile.Locations), new LargeFilePolicy(_profile.Locations), LeftoverTests.NoLeftovers(_profile))
         {
             RecycleOverride = path =>
             {

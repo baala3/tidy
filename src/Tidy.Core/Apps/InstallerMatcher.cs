@@ -21,7 +21,7 @@ public static partial class InstallerMatcher
     };
 
     /// <summary>Words every company name has, so they say nothing about which company it is.</summary>
-    private static readonly HashSet<string> CompanyNoise = new(StringComparer.Ordinal)
+    internal static readonly HashSet<string> CompanyNoise = new(StringComparer.Ordinal)
     {
         "inc", "llc", "ltd", "limited", "corp", "corporation", "co", "company", "gmbh", "ag", "sa", "bv", "oy", "ab",
         "foundation", "software", "technologies", "technology", "the", "and",

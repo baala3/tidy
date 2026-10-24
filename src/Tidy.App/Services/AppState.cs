@@ -5,6 +5,7 @@ using Tidy.App.ViewModels;
 using Tidy.Core.Apps;
 using Tidy.Core.Catalog;
 using Tidy.Core.Deletion;
+using Tidy.Core.Leftovers;
 using Tidy.Core.Models;
 using Tidy.Core.Platform;
 using Tidy.Core.Safety;
@@ -24,12 +25,14 @@ public sealed partial class AppState : ObservableObject
 {
     private readonly DispatcherQueue _ui;
     private readonly FileDeleter _deleter;
+    private readonly LeftoverScanner _leftoverScanner;
     private CancellationTokenSource? _cacheScan;
     private CancellationTokenSource? _projectScan;
     private CancellationTokenSource? _largeFileScan;
     private CancellationTokenSource? _duplicateScan;
     private CancellationTokenSource? _installerScan;
     private CancellationTokenSource? _oneDriveScan;
+    private CancellationTokenSource? _leftoverScan;
 
     public UserLocations Locations { get; }
     public DeletionSafetyPolicy Policy { get; }
@@ -45,6 +48,7 @@ public sealed partial class AppState : ObservableObject
     public BulkObservableCollection<InstallerViewModel> Installers { get; } = [];
     public BulkObservableCollection<LargeFileViewModel> OneDriveFiles { get; } = [];
     public BulkObservableCollection<VirtualDiskViewModel> VirtualDisks { get; } = [];
+    public BulkObservableCollection<LeftoverViewModel> Leftovers { get; } = [];
 
     /// <summary>Every handler in the catalog, sized once the user checks with administrator rights.</summary>
     public IReadOnlyList<WindowsCleanupItemViewModel> WindowsItems { get; } =
@@ -65,6 +69,8 @@ public sealed partial class AppState : ObservableObject
     [ObservableProperty] public partial DuplicateScanProgress DuplicatesProgress { get; private set; }
     [ObservableProperty] public partial bool IsScanningInstallers { get; private set; }
     [ObservableProperty] public partial DateTime? InstallersScannedUtc { get; private set; }
+    [ObservableProperty] public partial bool IsScanningLeftovers { get; private set; }
+    [ObservableProperty] public partial DateTime? LeftoversScannedUtc { get; private set; }
     [ObservableProperty] public partial bool IsScanningOneDrive { get; private set; }
     [ObservableProperty] public partial DateTime? OneDriveScannedUtc { get; private set; }
     [ObservableProperty] public partial bool IsOneDriveRunning { get; private set; }
@@ -88,7 +94,8 @@ public sealed partial class AppState : ObservableObject
         LargeFilePolicy = new LargeFilePolicy(Locations);
         OneDrivePolicy = new OneDrivePolicy(Locations);
         Settings = AppSettings.Load(Locations.TidyData);
-        _deleter = new FileDeleter(Policy, LargeFilePolicy);
+        _leftoverScanner = new LeftoverScanner(Policy, AppCatalog.Default);
+        _deleter = new FileDeleter(Policy, LargeFilePolicy, _leftoverScanner.Policy());
         Disk = DiskUsage.ForProfileDrive(Locations);
     }
 
@@ -102,6 +109,7 @@ public sealed partial class AppState : ObservableObject
     public long AppsBytes => Apps.Sum(a => a.SizeBytes);
     public long DuplicatesBytes => Duplicates.Sum(g => g.WastedBytes);
     public long InstallersBytes => Installers.Sum(i => i.SizeBytes);
+    public long LeftoversBytes => Leftovers.Sum(l => l.SizeBytes);
     public long OneDriveBytes => OneDriveFiles.Sum(f => f.SizeBytes);
     public long VirtualDisksBytes => VirtualDisks.Sum(d => d.Disk.FileBytes);
     public long VirtualDisksReclaimableBytes => VirtualDisks.Sum(d => d.Disk.KnownReclaimableBytes);
@@ -128,6 +136,7 @@ public sealed partial class AppState : ObservableObject
             await ScanDuplicatesAsync();
             await ScanAppsAsync();
             await ScanInstallersAsync();
+            await ScanLeftoversAsync();
             // Last: listing a OneDrive folder waits on the OneDrive app, so a stuck one can't hold up the rest.
             await ScanOneDriveAsync();
         }
@@ -457,6 +466,47 @@ public sealed partial class AppState : ObservableObject
         }
     }
 
+    /// <summary>Apps uninstalled from Tidy since it opened, so their leftovers can be shown on their own.</summary>
+    private readonly List<string> _justRemoved = [];
+
+    public async Task ScanLeftoversAsync()
+    {
+        var cancel = Restart(ref _leftoverScan);
+        IsScanningLeftovers = true;
+        var selected = Leftovers.Where(l => l.IsSelected).Select(l => l.Path).ToHashSet(PathUtil.Comparer);
+        try
+        {
+            var found = await Task.Run(() => _leftoverScanner.Scan(cancel.Token).OrderByDescending(f => f.SizeBytes).ToList(), cancel.Token);
+            Leftovers.ReplaceAll(found.Select(folder => new LeftoverViewModel(folder)
+            {
+                IsSelected = !folder.NeedsAdministrator && selected.Contains(folder.Path),
+                IsFromJustRemoved = _justRemoved.Any(folder.IsFrom),
+            }));
+            LeftoversScannedUtc = DateTime.UtcNow;
+            NotifyTotals();
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        finally
+        {
+            if (!cancel.IsCancellationRequested) IsScanningLeftovers = false;
+        }
+    }
+
+    public async Task<CleanResult> RecycleLeftoversAsync(IReadOnlyList<LeftoverViewModel> leftovers)
+    {
+        var result = await _deleter.MoveLeftoversToRecycleBinAsync(leftovers.Select(l => l.Path).ToList(), OwnerWindow);
+        var removed = result.Removed.ToHashSet(PathUtil.Comparer);
+        foreach (var leftover in Leftovers.Where(l => removed.Contains(l.Path)).ToList()) Leftovers.Remove(leftover);
+        NotifyTotals();
+        RefreshDisk();
+        // An app's folder often holds a cache App Caches lists too; that row went with it.
+        var cachesGone = AppCacheItems.Concat(DevToolItems).Any(i => i.Item.Paths.Any(p => result.Removed.Any(r => PathUtil.IsSameOrUnder(p, r))));
+        if (cachesGone) _ = ScanCachesAsync();
+        return result;
+    }
+
     public async Task<CleanResult> RecycleInstallersAsync(IReadOnlyList<InstallerViewModel> installers)
     {
         var result = await _deleter.MoveToRecycleBinAsync(installers.Select(i => i.Path).ToList(), DeletionKind.LargeFile, OwnerWindow);
@@ -469,6 +519,8 @@ public sealed partial class AppState : ObservableObject
     {
         var remover = new AppRemover(AppCatalog.Default);
         var results = new List<AppRemovalResult>();
+        // Once an uninstaller has run, Windows forgets the folders the app registered; note them first.
+        await Task.Run(_leftoverScanner.Remember);
         for (var i = 0; i < apps.Count; i++)
         {
             progress(i, apps[i]);
@@ -478,8 +530,13 @@ public sealed partial class AppState : ObservableObject
         }
         NotifyTotals();
         RefreshDisk();
-        // An installer for an app that is gone now is how the user would get it back.
-        if (results.Any(r => r.Removed)) _ = ScanInstallersAsync();
+        if (results.Any(r => r.Removed))
+        {
+            _justRemoved.AddRange(results.Where(r => r.Removed && r.App.Kind == AppKind.Desktop).Select(r => r.App.Name));
+            // An installer for an app that is gone now is how the user would get it back.
+            _ = ScanInstallersAsync();
+            await ScanLeftoversAsync();
+        }
         return results;
     }
 

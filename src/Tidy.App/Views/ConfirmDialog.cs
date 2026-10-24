@@ -57,6 +57,13 @@ public static class ConfirmDialog
                 ? "The apps stay installed. Installers marked Check First are newer than what you have, so you may still want to run them."
                 : "The apps stay installed. Only these installer files move, and you can restore any of them from the Recycle Bin.");
 
+    public static Task<bool> ConfirmLeftoversAsync(XamlRoot root, IReadOnlyList<LeftoverViewModel> leftovers) =>
+        ShowAsync(root,
+            $"Move {Format.Count(leftovers.Count, "folder", "folders")} to the Recycle Bin?",
+            leftovers.OrderByDescending(l => l.SizeBytes).Select(l => ($"{l.Name} · {l.Folder.AppName}", l.SizeBytes, true)),
+            leftovers.Sum(l => l.SizeBytes),
+            "The apps these came from are gone, but a folder can still hold something you want, like settings or files you made in the app. Right before moving each one, Tidy checks again that no installed or running app uses it.");
+
     public static Task<bool> ConfirmFreeUpAsync(XamlRoot root, IReadOnlyList<LargeFileViewModel> files) =>
         ShowAsync(root,
             $"Keep {Format.Count(files.Count, "file", "files")} in OneDrive only?",

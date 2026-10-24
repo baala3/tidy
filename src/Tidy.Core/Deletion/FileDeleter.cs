@@ -24,7 +24,7 @@ public enum DeletionKind
 /// safety policy at the moment of removal, not just at scan time, and then moved to the
 /// Recycle Bin. Nothing is ever deleted for good.
 /// </summary>
-public sealed class FileDeleter(DeletionSafetyPolicy cachePolicy, LargeFilePolicy largeFilePolicy)
+public sealed class FileDeleter(DeletionSafetyPolicy cachePolicy, LargeFilePolicy largeFilePolicy, LeftoverPolicy leftoverPolicy)
 {
     /// <summary>For tests: replaces the shell call. Returns null on success, or a reason.</summary>
     internal Func<string, string?>? RecycleOverride { get; init; }
@@ -40,6 +40,14 @@ public sealed class FileDeleter(DeletionSafetyPolicy cachePolicy, LargeFilePolic
     public Task<CleanResult> MoveDuplicatesToRecycleBinAsync(
         IReadOnlyList<DuplicateRemoval> removals, IntPtr ownerWindow, IProgress<string>? progress = null) =>
         OnStaThread(() => RunDuplicates(removals, ownerWindow, progress));
+
+    /// <summary>
+    /// Folders apps left behind. What is installed and running is read again first, and each
+    /// folder has to still be a leftover nothing installed could own.
+    /// </summary>
+    public Task<CleanResult> MoveLeftoversToRecycleBinAsync(
+        IReadOnlyList<string> paths, IntPtr ownerWindow, IProgress<string>? progress = null) =>
+        OnStaThread(() => RunLeftovers(paths, ownerWindow, progress));
 
     private static Task<CleanResult> OnStaThread(Func<CleanResult> run)
     {
@@ -67,6 +75,12 @@ public sealed class FileDeleter(DeletionSafetyPolicy cachePolicy, LargeFilePolic
 
     internal CleanResult Run(IReadOnlyList<string> paths, DeletionKind kind, IntPtr ownerWindow, IProgress<string>? progress) =>
         Recycle(paths.Distinct(PathUtil.Comparer).Select(p => (p, (Func<string, string?>)(path => Refusal(path, kind)))), ownerWindow, progress);
+
+    internal CleanResult RunLeftovers(IReadOnlyList<string> paths, IntPtr ownerWindow, IProgress<string>? progress)
+    {
+        var refusal = leftoverPolicy.Refusals(paths);
+        return Recycle(paths.Distinct(PathUtil.Comparer).Select(p => (p, refusal)), ownerWindow, progress);
+    }
 
     internal CleanResult RunDuplicates(IReadOnlyList<DuplicateRemoval> removals, IntPtr ownerWindow, IProgress<string>? progress) =>
         Recycle(removals.DistinctBy(r => r.Path, PathUtil.Comparer).Select(r => (r.Path, (Func<string, string?>)(path => DuplicateRefusal(path, r.KeepPath)))), ownerWindow, progress);

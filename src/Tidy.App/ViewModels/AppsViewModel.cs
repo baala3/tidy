@@ -38,6 +38,8 @@ public sealed partial class AppsViewModel : ObservableObject
     [ObservableProperty] public partial string ResultTitle { get; private set; } = "";
     [ObservableProperty] public partial string ResultMessage { get; private set; } = "";
     [ObservableProperty] public partial bool ResultHasFailures { get; private set; }
+    /// <summary>The apps just removed left folders behind, which the Leftovers page lists.</summary>
+    [ObservableProperty] public partial bool ResultHasLeftovers { get; private set; }
     public ObservableCollection<AppProblem> ResultFailures { get; } = [];
 
     public AppsViewModel(AppState state)
@@ -122,10 +124,13 @@ public sealed partial class AppsViewModel : ObservableObject
             ResultFailures.Clear();
             foreach (var failed in results.Where(r => !r.Removed)) ResultFailures.Add(new AppProblem(failed.App.Name, failed.Problem ?? ""));
             ResultHasFailures = ResultFailures.Count > 0;
+            var leftovers = _state.Leftovers.Where(l => removed.Any(r => l.Folder.IsFrom(r.App.Name))).ToList();
+            ResultHasLeftovers = leftovers.Count > 0;
             ResultTitle = removed.Count == 0 ? "Nothing was removed" : $"Removed {Format.Count(removed.Count, "app", "apps")}";
             ResultMessage = removed.Count == 0
                 ? "The reasons are below."
-                : $"Freed about {Format.Bytes(removed.Sum(r => r.App.SizeBytes))}." + (ResultHasFailures ? " Some apps were left installed." : "");
+                : $"Freed about {Format.Bytes(removed.Sum(r => r.App.SizeBytes))}." + (ResultHasFailures ? " Some apps were left installed." : "")
+                    + (ResultHasLeftovers ? $" {(removed.Count == 1 ? "It" : "They")} left {Format.Count(leftovers.Count, "folder", "folders")} behind ({Format.Bytes(leftovers.Sum(l => l.SizeBytes))})." : "");
             IsResultOpen = true;
         }
         finally

@@ -22,6 +22,17 @@ public sealed record PreinstalledEntry
 }
 
 /// <summary>
+/// Folders a common app keeps outside its install folder, which its uninstaller often leaves
+/// behind. Offered only while no installed app could own them.
+/// </summary>
+public sealed record KnownLeftover
+{
+    [JsonPropertyName("app")] public required string App { get; init; }
+    /// <summary>Per-user folders, with the catalog's tokens like <c>{Roaming}</c>.</summary>
+    [JsonPropertyName("folders")] public required string[] Folders { get; init; }
+}
+
+/// <summary>
 /// What Tidy knows about apps: Store apps that come with Windows or the PC and are safe
 /// or worth checking before removing, and apps that must never be offered because other
 /// apps or Windows itself depend on them.
@@ -32,6 +43,7 @@ public sealed class AppCatalog
     [JsonPropertyName("neverStore")] public required List<string> NeverStore { get; init; }
     [JsonPropertyName("neverStoreSuffixes")] public required List<string> NeverStoreSuffixes { get; init; }
     [JsonPropertyName("neverDesktop")] public required List<string> NeverDesktop { get; init; }
+    [JsonPropertyName("leftovers")] public required List<KnownLeftover> Leftovers { get; init; }
 
     private static readonly Lazy<AppCatalog> Embedded = new(() =>
     {

@@ -18,7 +18,7 @@ If PowerShell blocks scripts, run them as `powershell -ExecutionPolicy Bypass -F
 
 - `src/Tidy.Core` holds scanning, the safety policy and the deleter. It has no UI.
 - `src/Tidy.Core/Catalog/catalog.json` names every cache location Tidy may offer, with its tier and explanation.
-- `src/Tidy.Core/Apps/apps.json` lists preinstalled extras and the apps that must never be offered.
+- `src/Tidy.Core/Apps/apps.json` lists preinstalled extras, the apps that must never be offered, and where common apps keep data their uninstallers leave behind.
 - `src/Tidy.Core/Safety/DeletionSafetyPolicy.cs` is the allowlist every removal goes through.
 - `src/Tidy.App` is the WinUI 3 app.
 - `tests/Tidy.Core.Tests` holds the tests. They run against a throwaway profile, never your real folders.
