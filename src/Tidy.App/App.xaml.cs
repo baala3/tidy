@@ -9,6 +9,7 @@ public partial class App : Application
     private MainWindow? _window;
 
     public static AppState State { get; private set; } = null!;
+    public static UpdateState Updates { get; private set; } = null!;
     public static MainWindow Window => ((App)Current)._window!;
 
     // One per tab and kept for the app's lifetime, so filters and scroll survive navigation.
@@ -53,9 +54,31 @@ public partial class App : Application
     protected override void OnLaunched(LaunchActivatedEventArgs args)
     {
         State = new AppState(DispatcherQueue.GetForCurrentThread());
+        Updates = new UpdateState(DispatcherQueue.GetForCurrentThread(), State.Settings);
         _window = new MainWindow();
+        // Clicks on Tidy's notifications come here, including the one Windows started Tidy for.
+        ToastActivator.Clicked += OnNotificationClicked;
+        ToastActivator.Start();
+        _window.Closed += (_, _) => ToastActivator.Stop();
         _window.Activate();
+        Updates.Start();
         // Like the Mac app: open and it scans everything, one category at a time.
         _ = State.ScanEverythingAsync();
+        // Points the task and notifications at this copy of Tidy, in case the app moved.
+        if (State.Settings.NeedsBackgroundTask)
+        {
+            _ = State.ApplyBackgroundTaskAsync();
+            _ = Task.Run(() => Notifications.Register(Environment.ProcessPath!));
+        }
+    }
+
+    private void OnNotificationClicked(string arguments)
+    {
+        var page = Notifications.PageOf(arguments);
+        _window?.DispatcherQueue.TryEnqueue(() =>
+        {
+            if (page is not null) Window.NavigateTo(page);
+            Window.BringToFront();
+        });
     }
 }
