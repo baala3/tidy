@@ -67,5 +67,11 @@ public sealed partial class AppsPage : Page
         if (await ConfirmDialog.ConfirmAppsAsync(XamlRoot, apps)) await Vm.RemoveAsync(apps);
     }
 
+    private void OnReviewLeftovers(object sender, RoutedEventArgs e)
+    {
+        App.Leftovers.Filter = LeftoverFilter.JustRemoved;
+        App.Window.NavigateTo("leftovers");
+    }
+
     private void OnOpenPrivacy(object sender, RoutedEventArgs e) => Shell.OpenUrl("ms-settings:privacy-general");
 }

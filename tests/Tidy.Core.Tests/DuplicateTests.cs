@@ -17,7 +17,7 @@ public sealed class DuplicateTests : IDisposable
         new DuplicateScanner(new LargeFilePolicy(_profile.Locations)).Scan(cancellation: TestContext.Current.CancellationToken).ToList();
 
     private FileDeleter Deleter() =>
-        new(new DeletionSafetyPolicy(_profile.Locations), new LargeFilePolicy(_profile.Locations))
+        new(new DeletionSafetyPolicy(_profile.Locations), new LargeFilePolicy(_profile.Locations), LeftoverTests.NoLeftovers(_profile))
         {
             RecycleOverride = path =>
             {

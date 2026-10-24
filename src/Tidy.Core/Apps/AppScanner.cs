@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Globalization;
 using Microsoft.Win32;
 using Tidy.Core.Platform;
@@ -18,7 +17,7 @@ public sealed class AppScanner(UserLocations locations, AppCatalog catalog)
     public IEnumerable<InstalledApp> Scan(CancellationToken cancellation = default)
     {
         var history = LaunchHistory.Read(ShortcutIndex.Build());
-        var running = RunningExecutables();
+        var running = RunningApps.ExecutablePaths();
         foreach (var app in ScanStore(history, cancellation)) yield return app;
         foreach (var app in WithoutNestedSizes(ScanDesktop(history, running, cancellation).ToList())) yield return app;
     }
@@ -135,7 +134,7 @@ public sealed class AppScanner(UserLocations locations, AppCatalog catalog)
 
     // MARK: Desktop
 
-    private static readonly (RegistryHive Hive, RegistryView View, string Label)[] UninstallRoots =
+    internal static readonly (RegistryHive Hive, RegistryView View, string Label)[] UninstallRoots =
     [
         (RegistryHive.LocalMachine, RegistryView.Registry64, "HKLM64"),
         (RegistryHive.LocalMachine, RegistryView.Registry32, "HKLM32"),
@@ -164,13 +163,8 @@ public sealed class AppScanner(UserLocations locations, AppCatalog catalog)
 
     internal InstalledApp? ReadDesktopEntry(RegistryKey key, string id, LaunchHistory history, IReadOnlyList<string> running)
     {
-        var name = (key.GetValue("DisplayName") as string)?.Trim();
-        var uninstall = key.GetValue("UninstallString") as string;
-        if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(uninstall)) return null;
-        if (key.GetValue("SystemComponent") is int system && system == 1) return null;
-        if (key.GetValue("ParentKeyName") is string) return null;
-        if (key.GetValue("ReleaseType") is string release && release.Contains("Update", StringComparison.OrdinalIgnoreCase)) return null;
-        if (catalog.IsProtectedDesktopApp(name)) return null;
+        if (ListedName(key, catalog) is not { } name) return null;
+        var uninstall = (string)key.GetValue("UninstallString")!;
 
         var location = PathUtil.Normalize((key.GetValue("InstallLocation") as string)?.Trim().Trim('"'));
         // An install location that is a whole Program Files folder or a drive says nothing about the app.
@@ -205,7 +199,22 @@ public sealed class AppScanner(UserLocations locations, AppCatalog catalog)
         };
     }
 
-    private static bool IsSharedFolder(string folder)
+    /// <summary>
+    /// The entry's name when it is an app the user may remove, or null for components,
+    /// updates, runtimes and drivers, which other apps break without.
+    /// </summary>
+    internal static string? ListedName(RegistryKey key, AppCatalog catalog)
+    {
+        var name = (key.GetValue("DisplayName") as string)?.Trim();
+        var uninstall = key.GetValue("UninstallString") as string;
+        if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(uninstall)) return null;
+        if (key.GetValue("SystemComponent") is int system && system == 1) return null;
+        if (key.GetValue("ParentKeyName") is string) return null;
+        if (key.GetValue("ReleaseType") is string release && release.Contains("Update", StringComparison.OrdinalIgnoreCase)) return null;
+        return catalog.IsProtectedDesktopApp(name) ? null : name;
+    }
+
+    internal static bool IsSharedFolder(string folder)
     {
         var shared = new[]
         {
@@ -236,23 +245,4 @@ public sealed class AppScanner(UserLocations locations, AppCatalog catalog)
 
     private static string? NonEmpty(string? value) =>
         string.IsNullOrWhiteSpace(value) || value.StartsWith("ms-resource:", StringComparison.OrdinalIgnoreCase) ? null : value;
-
-    private static List<string> RunningExecutables()
-    {
-        var paths = new List<string>();
-        foreach (var process in Process.GetProcesses())
-        {
-            using (process)
-            {
-                try
-                {
-                    if (process.MainModule?.FileName is { } file) paths.Add(file);
-                }
-                catch (Exception e) when (e is System.ComponentModel.Win32Exception or InvalidOperationException or NotSupportedException)
-                {
-                }
-            }
-        }
-        return paths;
-    }
 }

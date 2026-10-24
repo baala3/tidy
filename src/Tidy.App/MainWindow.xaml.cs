@@ -27,6 +27,7 @@ public sealed partial class MainWindow : Window
         ["wsl"] = (typeof(VirtualDisksPage), null),
         ["windows"] = (typeof(WindowsPage), null),
         ["apps"] = (typeof(AppsPage), null),
+        ["leftovers"] = (typeof(LeftoversPage), null),
         ["history"] = (typeof(HistoryPage), null),
         ["settings"] = (typeof(SettingsPage), null),
         ["about"] = (typeof(AboutPage), null),
@@ -129,6 +130,7 @@ public sealed partial class MainWindow : Window
         VirtualDisksItem.Visibility = state.VirtualDisks.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
         VirtualDisksSize.Text = state.VirtualDisksReclaimableBytes > 0 ? Format.Bytes(state.VirtualDisksReclaimableBytes) : "";
         AppsSize.Text = state.Apps.Count > 0 ? Format.Bytes(state.AppsBytes) : "";
+        LeftoversSize.Text = state.Leftovers.Count > 0 ? Format.Bytes(state.LeftoversBytes) : "";
         RecycleBinSize.Text = Format.Bytes(state.RecycleBinBytes);
     }
 

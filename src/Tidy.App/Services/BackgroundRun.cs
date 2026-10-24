@@ -1,5 +1,7 @@
+using Tidy.Core.Apps;
 using Tidy.Core.Catalog;
 using Tidy.Core.Deletion;
+using Tidy.Core.Leftovers;
 using Tidy.Core.Platform;
 using Tidy.Core.Safety;
 using Tidy.Core.Scanning;
@@ -34,7 +36,7 @@ public static class BackgroundRun
         if (settings.AutoClean != CleanSchedule.Off)
         {
             var policy = new DeletionSafetyPolicy(locations);
-            var clean = new ScheduledClean(new CacheScanner(policy, CleanupCatalog.Default), new FileDeleter(policy, new LargeFilePolicy(locations)));
+            var clean = new ScheduledClean(new CacheScanner(policy, CleanupCatalog.Default), new FileDeleter(policy, new LargeFilePolicy(locations), new LeftoverScanner(policy, AppCatalog.Default).Policy()));
             cleaned = clean.RunAsync(settings.AutoClean, state.LastCleanUtc, now).GetAwaiter().GetResult();
             if (cleaned is not null)
             {

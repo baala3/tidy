@@ -46,6 +46,10 @@ public partial class App : Application
 
     public static ViewModels.AppsViewModel Apps => _apps ??= new(State);
 
+    private static ViewModels.LeftoversViewModel? _leftovers;
+
+    public static ViewModels.LeftoversViewModel Leftovers => _leftovers ??= new(State);
+
     public App()
     {
         InitializeComponent();

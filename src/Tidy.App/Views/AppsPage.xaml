@@ -89,6 +89,9 @@
         <InfoBar Grid.Row="3" Margin="0,0,0,10" IsOpen="{x:Bind Vm.IsResultOpen, Mode=TwoWay}"
                  Title="{x:Bind Vm.ResultTitle, Mode=OneWay}" Message="{x:Bind Vm.ResultMessage, Mode=OneWay}"
                  Severity="{x:Bind ResultSeverity(Vm.ResultHasFailures), Mode=OneWay}">
+            <InfoBar.ActionButton>
+                <HyperlinkButton Content="Review leftovers" Click="OnReviewLeftovers" Visibility="{x:Bind Vm.ResultHasLeftovers, Mode=OneWay}" />
+            </InfoBar.ActionButton>
             <ItemsControl ItemsSource="{x:Bind Vm.ResultFailures}" Margin="0,0,0,12" Visibility="{x:Bind Vm.ResultHasFailures, Mode=OneWay}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="vm:AppProblem">

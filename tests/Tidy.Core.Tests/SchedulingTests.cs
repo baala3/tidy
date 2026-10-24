@@ -26,7 +26,7 @@ public sealed class SchedulingTests : IDisposable
         {
             IsAnyRunning = names => chromeOpen && names.Contains("chrome", StringComparer.OrdinalIgnoreCase),
         };
-        var deleter = new FileDeleter(policy, new LargeFilePolicy(_profile.Locations))
+        var deleter = new FileDeleter(policy, new LargeFilePolicy(_profile.Locations), LeftoverTests.NoLeftovers(_profile))
         {
             RecycleOverride = path =>
             {

@@ -131,6 +131,16 @@
                                    Style="{StaticResource CaptionSecondaryStyle}" VerticalAlignment="Center" />
                     </Grid>
                 </NavigationViewItem>
+                <NavigationViewItem Tag="leftovers" AutomationProperties.Name="Leftovers">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8B7;" />
+                    </NavigationViewItem.Icon>
+                    <Grid>
+                        <TextBlock Text="Leftovers" />
+                        <TextBlock x:Name="LeftoversSize" HorizontalAlignment="Right" Margin="0,0,12,0"
+                                   Style="{StaticResource CaptionSecondaryStyle}" VerticalAlignment="Center" />
+                    </Grid>
+                </NavigationViewItem>
             </NavigationView.MenuItems>
 
             <NavigationView.FooterMenuItems>

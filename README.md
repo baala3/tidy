@@ -100,6 +100,13 @@ Tidy runs on Windows 10 (version 2004) and Windows 11, on x64 and Arm64.
 - A file counts only if it is an installer (a package, or a program that says it sets something up) and names an installed app exactly. Launchers that only share the app's name are left out.
 - Installers newer than the installed app are marked Check First, since you may still mean to run them.
 
+### Leftovers
+
+- Folders that uninstalled apps left in AppData, ProgramData and Program Files, with their size, when they last changed and the app they came from.
+- After you uninstall an app from Tidy, it shows what that app left behind.
+- A folder is listed only on strong evidence: a folder the app registered with Windows, its publisher and name together, or its whole name. A folder that merely shares a word with an app is left out, and so is anything an installed or running app could be using.
+- Everything is Check First and nothing is selected for you. Folders in ProgramData and Program Files need an administrator, so Tidy shows them for you to remove yourself.
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/apps-dark.png">
   <img src="docs/screenshots/apps-light.png" width="760" alt="Apps: installed apps with when each was last opened, and preinstalled extras tagged">
