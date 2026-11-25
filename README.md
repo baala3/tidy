@@ -6,10 +6,10 @@
 
 **Free up your PC. Safely.**
 
-A free Windows app that clears the cache and junk your PC piles up on its own.
+A Windows app that clears the cache and junk your PC piles up on its own.
 Files go to the Recycle Bin first, so you can put them back.
 
-[Website](https://baala3.github.io/tidy) · [Download](https://github.com/baala3/tidy/releases/latest) · [Safety](https://baala3.github.io/tidy/safety.html)
+[Website](https://tidy.balashekhar.me) · [Download](https://github.com/baala3/tidy/releases/latest) · [Safety](https://tidy.balashekhar.me/safety.html)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/overview-dark.png">
@@ -23,7 +23,7 @@ Files go to the Recycle Bin first, so you can put them back.
 In PowerShell:
 
 ```powershell
-irm https://baala3.github.io/tidy/install.ps1 | iex
+irm https://tidy.balashekhar.me/install.ps1 | iex
 ```
 
 The script downloads the latest installer, checks it against the published SHA-256, and installs Tidy for your account in `%LOCALAPPDATA%\Programs\Tidy`.
@@ -169,9 +169,19 @@ Tidy deletes files, so it is built to be sure rather than thorough.
   Turn it off in Settings > Updates.
   Checking for and installing app updates is winget's own work: winget reaches its sources itself, and Tidy sends nothing.
 
-The [safety page](https://baala3.github.io/tidy/safety.html) lists everything Tidy may clear and everything it refuses.
+The [safety page](https://tidy.balashekhar.me/safety.html) lists everything Tidy may clear and everything it refuses.
 It is generated from the app's own rules.
 Incidents are logged in [docs/safety-notes.md](docs/safety-notes.md), and [SECURITY.md](SECURITY.md) says how to report one.
+
+## Free and Pro
+
+Scanning, seeing everything Tidy finds, and the everyday cleaning are free: caches, old project build folders, Windows' own cleanup, large files, duplicates, leftover installers, removing apps, the Space Map and the low-space warning.
+Pro adds automatic cleaning, startup apps, app updates, leftovers of uninstalled apps, similar photos, screenshots and messaging app copies, OneDrive space, WSL and Docker compaction, and the Space Map's fast scan.
+
+Every new copy has all of Pro on for its first 7 days.
+After that, Pro is $2, paid once, from the [website](https://tidy.balashekhar.me/#pro).
+The key is checked on your PC, without going online.
+See the [terms of sale](https://tidy.balashekhar.me/terms.html), [refund policy](https://tidy.balashekhar.me/refunds.html) and [privacy policy](https://tidy.balashekhar.me/privacy.html).
 
 ## Report a problem
 
